@@ -9,11 +9,11 @@ template(name="container")
 
 template(name="form")
   .col-xs-6
-    h3 Resulting form
+    h3 Resulting Form
     +quickForm(schema=schema id=_id)
   .col-xs-6
     h3 Form Builder
-    +quickForm(doc=this collection="Forms" type="update" autosave=true autosaveOnKeyup=true id=updateFormId)
+    +quickForm(doc=this collection="Forms" type="update" id=updateFormId)
 
 template(name="forms")
   each forms
