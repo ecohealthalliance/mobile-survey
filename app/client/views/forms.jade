@@ -1,11 +1,12 @@
+//- The left column
 template(name="form_preview")
   .col-md-4
     .panel.panel-default
       .panel-heading
         h4= name
       .panel-body
-        form#result-form(novalidate='novalidate')
-          if widgets
+        form(novalidate='novalidate')
+          if hasWidgets
             each widgets
               +widget
             .form-group
@@ -14,14 +15,14 @@ template(name="form_preview")
             p No widgets specified
 
 
-template(name="form_edit")
+//- The middle column
+template(name="form_add")
   .col-md-4
     .panel.panel-default
-
       .panel-heading
         h4 Add new widget
       .panel-body
-        form#add-form(novalidate='novalidate')
+        form(novalidate='novalidate')
           .form-group(data-required='true')
             label.control-label(for='new-type') Field Type
             select#new-type.form-control(name='type')
@@ -38,9 +39,23 @@ template(name="form_edit")
             input#new-placeholder.form-control(type='text', name='placeholder')
           .form-group
             button.btn.btn-primary(type='submit') &larr; Add Element
-
       .panel-heading
         h4 Preview
       .panel-body#widget-preview
         each previewData
           +widget
+
+
+//- The right column
+template(name="form_edit")
+  .col-md-4
+    .panel.panel-default
+      .panel-heading
+        h4 Edit
+      .panel-body
+        if hasWidgets
+          each widgets
+            form(novalidate='novalidate')
+              +widget_edit
+        else
+          p No widgets specified
