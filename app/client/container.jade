@@ -1,20 +1,46 @@
-template(name="container")
-  .container
-    .row
-      p
-      unless hasForms
-        h2 Create a new form:
-          +quickForm(collection="Forms" type="insert" id="forms_insert")
-      +forms
+template(name="form_preview")
+  .col-md-4
+    .panel.panel-default
+      .panel-heading
+        h4= name
+      .panel-body
+        form#result-form(novalidate='novalidate')
+          if widgets
+            each widgets
+              +widget
+            .form-group
+              button.btn.btn-primary(type='submit') Submit
+          else
+            p No widgets specified
 
-template(name="form")
-  .col-xs-6
-    h3 Resulting form
-    +quickForm(schema=schema id=_id)
-  .col-xs-6
-    h3 Form Builder
-    +quickForm(doc=this collection="Forms" type="update" autosave=true autosaveOnKeyup=true id=updateFormId)
 
-template(name="forms")
-  each forms
-    +form
+template(name="form_edit")
+  .col-md-4
+    .panel.panel-default
+
+      .panel-heading
+        h4 Add new widget
+      .panel-body
+        form#add-form(novalidate='novalidate')
+          .form-group(data-required='true')
+            label.control-label(for='new-type') Field Type
+            select#new-type.form-control(name='type')
+              each types
+                option(value=name)= label
+          .form-group(data-required='true')
+            label.control-label(for='new-label') Field Label *
+            input#new-label.form-control(type='text' name='label' required maxlength='40')
+          .form-group(data-required='true')
+            label.control-label(for='new-name') System Name *
+            input#new-name.form-control(type='text' name='name' required maxlength='30')
+          .form-group(data-required='true')
+            label.control-label(for='new-placeholder') Placeholder
+            input#new-placeholder.form-control(type='text', name='placeholder')
+          .form-group
+            button.btn.btn-primary(type='submit') &larr; Add Element
+
+      .panel-heading
+        h4 Preview
+      .panel-body#widget-preview
+        each previewData
+          +widget

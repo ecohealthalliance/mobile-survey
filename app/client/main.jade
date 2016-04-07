@@ -2,3 +2,11 @@ head
   title Mobile Survey App
 body
   +container
+
+template(name="container")
+  .container
+    .row
+      p
+      each forms
+        +form_preview
+        +form_edit
