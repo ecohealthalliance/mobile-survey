@@ -1,0 +1,59 @@
+//-
+//- Widget wrapper templates
+//-
+
+template(name="widget")
+  .form-group
+    +Template.dynamic template=widgetTemplateName
+
+template(name="widget_edit")
+  .form-group
+    form
+      unless isFirst
+        a.up(href='#') ^
+      unless isLast
+        a.down(href='#') v
+      a.x(href='#') &times;
+      input(name=name value=value placeholder=data.placeholder)
+      +Template.dynamic template=widgetTemplateName
+
+
+//-
+//- Text input field
+//-
+
+template(name="widget.inputText")
+  label.control-label(for="form-#{form}-field-#{name}")= label
+  if data.required
+    |  *
+  input.form-control(
+    id="form-#{form}-field-#{name}"
+    type='text'
+    value=value
+    name=data.name
+    placeholder=data.placeholder
+    maxlength=data.maxlength
+    required=required
+  )
+
+template(name="widget.inputText.edit")
+  p text input edit
+
+//-
+//- Text area
+//-
+
+template(name="widget.textArea")
+  label.control-label(for="form-#{form}-field-#{name}")= label
+  if data.required
+    |  *
+  textarea.form-control(
+    id="form-#{form}-field-#{name}"
+    name=data.name
+    placeholder=data.placeholder
+    maxlength=data.maxlength
+    required=required
+  )= value
+
+template(name="widget.textArea.edit")
+  p textarea edit
