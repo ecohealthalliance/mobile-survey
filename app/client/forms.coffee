@@ -84,6 +84,8 @@ Template.form_add.events
 
     toastr.success("Added new field")
 
+Template.form_edit.onCreated ->
+  @subscribe 'widgets'
 
 Template.form_edit.helpers
   hasWidgets: ->

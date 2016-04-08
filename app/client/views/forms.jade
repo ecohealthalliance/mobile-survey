@@ -52,7 +52,12 @@ template(name="form_edit")
 
     if hasWidgets
       ul.list-group
-        each widgets
+        +sortable(
+          items=widgets
+          sortField='order'
+          handle='.sortable-handle'
+          ghostClass='sortable-ghost')
+
           li.list-group-item
             +widget_edit
     else
