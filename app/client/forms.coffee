@@ -69,19 +69,21 @@ Template.form_add.events
 
     name = form.label.value.trim().replace(/\s+/g, '-').toLowerCase()
 
-    Questions.insert
-      form: data._id
+    question =
       type: instance.type.get()
       label: form.label.value.trim()
       data:
         placeholder: form.placeholder.value.trim()
 
-    form.reset()
-    instance.type.set('inputText')
-    instance.label.set('')
-    instance.placeholder.set('')
-
-    toastr.success("Added new field")
+    Meteor.call "addQuestion", data._id, question, (error, response) ->
+      if error
+        toastr.error("Something went wrong")
+      else
+        form.reset()
+        instance.type.set('inputText')
+        instance.label.set('')
+        instance.placeholder.set('')
+        toastr.success("Question added")
 
 Template.form_edit.onCreated ->
   @subscribe 'questions'
