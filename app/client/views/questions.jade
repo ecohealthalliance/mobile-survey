@@ -1,12 +1,12 @@
 //-
-//- Widget wrapper templates
+//- Question wrapper templates
 //-
 
-template(name="widget")
+template(name="question")
   .form-group
-    +Template.dynamic template=widgetTemplateName
+    +Template.dynamic template=questionTemplateName
 
-template(name="widget_edit")
+template(name="question_edit")
   span.sortable-handle
     i.mdi.mdi-drag
   span= label
@@ -17,7 +17,7 @@ template(name="widget_edit")
 //- Text input field
 //-
 
-template(name="widget.inputText")
+template(name="question.inputText")
   label.control-label(for="form-#{form}-field-#{name}")= label
   if data.required
     |  *
@@ -31,14 +31,14 @@ template(name="widget.inputText")
     required=required
   )
 
-template(name="widget.inputText.edit")
+template(name="question.inputText.edit")
   p text input edit
 
 //-
 //- Text area
 //-
 
-template(name="widget.textArea")
+template(name="question.textArea")
   label.control-label(for="form-#{form}-field-#{name}")= label
   if data.required
     |  *
@@ -50,5 +50,5 @@ template(name="widget.textArea")
     required=required
   )= value
 
-template(name="widget.textArea.edit")
+template(name="question.textArea.edit")
   p textarea edit

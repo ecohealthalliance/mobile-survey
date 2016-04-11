@@ -1,9 +1,9 @@
 Template.form_preview.helpers
-  hasWidgets: ->
-    Widgets.find().count()
-  widgets: ->
+  hasQuestions: ->
+    Questions.find().count()
+  questions: ->
     data = Template.currentData()
-    Widgets.find(form: data._id, {sort: order: 1})
+    Questions.find(form: data._id, {sort: order: 1})
 
 Template.form_preview.events
   'submit form': (event, instance) ->
@@ -24,9 +24,9 @@ Template.form_add.onCreated ->
   @placeholder = new ReactiveVar ''
 
 Template.form_add.helpers
-  widgets: ->
+  questions: ->
     data = Template.currentData()
-    Widgets.find(form: data._id, {sort: order: 1})
+    Questions.find(form: data._id, {sort: order: 1})
   types: ->
     [
       {
@@ -69,11 +69,10 @@ Template.form_add.events
 
     name = form.label.value.trim().replace(/\s+/g, '-').toLowerCase()
 
-    Widgets.insert
+    Questions.insert
       form: data._id
       type: instance.type.get()
       label: form.label.value.trim()
-      name: name
       data:
         placeholder: form.placeholder.value.trim()
 
@@ -85,11 +84,11 @@ Template.form_add.events
     toastr.success("Added new field")
 
 Template.form_edit.onCreated ->
-  @subscribe 'widgets'
+  @subscribe 'questions'
 
 Template.form_edit.helpers
-  hasWidgets: ->
-    Widgets.find().count()
-  widgets: ->
+  hasQuestions: ->
+    Questions.find().count()
+  questions: ->
     data = Template.currentData()
-    Widgets.find(form: data._id, {sort: order: 1})
+    Questions.find(form: data._id, {sort: order: 1})

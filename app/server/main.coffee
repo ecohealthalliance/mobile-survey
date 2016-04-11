@@ -1,5 +1,5 @@
-Meteor.publish 'widgets', ->
-  Widgets.find()
+Meteor.publish 'questions', ->
+  Questions.find()
 
 Meteor.publish 'form', ->
   Forms.find()
@@ -10,7 +10,6 @@ Meteor.startup ->
       {
         type: "inputText"
         label: "Your Name"
-        name: "name"
         value: "John Doe"
         required: true
         data:
@@ -20,7 +19,6 @@ Meteor.startup ->
       {
         type: "textArea"
         label: "Short bio"
-        name: "bio"
         data:
           placeholder: "Tell a little about yourself"
           maxlength: 20
@@ -28,16 +26,15 @@ Meteor.startup ->
       {
         type: "inputText"
         label: "How did you find  us"
-        name: "how-did-you"
         data:
           placeholder: "Web search/newspaper/a friend"
           maxlength: 20
       }
     ]
-  unless Widgets.findOne()
+  unless Questions.findOne()
     form_id = Forms.insert(name: "Test form")
     _.each dummyData, (data, i) ->
       i++
       data.form = form_id
       data.order = i
-      Widgets.insert data
+      Questions.insert data

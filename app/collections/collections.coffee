@@ -1,14 +1,14 @@
 if Meteor.isClient
   @Forms = new Mongo.Collection 'forms'
-  @Widgets = new Mongo.Collection 'widgets'
+  @Questions = new Mongo.Collection 'questions'
 
 if Meteor.isServer
   @Forms = new Mongo.Collection 'forms'
-  @Widgets = new Mongo.Collection 'widgets'
+  @Questions = new Mongo.Collection 'questions'
 
-  Sortable.collections = ['widgets']
+  Sortable.collections = ['questions']
 
-  @Widgets.allow
+  @Questions.allow
     insert: ->
       true
     remove: ->
