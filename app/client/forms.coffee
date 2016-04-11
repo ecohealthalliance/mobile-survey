@@ -19,9 +19,9 @@ Template.form_preview.events
 
 
 Template.form_add.onCreated ->
-  @type = new ReactiveVar('inputText')
-  @label = new ReactiveVar('')
-  @placeholder = new ReactiveVar('')
+  @type = new ReactiveVar 'inputText'
+  @label = new ReactiveVar ''
+  @placeholder = new ReactiveVar ''
 
 Template.form_add.helpers
   widgets: ->
@@ -47,10 +47,12 @@ Template.form_add.helpers
       data:
         placeholder: Template.instance().placeholder.get()
     ]
+  selected: ->
+    @name is Template.instance().type.get()
 
 Template.form_add.events
-  'change #new-type': (event, instance) ->
-    instance.type.set(event.currentTarget.value)
+  'click .type': (event, instance) ->
+    instance.type.set $(event.currentTarget).data 'type'
   'input #new-label': (event, instance) ->
     instance.label.set(event.currentTarget.value)
   'input #new-placeholder': (event, instance) ->
@@ -65,15 +67,13 @@ Template.form_add.events
       toastr.error('Please fill out all required fields')
       throw new Meteor.Error('Invalid form')
 
-    if Widgets.find(form: data._id, name: form.name.value.trim()).count()
-      toastr.error('Please specify a unique system name')
-      throw new Meteor.Error('Duplicate field')
+    name = form.label.value.trim().replace(/\s+/g, '-').toLowerCase()
 
     Widgets.insert
       form: data._id
-      type: form.type.value
+      type: instance.type.get()
       label: form.label.value.trim()
-      name: form.name.value.trim()
+      name: name
       data:
         placeholder: form.placeholder.value.trim()
 
@@ -84,6 +84,8 @@ Template.form_add.events
 
     toastr.success("Added new field")
 
+Template.form_edit.onCreated ->
+  @subscribe 'widgets'
 
 Template.form_edit.helpers
   hasWidgets: ->

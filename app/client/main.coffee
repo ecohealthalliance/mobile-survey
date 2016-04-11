@@ -1,6 +1,5 @@
-@Forms = new Meteor.Collection(null)
-@Widgets = new Meteor.Collection(null)
-
+Template.container.onCreated ->
+  @subscribe 'form'
 
 Template.container.helpers
   forms: ->

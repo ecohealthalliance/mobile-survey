@@ -1,61 +1,65 @@
 //- The left column
 template(name="form_preview")
-  .col-md-4
-    .panel.panel-default
-      .panel-heading
-        h4= name
-      .panel-body
-        form(novalidate='novalidate')
-          if hasWidgets
-            each widgets
-              +widget
-            .form-group
-              button.btn.btn-primary(type='submit') Submit
-          else
-            p No widgets specified
+  .panel.panel-default
+    .panel-heading
+      h4= name
+    .panel-body
+      form(novalidate='novalidate')
+        if hasWidgets
+          each widgets
+            +widget
+          .form-group
+            button.btn.btn-primary(type='submit') Submit
+        else
+          p No widgets specified
 
 
 //- The middle column
 template(name="form_add")
-  .col-md-4
-    .panel.panel-default
-      .panel-heading
-        h4 Add new widget
-      .panel-body
-        form(novalidate='novalidate')
-          .form-group(data-required='true')
-            label.control-label(for='new-type') Field Type
-            select#new-type.form-control(name='type')
-              each types
-                option(value=name)= label
-          .form-group(data-required='true')
-            label.control-label(for='new-label') Field Label *
-            input#new-label.form-control(type='text' name='label' required maxlength='40')
-          .form-group(data-required='true')
-            label.control-label(for='new-name') System Name *
-            input#new-name.form-control(type='text' name='name' required maxlength='30')
-          .form-group(data-required='true')
-            label.control-label(for='new-placeholder') Placeholder
-            input#new-placeholder.form-control(type='text', name='placeholder')
-          .form-group
-            button.btn.btn-primary(type='submit') &larr; Add Element
-      .panel-heading
-        h4 Preview
-      .panel-body#widget-preview
-        each previewData
-          +widget
+  .panel.panel-default
+    .panel-heading
+      h4 Add new question
+    .panel-body
+      form(novalidate='novalidate')
+        .form-group(data-required='true')
+          label.control-label(for='new-type') Question Type
+          .btn-group.btn-group-justified
+            each types
+              .btn-group
+                button.btn.btn-default.type(type='button' class='{{#if selected}} active {{/if}}' data-type=name)= label
+        .form-group(data-required='true')
+          label.control-label(for='new-label') Question *
+          input#new-label.form-control(type='text' name='label' required maxlength='40')
+        .form-group(data-required='true')
+          label.control-label(for='new-placeholder') Placeholder
+          input#new-placeholder.form-control(type='text', name='placeholder')
+        .form-group
+          button.btn.btn-primary(type='submit')
+            span.mdi.mdi-library-plus
+            | Add Question
+    .panel-heading
+      h4 Preview
+    .panel-body#widget-preview
+      each previewData
+        +widget
 
 
 //- The right column
 template(name="form_edit")
-  .col-md-4
-    .panel.panel-default
-      .panel-heading
-        h4 Edit
+  .panel.panel-default
+    .panel-heading
+      h4 Questions
+
+    if hasWidgets
+      ul.list-group
+        +sortable(
+          items=widgets
+          sortField='order'
+          handle='.sortable-handle'
+          ghostClass='sortable-ghost')
+
+          li.list-group-item
+            +widget_edit
+    else
       .panel-body
-        if hasWidgets
-          each widgets
-            form(novalidate='novalidate')
-              +widget_edit
-        else
-          p No widgets specified
+        p No widgets specified

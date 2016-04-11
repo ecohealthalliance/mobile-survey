@@ -7,16 +7,11 @@ template(name="widget")
     +Template.dynamic template=widgetTemplateName
 
 template(name="widget_edit")
-  .form-group
-    form
-      unless isFirst
-        a.up(href='#') ^
-      unless isLast
-        a.down(href='#') v
-      a.x(href='#') &times;
-      input(name=name value=value placeholder=data.placeholder)
-      +Template.dynamic template=widgetTemplateName
-
+  span.sortable-handle
+    i.mdi.mdi-drag
+  span= label
+  .delete.warning
+    i.mdi.mdi-delete
 
 //-
 //- Text input field

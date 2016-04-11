@@ -1,1 +1,25 @@
-/* CSS declarations go here */
+.container-fluid
+  margin 0 10%
+
+.sortable-handle
+  cursor move
+  font-size 2em
+  margin-right .1em
+
+.delete
+  position absolute
+  right 15px
+  top 50%
+  transform translate(0, -50%)
+  font-size 1.75em
+  color #D9534F
+  &:hover
+    cursor pointer
+    color darken(@color, 15%)
+
+.list-group-item
+  span
+    vertical-align middle
+
+.sortable-ghost
+  background #f9f9f9

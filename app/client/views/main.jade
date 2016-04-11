@@ -4,10 +4,11 @@ body
   +container
 
 template(name="container")
-  .container
+  .container-fluid
     .row
-      p
       each forms
-        +form_edit
-        +form_preview
-        +form_add
+        .col-md-4
+          +form_add
+        .col-md-8
+          +form_edit
+        //- +form_preview
