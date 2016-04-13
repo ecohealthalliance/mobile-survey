@@ -5,13 +5,13 @@ template(name="form_preview")
       h4= name
     .panel-body
       form(novalidate='novalidate')
-        if hasWidgets
-          each widgets
-            +widget
+        if hasQuestions
+          each questions
+            +question
           .form-group
             button.btn.btn-primary(type='submit') Submit
         else
-          p No widgets specified
+          p No questions specified
 
 
 //- The middle column
@@ -26,7 +26,7 @@ template(name="form_add")
           .btn-group.btn-group-justified
             each types
               .btn-group
-                button.btn.btn-default.type(type='button' class='{{#if selected}} active {{/if}}' data-type=name)= label
+                button.btn.btn-default.type(type='button' class='{{#if selected}} active {{/if}}' data-type=name)= text
         .form-group(data-required='true')
           label.control-label(for='new-label') Question *
           input#new-label.form-control(type='text' name='label' required maxlength='40')
@@ -39,9 +39,9 @@ template(name="form_add")
             | Add Question
     .panel-heading
       h4 Preview
-    .panel-body#widget-preview
+    .panel-body#question-preview
       each previewData
-        +widget
+        +question
 
 
 //- The right column
@@ -50,16 +50,15 @@ template(name="form_edit")
     .panel-heading
       h4 Questions
 
-    if hasWidgets
+    if hasQuestions
       ul.list-group
         +sortable(
-          items=widgets
+          items=questions
           sortField='order'
           handle='.sortable-handle'
           ghostClass='sortable-ghost')
-
           li.list-group-item
-            +widget_edit
+            +question_edit
     else
       .panel-body
-        p No widgets specified
+        p No questions specified

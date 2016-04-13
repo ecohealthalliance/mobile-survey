@@ -1,14 +1,13 @@
 Template.container.onCreated ->
-  @subscribe 'form'
+  @subscribe 'surveys'
+  @subscribe 'forms'
 
 Template.container.helpers
+  surveys: ->
+    Surveys.find()
+
+
+Template.survey.helpers
   forms: ->
-    Forms.find()
-
-
-# Meteor.methods
-  @addWidget = (form_id, data) ->
-    maxOrder = Widgets.findOne({form: form_id}, {sort: order: -1})?.order or 0
-    data.order = maxOrder + 1
-    data.form = form_id
-    Widgets.insert data
+    selector = _.map Template.currentData().forms, (obj) -> { _id: obj }
+    Forms.find( $or: selector )
