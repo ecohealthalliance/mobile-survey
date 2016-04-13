@@ -26,4 +26,7 @@ dapearce:material-icons
 # Our stack
 coffeescript
 mquandalle:jade
+fortawesome:fontawesome
 stylus
+kadira:flow-router
+kadira:blaze-layout

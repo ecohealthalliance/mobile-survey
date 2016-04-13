@@ -3,6 +3,23 @@
 @Questions = new Mongo.Collection 'questions'
 
 
+@Surveys.allow
+  insert: ->
+    true
+  remove: ->
+    true
+  update: ->
+    true
+
+@Questions.allow
+  insert: ->
+    true
+  remove: ->
+    true
+  update: ->
+    true
+
+
 Meteor.methods
   addQuestion: (form_id, data) ->
     question_id = Questions.insert data
@@ -11,7 +28,6 @@ Meteor.methods
       form.questions.push question_id
       Forms.update(form_id, $set: {questions: form.questions})
   removeQuestion: (question_id) ->
-    console.log question_id
     Forms.find(questions: question_id).forEach (item) ->
       questions = _.without(item.questions, question_id)
       Forms.update(item._id, $set: questions: questions)
@@ -20,11 +36,3 @@ Meteor.methods
 
 if Meteor.isServer
   Sortable.collections = ['questions']
-
-  @Questions.allow
-    insert: ->
-      true
-    remove: ->
-      true
-    update: ->
-      true

@@ -1,0 +1,25 @@
+template(name="create_survey_modal")
+  #create-survey-modal.modal.fade(tabindex="-1" role="dialog")
+    form.modal-dialog
+      .modal-content
+        .modal-header
+          button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+            i.fa.fa-times-circle
+        .modal-body
+          .form-group
+            .row
+              .col-sm-8
+                label
+                  span Title
+                  input.form-control(type='string' name='title' maxlength='128')
+
+          .form-group
+            .row
+              .col-sm-8
+                label
+                  span Description
+                  input.form-control(type='string' name='description')
+
+        .modal-footer
+          button.btn.btn-default(data-dismiss='modal' aria-hidden='true') Cancel
+          button.btn.btn-primary Create Survey
