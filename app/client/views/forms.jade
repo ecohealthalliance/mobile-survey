@@ -26,7 +26,7 @@ template(name="form_add")
           .btn-group.btn-group-justified
             each types
               .btn-group
-                button.btn.btn-default.type(type='button' class='{{#if selected}} active {{/if}}' data-type=name)= label
+                button.btn.btn-default.type(type='button' class='{{#if selected}} active {{/if}}' data-type=name)= text
         .form-group(data-required='true')
           label.control-label(for='new-label') Question *
           input#new-label.form-control(type='text' name='label' required maxlength='40')
@@ -57,7 +57,6 @@ template(name="form_edit")
           sortField='order'
           handle='.sortable-handle'
           ghostClass='sortable-ghost')
-
           li.list-group-item
             +question_edit
     else

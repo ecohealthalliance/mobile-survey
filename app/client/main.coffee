@@ -1,6 +1,13 @@
 Template.container.onCreated ->
-  @subscribe 'form'
+  @subscribe 'surveys'
+  @subscribe 'forms'
 
 Template.container.helpers
+  surveys: ->
+    Surveys.find()
+
+
+Template.survey.helpers
   forms: ->
-    Forms.find()
+    selector = _.map Template.currentData().forms, (obj) -> { _id: obj }
+    Forms.find( $or: selector )

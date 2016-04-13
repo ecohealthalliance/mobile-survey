@@ -5,10 +5,16 @@ body
 
 template(name="container")
   .container-fluid
-    each forms
-      .row
-        .col-md-4
-          +form_add
-        .col-md-8
-          +form_edit
-      //- +form_preview
+    each surveys
+      +survey
+
+template(name="survey")
+  h1= title
+  each forms
+    h2= name
+    .row
+      .col-md-4
+        +form_add
+      .col-md-8
+        +form_edit
+        //- +form_preview
