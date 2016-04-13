@@ -1,8 +1,8 @@
-Template.survey.onCreated ->
+Template.survey_single.onCreated ->
   @surveyRV = new ReactiveVar()
-  Meteor.call 'getSurvey', @data.id, (err, survey)=>
+  Meteor.call 'getSurvey', @data.id, (err, survey) =>
     @surveyRV.set(survey)
 
-Template.survey.helpers
+Template.survey_single.helpers
   surveyTitle: ->
     Template.instance().surveyRV.get()?.title
