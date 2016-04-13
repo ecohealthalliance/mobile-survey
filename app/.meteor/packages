@@ -30,3 +30,8 @@ fortawesome:fontawesome
 stylus
 kadira:flow-router
 kadira:blaze-layout
+
+# testing
+xolvio:cleaner
+dispatch:mocha-phantomjs
+practicalmeteor:mocha@2.1.1-rc.1

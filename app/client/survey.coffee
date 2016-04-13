@@ -1,3 +1,7 @@
+Template.surveys.helpers
+  surveys: ->
+    Surveys.find()
+
 Template.survey_single.onCreated ->
   @surveyRV = new ReactiveVar()
   Meteor.call 'getSurvey', @data.id, (err, survey) =>
