@@ -10,7 +10,11 @@ FlowRouter.route '/admin/surveys',
       main: 'surveys'
 
 FlowRouter.route '/admin/surveys/:id',
-  action: (params) ->
+  action: ->
     BlazeLayout.render 'layout',
       main: 'survey_admin'
-      params: params
+
+FlowRouter.route '/admin/surveys/:id/:page',
+  action: ->
+    BlazeLayout.render 'layout',
+      main: 'survey_admin'
