@@ -29,7 +29,7 @@ Template.form_add.helpers
   types: ->
     [
       {
-        text: 'Simple Text Input'
+        text: 'Simple Input'
         name: 'inputText'
       },
       {
