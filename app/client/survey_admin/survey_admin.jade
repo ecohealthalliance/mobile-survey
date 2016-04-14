@@ -1,11 +1,18 @@
 template(name="survey_admin")
-  h1= title
-  p= description
-  each forms
-    h2= name
-    .row
-      .col-md-4
-        +form_add
-      .col-md-8
-        +form_edit
-      //- +form_preview
+  .page-header
+    nav.navbar
+      .navbar-header
+        a.navbar-brand.pull-left(href="/")= survey.title
+      ul.nav.navbar-nav.survey-admin-nav
+        li
+          a(href="/admin/surveys/#{survey._id}/details" class=detailsActive) Details
+        li
+          a(href="/admin/surveys/#{survey._id}/forms" class=formsActive) Forms
+        li
+          a(href="/admin/surveys/#{survey._id}/users" class=usersActive) Users
+  if survey
+    if detailsActive
+      p= survey.description
+    else
+      if formsActive
+        +survey_admin_forms survey=survey

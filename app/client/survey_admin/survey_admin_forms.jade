@@ -1,0 +1,15 @@
+template(name="survey_admin_forms")
+  if formToEdit
+    +edit_form form=formToEdit
+  else
+    h2 Forms
+      a#add-form.btn.btn-sm
+        i.mdi.mdi-plus-circle Add Form
+    each forms
+      h2= name
+      .row
+        .col-md-4
+          +form_add
+        .col-md-8
+          +form_edit
+        //- +form_preview
