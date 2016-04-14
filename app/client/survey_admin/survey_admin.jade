@@ -10,7 +10,9 @@ template(name="survey_admin")
           a(href="/admin/surveys/#{survey._id}/forms" class=formsActive) Forms
         li
           a(href="/admin/surveys/#{survey._id}/users" class=usersActive) Users
-  if detailsActive
-    p= survey.description
-  else
-    +survey_admin_forms survey=survey
+  if survey
+    if detailsActive
+      p= survey.description
+    else
+      if formsActive
+        +survey_admin_forms survey=survey

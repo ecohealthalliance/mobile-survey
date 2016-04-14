@@ -9,12 +9,17 @@ FlowRouter.route '/admin/surveys',
     BlazeLayout.render 'layout',
       main: 'surveys'
 
-FlowRouter.route '/admin/surveys/:id',
+FlowRouter.route '/admin/surveys/:id/:page/:formId',
   action: ->
     BlazeLayout.render 'layout',
       main: 'survey_admin'
 
 FlowRouter.route '/admin/surveys/:id/:page',
+  action: ->
+    BlazeLayout.render 'layout',
+      main: 'survey_admin'
+
+FlowRouter.route '/admin/surveys/:id',
   action: ->
     BlazeLayout.render 'layout',
       main: 'survey_admin'

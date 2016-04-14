@@ -1,4 +1,5 @@
 getSurveys = => @Surveys
+getForms = => @Forms
 
 Meteor.methods
   createSurvey: (fields)->
@@ -6,6 +7,17 @@ Meteor.methods
       throw new Meteor.Error("The title field cannot be empty")
     fields.createdBy = @userId
     getSurveys().insert(fields)
+
+  createForm: (surveyId)->
+    #TODO Authenticate
+    formId = getForms().insert
+      name: "Form " + getForms().find().count()
+      createdBy: @userId
+    getSurveys().update({_id: surveyId}, {$addToSet: {forms: formId}})
+    formId
+
+  updateForm: (form)->
+    getForms().update(_id: form._id, { $set: form })
 
   getSurvey: (id)->
     getSurveys().findOne
