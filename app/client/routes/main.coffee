@@ -2,8 +2,7 @@ BlazeLayout.setRoot('body')
 
 FlowRouter.route '/',
   action: () ->
-    BlazeLayout.render 'layout',
-      main: 'container'
+    FlowRouter.go '/admin/surveys'
 
 FlowRouter.route '/admin/surveys',
   action: () ->
@@ -15,7 +14,5 @@ FlowRouter.route '/admin/surveys',
 FlowRouter.route '/admin/surveys/:id',
   action: (params) ->
     BlazeLayout.render 'layout',
-      main: 'survey'
+      main: 'survey_admin'
       params: params
-  subscriptions: (params, queryParams) ->
-    this.register('surveys', Meteor.subscribe('surveys'))

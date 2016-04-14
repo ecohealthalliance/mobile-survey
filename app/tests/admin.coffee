@@ -8,7 +8,7 @@ describe 'admin surveys page', ->
 
   it 'can create a survey', ->
     clickWhenVisible('#add-survey')
-    browser.waitForExist('.survey-name')
-    browser.waitForExist('.survey-title')
+    browser.setValue("[name='title']", "test")
+    browser.click('#confirm-create-survey')
     elements = browser.elements('.survey-title')
     assert.equal(elements.value.length, 1)

@@ -1,8 +1,8 @@
 template(name="surveys")
   .page-header
     h2 Surveys
-      a.btn.btn-sm(data-toggle="modal" data-target="#create-survey-modal")
-        i.fa.fa-plus Add Survey
+      a#add-survey.btn.btn-sm(data-toggle="modal" data-target="#create-survey-modal")
+        i.mdi.mdi-plus-circle Add Survey
       each surveys
         +survey_single
 

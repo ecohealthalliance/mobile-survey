@@ -4,7 +4,7 @@ template(name="create_survey_modal")
       .modal-content
         .modal-header
           button(type="button" class="close" data-dismiss="modal" aria-label="Close")
-            i.fa.fa-times-circle
+            i.mdi.mdi-close-circle
         .modal-body
           .form-group
             .row
@@ -22,4 +22,4 @@ template(name="create_survey_modal")
 
         .modal-footer
           button.btn.btn-default(data-dismiss='modal' aria-hidden='true') Cancel
-          button.btn.btn-primary Create Survey
+          button.btn.btn-primary#confirm-create-survey Create Survey

@@ -1,0 +1,11 @@
+template(name="survey_admin")
+  h1= title
+  p= description
+  each forms
+    h2= name
+    .row
+      .col-md-4
+        +form_add
+      .col-md-8
+        +form_edit
+      //- +form_preview
