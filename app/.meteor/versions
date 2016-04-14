@@ -1,5 +1,6 @@
 allow-deny@1.0.3
 anti:i18n@0.4.3
+arillo:flow-router-helpers@0.5.1
 aslagle:reactive-table@0.8.28
 autoupdate@1.2.7
 babel-compiler@6.6.1
@@ -90,3 +91,4 @@ url@1.0.8
 webapp@1.2.7
 webapp-hashing@1.0.8
 xolvio:cleaner@0.2.0
+zimme:active-route@2.3.2

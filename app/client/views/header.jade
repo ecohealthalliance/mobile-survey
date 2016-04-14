@@ -3,4 +3,7 @@ template(name="header")
     nav.navbar.navbar-default
       .container-fluid
         .navbar-header
-          a.navbar-brand.pull-left(href="/") Mobile Survey
+          a.navbar-brand.pull-left(href="/") Good Question
+        ul.nav.navbar-nav.navbar-right
+          li
+            a(href="{{pathFor 'surveys'}}") Surveys
