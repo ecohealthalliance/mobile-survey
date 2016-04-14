@@ -1,6 +1,28 @@
 template(name="survey_admin")
-  h1= title
-  p= description
+  .survey
+    nav.navbar.navbar-default.survey--nav
+      .container-fluid
+        .navbar-header
+          h2= survey.title
+        ul.nav.navbar-nav.navbar-right
+          li(class="{{#if isActiveRoute regex='survey_details'}} active {{/if}}")
+            a.survey--view-link(href="{{pathFor 'survey_details' id=id}}" data-route='survey_details') Details
+          li(class="{{#if isActiveRoute 'survey_forms'}} active {{/if}}")
+            a.survey--view-link(href="{{pathFor 'survey_forms' id=id}}" data-route='survey_forms') Forms
+          li(class="{{#if isActiveRoute 'survey_users'}} active {{/if}}")
+            a.survey--view-link(href="{{pathFor 'survey_users' id=id}}" data-route='survey_users') Users
+
+    .container-fluid
+      +Template.dynamic template=surveyView data=survey
+
+
+template(name="survey_details")
+  h3 Details
+  .survey--details
+    p= description
+
+template(name="survey_forms")
+  h3 Forms
   each forms
     h2= name
     .row
@@ -9,3 +31,6 @@ template(name="survey_admin")
       .col-md-8
         +form_edit
       //- +form_preview
+
+template(name="survey_users")
+  h3 Users
