@@ -1,15 +1,10 @@
 template(name="survey_admin_forms")
-  if formToEdit
-    +edit_form form=formToEdit
-  else
-    h2 Forms
-      a#add-form.btn.btn-sm
-        i.mdi.mdi-plus-circle Add Form
+  h3 Forms
+    a(href="{{pathFor 'survey_admin_forms_new' id=survey._id}}")#add-form.btn.btn-sm
+      i.mdi.mdi-plus-circle
+      | Add Form
+
+  ul.list-group
     each forms
-      h2= name
-      .row
-        .col-md-4
-          +form_add
-        .col-md-8
-          +form_edit
-        //- +form_preview
+      li.list-group-item
+        h5= name

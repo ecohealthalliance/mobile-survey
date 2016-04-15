@@ -1,7 +1,8 @@
 Template.survey_admin_forms.onCreated ->
   @survey = @data.survey
   # TODO: Limit to those in survey
-  @subscribe('forms')
+  @subscribe 'forms'
+  @creatingForm = new ReactiveVar false
 
 Template.survey_admin_forms.helpers
   forms: ->
@@ -14,10 +15,5 @@ Template.survey_admin_forms.helpers
   formToEdit: =>
     @Forms.findOne(_id: FlowRouter.getParam('formId'))
 
-Template.survey_admin_forms.events
-  'click #add-form': (event, instance)->
-    Meteor.call 'createForm', instance.survey._id, (error, formId)->
-      if error
-        toastr.error('Error')
-      else
-        FlowRouter.go("""/admin/surveys/#{instance.survey._id}/forms/#{formId}""")
+  creatingForm: ->
+    Template.instance().creatingForm.get()

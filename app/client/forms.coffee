@@ -86,7 +86,7 @@ Template.form_add.events
 
 
 Template.form_edit.onCreated ->
-  form_id = Template.currentData()._id
+  form_id = Template.instance().data.formId
   @autorun =>
     @subscribe 'questions', Forms.findOne(form_id).questions
 
