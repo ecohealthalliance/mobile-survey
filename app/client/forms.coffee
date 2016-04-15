@@ -73,8 +73,7 @@ Template.form_add.events
       text: form.label.value.trim()
       properties:
         placeholder: form.placeholder.value.trim()
-
-    Meteor.call "addQuestion", data._id, question, (error, response) ->
+    Meteor.call "addQuestion", data.form._id, question, (error, response) ->
       if error
         toastr.error("Something went wrong")
       else
@@ -86,9 +85,9 @@ Template.form_add.events
 
 
 Template.form_edit.onCreated ->
-  form_id = Template.instance().data.formId
+  formId = Template.instance().data.form._id
   @autorun =>
-    @subscribe 'questions', Forms.findOne(form_id).questions
+    @subscribe 'questions', Forms.findOne(formId).questions
 
 Template.form_edit.helpers
   hasQuestions: ->

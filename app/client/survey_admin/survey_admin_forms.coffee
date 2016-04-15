@@ -1,17 +1,11 @@
 Template.survey_admin_forms.onCreated ->
-  @survey = @data.survey
-  # TODO: Limit to those in survey
-  @subscribe 'forms'
-  @creatingForm = new ReactiveVar false
+  survey = @data.survey
+  if survey.forms
+    @subscribe 'surveyForms', survey.forms
 
 Template.survey_admin_forms.helpers
   forms: ->
-    forms = Template.instance().survey?.forms
-    if forms
-      selector = _.map forms, (obj) -> { _id: obj }
-      Forms.find( $or: selector )
-    else
-      []
+    Forms.find()
   formToEdit: =>
     @Forms.findOne(_id: FlowRouter.getParam('formId'))
 

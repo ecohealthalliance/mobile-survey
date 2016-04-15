@@ -13,6 +13,7 @@ Meteor.methods
     formId = getForms().insert
       name: props.name
       createdBy: @userId
+      questions: []
     getSurveys().update({_id: surveyId}, {$addToSet: {forms: formId}})
     formId
 

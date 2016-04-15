@@ -10,6 +10,11 @@ Meteor.publish 'forms', ->
 Meteor.publish 'form', (formId) ->
   Forms.find _id: formId
 
+Meteor.publish 'surveyForms', (formIds) ->
+  Forms.find
+    _id:
+      $in: formIds
+
 Meteor.publish 'questions', (IDs) ->
   selector = _.map IDs, (obj) -> { _id: obj }
   Questions.find( $or: selector )
