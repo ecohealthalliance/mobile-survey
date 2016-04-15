@@ -4,9 +4,6 @@ Meteor.publish 'surveys', ->
 Meteor.publish 'survey', (surveyId) ->
   Surveys.find _id: surveyId
 
-Meteor.publish 'forms', ->
-  Forms.find()
-
 Meteor.publish 'form', (formId) ->
   Forms.find _id: formId
 
