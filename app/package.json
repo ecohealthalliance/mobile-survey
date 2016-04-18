@@ -4,7 +4,7 @@
   "scripts": {
     "start": "meteor -p 13000 --settings settings.json",
     "pretest": "npm install --only=dev",
-    "test": "chimp --ddp=http://localhost:13000 --watch --path=tests/ --coffee=true --chai=true --sync=false"
+    "test": "chimp --ddp=http://localhost:13000 --watch --path=tests/ --coffee=true --compiler=coffee:coffee-script/register --chai=true --sync=false"
   },
   "dependencies": {
     "autoprefixer": "^6.3.1",
