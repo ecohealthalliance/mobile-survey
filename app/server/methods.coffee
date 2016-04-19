@@ -8,16 +8,17 @@ Meteor.methods
     fields.createdBy = @userId
     getSurveys().insert(fields)
 
-  createForm: (surveyId)->
+  createForm: (surveyId, props)->
     #TODO Authenticate
     formId = getForms().insert
-      name: "Form " + getForms().find().count()
+      name: props.name
       createdBy: @userId
+      questions: []
     getSurveys().update({_id: surveyId}, {$addToSet: {forms: formId}})
     formId
 
-  updateForm: (form)->
-    getForms().update(_id: form._id, { $set: form })
+  updateForm: (formId, form)->
+    getForms().update(_id: formId, { $set: form })
 
   getSurvey: (id)->
     getSurveys().findOne

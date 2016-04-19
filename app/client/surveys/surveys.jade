@@ -1,12 +1,13 @@
 template(name="surveys")
-  .page-header
-    h2 Surveys
-      a#add-survey.btn.btn-sm(data-toggle="modal" data-target="#create-survey-modal")
-        i.mdi.mdi-plus-circle Add Survey
-      +reactiveTableFilter id="tableFilter" label="Search"
-    +reactiveTable settings=tableSettings collection="administratedSurveys"
-  +create_survey_modal
-  +delete_survey_modal
+  .container-fluid
+    .page-header
+      h2 Surveys
+        a#add-survey.btn.btn-sm(data-toggle="modal" data-target="#create-survey-modal")
+          i.mdi.mdi-plus-circle Add Survey
+        +reactiveTableFilter id="tableFilter" label="Search"
+      +reactiveTable settings=tableSettings collection="administratedSurveys"
+    +create_survey_modal
+    +delete_survey_modal
 
 template(name="survey_item_controls")
   a.btn.btn-danger(data-toggle="modal" data-target="#delete-survey-modal") Delete

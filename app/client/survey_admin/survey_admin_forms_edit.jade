@@ -1,0 +1,14 @@
+template(name="survey_admin_forms_edit")
+  .survey-admin--content
+    form.edit-form
+      .form-group
+        .row
+          .col-sm-8
+            label
+              span Name
+              input.form-control(type='string' name='name' value=form.name maxlength='128')
+      button.btn.btn-primary 
+        if formId
+          | Save Form
+        else
+          | Create Form

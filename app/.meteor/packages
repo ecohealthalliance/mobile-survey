@@ -22,6 +22,8 @@ twbs:bootstrap
 chrismbeckett:toastr
 rubaxa:sortable
 dapearce:material-icons
+arillo:flow-router-helpers
+zimme:active-route
 
 # Our stack
 coffeescript
