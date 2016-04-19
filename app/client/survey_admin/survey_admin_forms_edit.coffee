@@ -17,9 +17,9 @@ Template.survey_admin_forms_edit.events
     if formId
       Meteor.call 'editForm', formId, props, (error)->
         if error
-          toastr.error('Error')
+          toastr.error 'Error'
         else
-          FlowRouter.go "/admin/surveys/#{instance.surveyId}/forms/#{formId}"
+          FlowRouter.go "/admin/surveys/#{instance.surveyId}/forms"
     else
       Meteor.call 'createForm', instance.surveyId, props, (error, formId)->
         if error
