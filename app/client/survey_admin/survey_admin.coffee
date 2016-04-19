@@ -4,3 +4,7 @@ Template.survey_admin.onCreated ->
 Template.survey_admin.helpers
   survey: ->
     Surveys.findOne _id: Template.instance().data.id
+  data: ->
+    instanceData = Template.instance().data
+    surveyId: instanceData.id
+    formId: instanceData.formId

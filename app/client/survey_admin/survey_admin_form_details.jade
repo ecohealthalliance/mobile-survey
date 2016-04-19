@@ -1,10 +1,11 @@
 template(name="survey_admin_form_details")
-  h4=form.name
-  if Template.subscriptionsReady
-    .form-details
-      .row
-        .col-md-4
-          +form_add form=form
-        .col-md-8
-          +form_edit form=form
-        //- +form_preview
+  .survey-admin--content
+    h4=form.name
+    if Template.subscriptionsReady
+      .form-details
+        .row
+          .col-md-4
+            +form_add form=form
+          .col-md-8
+            +form_edit form=form
+          //- +form_preview

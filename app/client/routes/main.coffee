@@ -30,8 +30,15 @@ FlowRouter.route '/admin/surveys/:id/users',
       main: 'survey_admin'
       params: params
 
+FlowRouter.route '/admin/surveys/:id/forms/:formId/edit',
+  name: 'survey_admin_forms_edit'
+  action: (params) ->
+    BlazeLayout.render 'layout',
+      main: 'survey_admin'
+      params: params
+
 FlowRouter.route '/admin/surveys/:id/forms/new',
-  name: 'survey_admin_forms_new'
+  name: 'survey_admin_forms_edit'
   action: (params) ->
     BlazeLayout.render 'layout',
       main: 'survey_admin'

@@ -17,8 +17,8 @@ Meteor.methods
     getSurveys().update({_id: surveyId}, {$addToSet: {forms: formId}})
     formId
 
-  updateForm: (form)->
-    getForms().update(_id: form._id, { $set: form })
+  updateForm: (formId, form)->
+    getForms().update(_id: formId, { $set: form })
 
   getSurvey: (id)->
     getSurveys().findOne

@@ -1,10 +1,11 @@
 template(name="survey_admin_forms")
-  h3 Forms
-    a(href="{{pathFor 'survey_admin_forms_new' id=survey._id}}")#add-form.btn.btn-sm
-      i.mdi.mdi-plus-circle
-      | Add Form
+  .survey-admin--content
+    h3 Forms
+      a(href="{{pathFor 'survey_admin_forms_edit' id=survey._id}}")#add-form.btn.btn-sm
+        i.mdi.mdi-plus-circle
+        | Add Form
 
-  ul.list-group
-    each forms
-      li.list-group-item.form-link
-        a(href="{{pathFor 'survey_admin_form_details' id=../survey._id formId=_id}}")= name
+    ul.list-group
+      each forms
+        li.list-group-item.form-link
+          a(href="{{pathFor 'survey_admin_form_details' id=../survey._id formId=_id}}")= name

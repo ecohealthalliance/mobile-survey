@@ -14,7 +14,8 @@ Meteor.publish 'surveyForms', (formIds) ->
 
 Meteor.publish 'questions', (IDs) ->
   selector = _.map IDs, (obj) -> { _id: obj }
-  Questions.find( $or: selector )
+  if selector.length
+    Questions.find( $or: selector )
 
 ReactiveTable.publish "administratedSurveys", @Surveys, ->
   if @userId

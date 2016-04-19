@@ -21,8 +21,8 @@ template(name="survey_admin")
         else if isActiveRoute 'survey_admin_forms'
           +survey_admin_forms survey=survey
 
-        else if isActiveRoute 'survey_admin_forms_new'
-          +survey_admin_forms_new survey=survey
+        else if isActiveRoute 'survey_admin_forms_edit'
+          +survey_admin_forms_edit data
 
         else if isActiveRoute 'survey_admin_form_details'
           +survey_admin_form_details
