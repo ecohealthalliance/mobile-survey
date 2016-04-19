@@ -4,16 +4,16 @@ _map = null # the map instance for the geofence trigger
 resizeMap = () ->
   _map.invalidateSize();
 
+Template.survey_admin_forms_edit.onCreated ->
+  @surveyId = @data.surveyId
+  @formId = @data.formId
+  @subscribe 'form', @formId
 
-Template.edit_form.onCreated ->
-  @survey = Template.parentData().survey
-  @form = @data.form
-
-Template.edit_form.helpers
+Template.survey_admin_forms_edit.helpers
   form: ->
-    Template.instance().form
+    Forms.findOne _id: Template.instance().formId
 
-Template.edit_form.events
+Template.survey_admin_forms_edit.events
   'click #toggleTrigger': (event, instance) ->
     if $('.trigger-container').is(':visible')
       $('.trigger-container').hide()
@@ -21,24 +21,28 @@ Template.edit_form.events
       $('.trigger-container').show()
       resizeMap()
   'click #cancelForm': (event, instance) ->
-    # upon canceling the edit_form, go to the list
-    # TODO possibly make a separate view 'create_form' that will only create the initial form upon form submission and allow the action to be canceled
-    # TODO the most recent form is not displayed upon navigating back to the list
-    FlowRouter.go("""/admin/surveys/#{instance.survey._id}/forms""")
+    # upon canceling, go to the list
+    FlowRouter.go("/admin/surveys/#{instance.surveyId}/forms")
   'submit form': (event, instance)->
     event.preventDefault()
-    formObj = _.object $(event.target).serializeArray().map(
-      ({name, value})-> [name, value]
-    )
-    formObj._id = instance.form._id
-    # TODO object validation
-    Meteor.call 'updateForm', formObj, (error, formId)->
-      if error
-        toastr.error('Error')
-      else
-        FlowRouter.go("""/admin/surveys/#{FlowRouter.getParam('id')}/forms""")
+    formId = instance.formId
+    form = event.currentTarget
+    props =
+      name: form.name.value
+    if formId
+      Meteor.call 'editForm', formId, props, (error)->
+        if error
+          toastr.error 'Error'
+        else
+          FlowRouter.go "/admin/surveys/#{instance.surveyId}/forms"
+    else
+      Meteor.call 'createForm', instance.surveyId, props, (error, formId)->
+        if error
+          toastr.error 'Error'
+        else
+          FlowRouter.go "/admin/surveys/#{instance.surveyId}/forms/#{formId}"
 
-Template.edit_form.onRendered ->
+Template.survey_admin_forms_edit.onRendered ->
   CartoDB = L.tileLayer 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
     layerName: 'CartoDB'
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
@@ -52,7 +56,7 @@ Template.edit_form.onRendered ->
 
   _map = L.map 'map', mapOptions
   _map.addControl L.control.zoom {position: 'bottomright'}
-  Template.edit_form.map = _map
+  Template.survey_admin_forms_edit.map = _map
 
   datetimeTrigger = $('#datetimeTrigger').datetimepicker {format: 'MM/DD/YY hh:mm'}
   datetimeTrigger.data('DateTimePicker').widgetPositioning {vertical: 'bottom', horizontal: 'right'}

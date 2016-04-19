@@ -1,0 +1,51 @@
+template(name="survey_admin_forms_edit")
+  .survey-admin--content
+    form.edit-form
+      .form-group
+        .row
+          .col-xs-12.col-sm-8
+            label
+              span Name
+            input.form-control(type='string' name='name' maxlength='128' value='#{form.name}')
+        .row
+          .col-xs-12.col-sm-8
+            label
+              span Trigger
+              a#toggleTrigger.btn.btn-sm
+                i.mdi.mdi-plus-circle
+
+        .trigger-container(style='display: none;')
+          .nav-floating-row
+            ul#tabs.nav.nav-tabs.trigger-nav-small(data-tabs='tabs')
+              li.active
+                a(href='#location' data-toggle='tab') Location
+              li
+                a(href='#datetime' data-toggle='tab') Date/Time
+          .tab-content.trigger-tabs
+              #location.tab-pane.active
+                .tab-content-floating-row
+                  .col-xs-12.col-sm-8
+                    input.form-control(type='number' name='radiusTrigger' value='#{form.radiusTrigger}' placeholder='Enter radius in miles')
+                    input.form-control(type='string' name='coordinateOrAddressTrigger' value='#{form.coordinateOrAddressTrigger}' placeholder='Enter coordinates or address')
+                .map-floating-row
+                  #map
+              #datetime.tab-pane
+                .tab-content-floating-row
+                  .col-xs-12.col-sm-8
+                    #datetimeTrigger.input-group.date
+                      input.form-control.datetime-trigger(type='string' name='datetimeTrigger' value='#{form.datetimeTrigger}' placeholder='Choose a date and time')
+                      span.input-group-addon
+                        span.glyphicon.glyphicon-calendar
+                  .clearfix(style='margin-bottom: 15px;')
+
+        .buttons-floating-row
+          button.btn.btn-primary#save-form
+            i.mdi.mdi-plus-circle
+            span
+              if formId
+                | Save Form
+              else
+                | Create Form
+          button.btn.btn-default#cancelForm(type="button")
+            i.mdi.mdi-close-circle-outline
+            span Cancel
