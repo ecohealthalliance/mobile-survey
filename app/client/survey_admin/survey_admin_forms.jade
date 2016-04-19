@@ -6,6 +6,13 @@ template(name="survey_admin_forms")
         | Add Form
 
     ul.list-group
-      each forms
+      +sortable(
+        items=forms
+        sortField='order'
+        handle='.sortable-handle'
+        ghostClass='sortable-ghost')
+
         li.list-group-item.form-link
+          span.sortable-handle
+            i.mdi.mdi-drag
           a(href="{{pathFor 'survey_admin_form_details' id=../survey._id formId=_id}}")= name
