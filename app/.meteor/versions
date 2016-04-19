@@ -5,6 +5,7 @@ autoupdate@1.2.7
 babel-compiler@6.6.1
 babel-runtime@0.1.7
 base64@1.0.7
+bevanhunt:leaflet@0.3.18
 binary-heap@1.0.7
 blaze@2.1.6
 blaze-html-templates@1.0.3
@@ -54,6 +55,7 @@ mobile-experience@1.0.3
 mobile-status-bar@1.0.11
 modules@0.5.2
 modules-runtime@0.6.2
+momentjs:moment@2.8.4
 mongo@1.1.6
 mongo-id@1.0.3
 mquandalle:jade@0.4.9
@@ -83,6 +85,7 @@ templating@1.1.8
 templating-tools@1.0.3
 tmeasday:test-reporter-helpers@0.2.1
 tracker@1.0.12
+tsega:bootstrap3-datetimepicker@4.17.37_1
 twbs:bootstrap@3.3.6
 ui@1.0.10
 underscore@1.0.7

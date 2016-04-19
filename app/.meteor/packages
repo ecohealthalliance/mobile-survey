@@ -22,6 +22,8 @@ twbs:bootstrap
 chrismbeckett:toastr
 rubaxa:sortable
 dapearce:material-icons
+bevanhunt:leaflet@0.3.18
+tsega:bootstrap3-datetimepicker@4.17.37_1
 
 # Our stack
 coffeescript
