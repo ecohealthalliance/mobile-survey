@@ -9,7 +9,7 @@ do ->
     url = require 'url'
 
     @Before (callback) ->
-      # @server.call('resetFixture')
+      @server.call 'resetFixture'
       @client.url(url.resolve(process.env.ROOT_URL, '/'))
         .execute (->
           # Meteor.logout()
