@@ -2,6 +2,8 @@ Feature: Admin
 
   @dev
   @admin
-  Scenario: Deleting a survey
+  Scenario: Creating a survey
     When I navigate to "/admin/surveys"
-    And I should see content "Important survey"
+    And I click "#add-survey"
+    And I fill in the add survey form
+    And I should see content "test survey"

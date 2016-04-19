@@ -15,6 +15,17 @@ do ->
           # Meteor.logout()
         ), callback
 
+    @When /^I click "([^"]*)"$/, (selector) ->
+      @client
+        .waitForVisible(selector)
+        .click(selector)
+
+    @When 'I fill in the add survey form', ->
+      @client
+        .waitForVisible('[name="title"]')
+        .setValue('[name="title"]', 'Test Survey')
+        .click('#confirm-create-survey')
+
     @When /^I navigate to "([^"]*)"$/, (relativePath) ->
       @client
         .url(url.resolve(process.env.ROOT_URL, relativePath))
