@@ -5,7 +5,7 @@ Template.survey_admin_forms.onCreated ->
 
 Template.survey_admin_forms.helpers
   forms: ->
-    Forms.find()
+    Forms.find {}, sort: {order: 1}
 
   formToEdit: =>
     @Forms.findOne(_id: FlowRouter.getParam('formId'))

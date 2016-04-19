@@ -19,5 +19,13 @@
   update: ->
     true
 
+@Forms.allow
+  insert: ->
+    true
+  remove: ->
+    true
+  update: ->
+    true
+
 if Meteor.isServer
   Sortable.collections = ['questions', 'forms']

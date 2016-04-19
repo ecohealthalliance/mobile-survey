@@ -10,12 +10,12 @@ Meteor.methods
 
   createForm: (surveyId, props)->
     #TODO Authenticate
-    currentFormCount = getSurveys().findOne(surveyId).forms.length
+    currentFormCount = getSurveys().findOne(surveyId).forms.length or 0
     formId = getForms().insert
       name: props.name
       createdBy: @userId
       questions: []
-      order: currentFormCount++
+      order: ++currentFormCount
     getSurveys().update({_id: surveyId}, {$addToSet: {forms: formId}})
     formId
 
@@ -26,15 +26,17 @@ Meteor.methods
     getSurveys().findOne
       _id: id
 
-  addQuestion: (form_id, data) ->
-    question_id = Questions.insert data
-    if question_id
-      form = Forms.findOne(form_id)
-      form.questions.push question_id
-      Forms.update(form_id, $set: {questions: form.questions})
+  addQuestion: (formId, data) ->
+    form = Forms.findOne(formId)
+    currentQuestionCount = form.questions.length or 0
+    data.order = ++currentQuestionCount
+    questionId = Questions.insert data
+    if questionId
+      form.questions.push questionId
+      Forms.update(formId, $set: {questions: form.questions})
 
-  removeQuestion: (question_id) ->
-    Forms.find(questions: question_id).forEach (item) ->
-      questions = _.without(item.questions, question_id)
+  removeQuestion: (questionId) ->
+    Forms.find(questions: questionId).forEach (item) ->
+      questions = _.without(item.questions, questionId)
       Forms.update(item._id, $set: questions: questions)
-    Questions.remove question_id
+    Questions.remove questionId
