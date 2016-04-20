@@ -16,6 +16,7 @@ fi
 # Put the data back
 function finish {
   echo "Restoring the stashed data..."
+  mongo localhost:13001/meteor .scripts/database/drop.js
   mongorestore -h 127.0.0.1 --port 13001 -d meteor tests/dump/meteor
   rm -rf tests/dump/
 }
