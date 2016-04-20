@@ -17,6 +17,8 @@ es5-shim                # ECMAScript 5 compatibility for older browsers.
 ecmascript              # Enable ECMAScript2015+ syntax in app code
 check
 
+goodquestion:openam
+
 # Third-party
 twbs:bootstrap
 chrismbeckett:toastr
@@ -26,13 +28,13 @@ arillo:flow-router-helpers
 zimme:active-route
 bevanhunt:leaflet@0.3.18
 tsega:bootstrap3-datetimepicker@4.17.37_1
+kadira:flow-router
+kadira:blaze-layout
 
 # Our stack
 coffeescript
 mquandalle:jade
 stylus
-kadira:flow-router
-kadira:blaze-layout
 
 # testing
 goodquestion:fixtures
