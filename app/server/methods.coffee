@@ -10,8 +10,10 @@ Meteor.methods
 
   createForm: (surveyId, props)->
     #TODO Authenticate
+    #TODO Validate
     formId = getForms().insert
       name: props.name
+      trigger: props.trigger
       createdBy: @userId
       questions: []
     getSurveys().update({_id: surveyId}, {$addToSet: {forms: formId}})
