@@ -1,2 +1,7 @@
+# Dev server
 run:
-	meteor -p 13000 --settings settings.json
+	npm run start
+
+# Acceptance test
+test:
+	npm run test

@@ -2,13 +2,17 @@
   "name": "app",
   "private": true,
   "scripts": {
-    "start": "meteor run",
-    "test": "meteor test --once --driver-package dispatch:mocha-phantomjs",
-    "test-watch": "meteor test --driver-package practicalmeteor:mocha",
-    "test-app-watch": "meteor test --full-app --driver-package practicalmeteor:mocha"
+    "start": "meteor -p 13000 --settings settings.json",
+    "pretest": "npm install --only=dev",
+    "test": ".scripts/run-tests.sh"
   },
   "dependencies": {
     "autoprefixer": "^6.3.1",
     "faker": "^3.0.1"
+  },
+  "devDependencies": {
+    "underscore": "^1.8.3",
+    "jquery": "^2.0.0",
+    "coffee-script": "^1.10.0"
   }
 }
