@@ -15,10 +15,6 @@ do ->
           # Meteor.logout()
         ), callback
 
-    # Clean-up for production
-    @After (callback) ->
-      @server.call 'resetFixture'
-
     @When /^I click "([^"]*)"$/, (selector) ->
       @client
         .waitForVisible(selector)
