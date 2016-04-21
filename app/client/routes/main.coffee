@@ -1,8 +1,12 @@
 BlazeLayout.setRoot('body')
 
+
 FlowRouter.route '/',
   action: ->
-    FlowRouter.go '/admin/surveys'
+    if Meteor.user()
+      FlowRouter.go '/admin/surveys'
+    else
+      FlowRouter.go 'login'
 
 
 loggedIn = FlowRouter.group
@@ -15,8 +19,6 @@ loggedIn = FlowRouter.group
   ]
 
 
-
-
 adminRoutes = loggedIn.group
   prefix: '/admin'
   name: 'admin'
@@ -24,7 +26,6 @@ adminRoutes = loggedIn.group
   #   unless Roles.userIsInRole Meteor.user(), [ 'admin' ]
   #     FlowRouter.go FlowRouter.path('dashboard')
   # ]
-
 
 
 adminRoutes.route '/surveys',

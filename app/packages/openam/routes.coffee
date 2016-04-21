@@ -1,15 +1,21 @@
+exposed = FlowRouter.group {}
 
 
-FlowRouter.route '/login',
+exposed.route '/login',
  name: 'login'
  action: ->
    BlazeLayout.render "login"
-FlowRouter.route '/signup',
+exposed.route '/signup',
  name: 'signup'
  action: ->
    BlazeLayout.render "signup"
 
-
+Meteor.startup ->
+  Meteor.autorun ->
+    if Meteor.userId()
+      FlowRouter.go '/admin/surveys'
+    else
+      FlowRouter.go 'login'
 
 # adminRoutes.route '/surveys',
 # action: () ->

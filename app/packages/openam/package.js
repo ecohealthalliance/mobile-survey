@@ -7,8 +7,6 @@ Package.describe({
 Package.onUse(function (api) {
   api.versionsFrom('1.2.1');
 
-  api.use('accounts-base');
-  api.use('accounts-password');
   api.use('coffeescript');
 
   api.use('kadira:flow-router', 'client');
