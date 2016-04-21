@@ -1,0 +1,46 @@
+template(name="add_question")
+  .panel.panel-default
+    .panel-heading
+      h4 Add new question
+    .panel-body
+      form(novalidate='novalidate')
+        .form-group(data-required='true')
+          label.control-label(for='new-label') Question *
+          input#new-label.form-control(type='text' name='text' required)
+        .form-group(data-required='true')
+          label.control-label(for='new-type') Question Type
+          .btn-grid
+            each types
+              button.btn.btn-default.type(type='button' class='{{#if selected}} active {{/if}}' data-type=name)= text
+        .form-group
+          label.control-label Required
+            input.form-control(type='checkbox' name='required')
+        if match type regex='shortAnswer|longAnswer'
+          .form-group
+            label.control-label(for='new-placeholder') Placeholder
+            input#new-placeholder.form-control(type='text', name='placeholder')
+        if match type regex='checkboxes|multipleChoice'
+          label Choices
+          .form-group(data-required='true')
+            each choices
+              .choice-container
+                input.form-control.choice(type='text' data-id=_id value=name)
+                a.delete-choice(data-id=_id)
+                  i.mdi.mdi-close-circle
+            else
+              button.btn.btn-primary.add-choice(type="button")
+                i.mdi.mdi-plus-circle Add a choice
+            unless isEmpty choices
+              button.btn.btn-primary.add-choice(type="button")
+                i.mdi.mdi-plus-circle Add another choice
+        if match type regex='scale|number'
+          .form-group
+            label.control-label Minimum
+              input.form-control.choice(type='number' name='min' step='any')
+          .form-group
+            label.control-label Maximum
+              input.form-control.choice(type='number' name='max' step='any')
+        .form-group
+          button.btn.btn-primary(type='submit')
+            span.mdi.mdi-library-plus
+            | Add Question

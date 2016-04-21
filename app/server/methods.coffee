@@ -34,7 +34,7 @@ Meteor.methods
       _id: id
 
   addQuestion: (formId, data) ->
-    form = Forms.findOne(formId)
+    form = getForms().findOne(formId)
     formQuestions = form.questions
     if formQuestions?.length
       lastQuestion = getQuestions().findOne
@@ -42,13 +42,13 @@ Meteor.methods
       data.order = ++lastQuestion.order
     else
       data.order = 1
-    questionId = Questions.insert data
+    questionId = getQuestions().insert data
     if questionId
       form.questions.push questionId
-      Forms.update(formId, $set: {questions: form.questions})
+      getForms().update(formId, $set: {questions: form.questions})
 
   removeQuestion: (questionId) ->
-    Forms.find(questions: questionId).forEach (item) ->
+    getForms().find(questions: questionId).forEach (item) ->
       questions = _.without(item.questions, questionId)
-      Forms.update(item._id, $set: questions: questions)
-    Questions.remove questionId
+      getForms().update(item._id, $set: questions: questions)
+    getQuestions().remove questionId
