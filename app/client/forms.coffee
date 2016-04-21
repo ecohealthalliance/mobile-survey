@@ -93,7 +93,4 @@ Template.form_edit.helpers
   hasQuestions: ->
     Questions.find().count()
   questions: ->
-    Questions.find()
-    # data = Template.currentData()
-    # selector = _.map data.questions, (obj) -> { _id: obj }
-    # Questions.find($or: selector, {sort: {order: 1}})
+    Questions.find {}, sort: {order: 1}
