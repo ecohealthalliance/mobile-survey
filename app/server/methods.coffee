@@ -11,13 +11,26 @@ Meteor.methods
   createForm: (surveyId, props)->
     #TODO Authenticate
     #TODO Validate
+
+    trigger = null
+    if props.trigger
+      if props.trigger.type == 'datetime'
+        trigger.datetime = new Date(trigger.datetime)
+
     formId = getForms().insert
       name: props.name
-      trigger: props.trigger
+      trigger: trigger
       createdBy: @userId
       questions: []
     getSurveys().update({_id: surveyId}, {$addToSet: {forms: formId}})
     formId
+
+  editForm: (formId, props) ->
+    trigger = null
+    if props.trigger
+      if props.trigger.type == 'datetime'
+        trigger.datetime = new Date(trigger.datetime)
+    getForms().update(_id: formId, { $set: props })
 
   updateForm: (formId, form)->
     getForms().update(_id: formId, { $set: form })
