@@ -7,7 +7,7 @@ template(name="survey_admin_forms_edit")
             label
               span Name
             input.form-control(type='string' name='name' maxlength='128' value='#{form.name}')
-        .row
+        .row(style='margin-top: 5px;')
           .col-xs-12.col-sm-8
             label
               span Trigger
@@ -25,8 +25,8 @@ template(name="survey_admin_forms_edit")
               #location.tab-pane.active
                 .tab-content-floating-row
                   .col-xs-12.col-sm-8
-                    input.form-control(type='number' name='radiusTrigger' value='#{form.radiusTrigger}' placeholder='Enter radius in miles')
-                    input.form-control(type='string' name='coordinateOrAddressTrigger' value='#{form.coordinateOrAddressTrigger}' placeholder='Enter coordinates or address')
+                    input#radiusTrigger.form-control(type='number' name='radiusTrigger' value='#{form.radiusTrigger}' placeholder='Enter radius in miles')
+                    input#coordinateOrAddressTrigger.form-control(type='string' name='coordinateOrAddressTrigger' value='#{form.coordinateOrAddressTrigger}' placeholder='Enter coordinates or address')
                 .map-floating-row
                   #map
               #datetime.tab-pane

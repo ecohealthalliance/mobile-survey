@@ -11,6 +11,7 @@ Meteor.methods
 
   createForm: (surveyId, props)->
     #TODO Authenticate
+    #TODO Validate
     surveyForms = getSurveys().findOne(surveyId).forms
     if surveyForms?.length
       lastForm = getForms().findOne
@@ -20,6 +21,7 @@ Meteor.methods
       order = 1
     formId = getForms().insert
       name: props.name
+      trigger: props.trigger
       createdBy: @userId
       questions: []
       order: order
