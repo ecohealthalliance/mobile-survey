@@ -31,8 +31,19 @@ $blue = #337AB7
 .form-link
   padding 0
   overflow hidden
+  .sortable-handle
+    position absolute
+    height 100%
+    width 40px
+    margin 0
+    i
+      position absolute
+      width 100%
+      top 50%
+      transform translate(0,-50%)
+      text-align center
   a
-    padding 15px
+    padding 15px 15px 15px 45px
     display block
     &:hover
       background #f9f9f9

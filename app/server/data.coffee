@@ -38,6 +38,7 @@ Meteor.startup ->
       name: "Test form"
       triggers: []
       questions: question_ids
+      order: 1
 
     Surveys.insert
       title: "Important survey"
