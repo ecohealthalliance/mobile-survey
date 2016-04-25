@@ -168,15 +168,18 @@ suggestionGenerator = (instance, query, callback) ->
     if res.statusCode != 200
       toastr.error('Network Error: ' + res.statusCode)
       return
-    if _.isArray(res.data) && res.data.length > 0
+    if _.isArray(res.data)
       # the tokenizer expects an array of objects with keys 'label', 'value', we add 'raw' for the _suggestionTemplate
       matches = _.map res.data, (loc) -> {'label': loc.display_name, 'value': loc.place_id, raw: loc}
+      if Object.keys(matches).length == 0
+        toastr.warning('No results found.')
+        return
       callback(matches)
   )
 
 # leaflet event handler for when a map is clicked
 onMapClick = (event) ->
-  if _searchBar.tokenfield('getTokens').lenght > 0
+  if _searchBar.tokenfield('getTokens').length > 0
     # TODO show a sweetalert / bootstrap confirm to confirm clicking on the map when an address is present
     return
   addMarker(event.latlng)
@@ -232,6 +235,10 @@ Template.survey_admin_forms_edit.events
     )
     return
   'tokenfield:createtoken': (e) ->
+    if e.keyCode == 13 or e.keyCode == 9
+      e.preventDefault()
+      e.stopPropagation()
+      return
     $target = $(e.target)
     tokens = $target.tokenfield('getTokens')
     if tokens.length >= 1
@@ -250,6 +257,7 @@ Template.survey_admin_forms_edit.events
     if not obj.hasOwnProperty('raw')
       $target.tokenfield('setTokens', [])
       toastr.error('Invalid address, please select one from the search results.')
+      $('.twitter-typeahead').show()
       return
     latLng = L.latLng(e.attrs.raw.lat, e.attrs.raw.lon)
     addMarker(latLng, true)
