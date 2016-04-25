@@ -5,3 +5,7 @@ run:
 # Acceptance test
 test:
 	npm run test
+
+# Acceptance test (watch)
+test-watch:
+	npm run test-watch
