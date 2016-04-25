@@ -7,5 +7,5 @@ Template.login.events
     # console.log form.password.value.trim()
 
     Meteor.call("loginUser", "yursky555@blurg.com", "P@ssw0rd", (err, token) ->
-      Meteor.loginWithToken(token);
+      Meteor.loginWithToken(token)
     )
