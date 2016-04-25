@@ -10,10 +10,13 @@ Package.onUse(function (api) {
   api.use('coffeescript');
 
   api.use('kadira:flow-router', 'client');
+  api.use('stylus', 'client');
   api.use('templating', 'client');
   api.use('mquandalle:jade', 'client');
 
   api.use('http', 'server');
+
+  api.addFiles('stylesheets/signin.styl', 'client');
 
   api.addFiles('views/login.jade', 'client');
   api.addFiles('views/signup.jade', 'client');
