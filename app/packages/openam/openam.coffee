@@ -73,7 +73,7 @@ Meteor.methods
         # will also log the user in locally to setup the base session. That is why
         # it is important to store the current password in the local db as well.
         # Meteor.loginWithPassword(email, password)
-        console.log userData
+        # console.log userData
         tokenObject =
           token: userData.headers.iplanetDirectoryPro
           when: new Date

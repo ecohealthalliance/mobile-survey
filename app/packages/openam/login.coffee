@@ -2,10 +2,10 @@ Template.login.events
   'submit form': (event, instance) ->
     event.preventDefault()
 
-    # form = event.currentTarget
-    # console.log form.username.value.trim()
-    # console.log form.password.value.trim()
+    form = event.currentTarget
+    email = form.username.value.trim()
+    passw = form.password.value.trim()
 
-    Meteor.call("loginUser", "yursky555@blurg.com", "P@ssw0rd", (err, token) ->
+    Meteor.call("loginUser", email, passw, (err, token) ->
       Meteor.loginWithToken(token)
     )

@@ -1,15 +1,3 @@
-exposed = FlowRouter.group {}
-
-
-exposed.route '/login',
- name: 'login'
- action: ->
-   BlazeLayout.render "login"
-exposed.route '/signup',
- name: 'signup'
- action: ->
-   BlazeLayout.render "signup"
-
 Meteor.startup ->
   Meteor.autorun ->
     if Meteor.userId()
@@ -17,21 +5,30 @@ Meteor.startup ->
     else
       FlowRouter.go 'login'
 
-# adminRoutes.route '/surveys',
-# action: () ->
-#   BlazeLayout.render 'layout',
-#     main: 'surveys'
-#
-# adminRoutes.route '/surveys/:id',
-# name: 'survey_admin_details'
-# action: (params) ->
-#   BlazeLayout.render 'layout',
-#     main: 'survey_admin'
-#     params: params
-#
-# adminRoutes.route '/surveys/:id/forms',
-# name: 'survey_admin_forms'
-# action: (params) ->
-#   BlazeLayout.render 'layout',
-#     main: 'survey_admin'
-#     params: params
+
+exposed = FlowRouter.group {}
+
+loggedIn = FlowRouter.group
+  triggersEnter: [ ->
+    unless Meteor.loggingIn() or Meteor.userId()
+      route = FlowRouter.current()
+      FlowRouter.go 'login'
+  ]
+
+adminRoutes = loggedIn.group
+  prefix: '/admin'
+  name: 'admin'
+
+
+exposed.route '/login',
+ name: 'login'
+ action: ->
+   BlazeLayout.render "login"
+
+
+adminRoutes.route '/signup',
+  name: 'signup'
+  action: (params) ->
+    BlazeLayout.render 'layout',
+      main: 'signup'
+      params: params
