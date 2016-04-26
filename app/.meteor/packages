@@ -29,6 +29,7 @@ tsega:bootstrap3-datetimepicker@4.17.37_1
 fortawesome:fontawesome@4.5.0
 ajduke:bootstrap-tokenfield@0.5.0
 fourq:typeahead@1.0.0
+aldeed:geocoder@0.3.8
 
 # Our stack
 coffeescript

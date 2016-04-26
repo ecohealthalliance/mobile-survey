@@ -1,5 +1,6 @@
 accounts-base@1.2.7
 ajduke:bootstrap-tokenfield@0.5.0
+aldeed:geocoder@0.3.8
 allow-deny@1.0.4
 anti:i18n@0.4.3
 arillo:flow-router-helpers@0.5.1

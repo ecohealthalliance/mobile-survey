@@ -14,12 +14,8 @@ _shape =
   fillOpacity: 0.5
 # the underscore templates for the typeahead result
 _suggestionTemplate = _.template('
-  <span class="typeahead-code">
-    <%= raw.place_id %>
-  </span>
-  <br/>
   <span class="typeahead-info">
-    <%= raw.display_name %>
+    <%= raw.formattedAddress %>
   </span>')
 _typeaheadFooter = _.template('
   <div class="typeahead-footer">
@@ -39,8 +35,10 @@ resizeMap = () ->
 resetMap = () ->
   if _geofenceMarker != null
     _map.removeLayer(_geofenceMarker)
+    _geofenceMarker = null
   if _geofenceShape != null
     _map.removeLayer(_geofenceShape)
+    _geofenceShape = null
 
 # add marker to the map
 #
@@ -149,8 +147,7 @@ getActiveTrigger = () ->
 # @param [String] q, the query
 # @param [Function] cb, the callback to the suggestionGenerator
 debounceAddressSearch = _.debounce((q, cb) ->
-  url = encodeURI('http://nominatim.openstreetmap.org/search/'+q)
-  Meteor.http.get(url, {params: {format: 'json', limit: 10}}, cb)
+  Meteor.call('geocode', q, cb)
 , 1500)
 
 # generate suggestions for the searchBar
@@ -165,15 +162,13 @@ suggestionGenerator = (instance, query, callback) ->
     if err
       toastr.error(err.message)
       return
-    if res.statusCode != 200
-      toastr.error('Network Error: ' + res.statusCode)
+    if Object.keys(res).length == 0
+      toastr.warning('No results found.')
+      callback([])
       return
-    if _.isArray(res.data)
+    if _.isObject(res)
       # the tokenizer expects an array of objects with keys 'label', 'value', we add 'raw' for the _suggestionTemplate
-      matches = _.map res.data, (loc) -> {'label': loc.display_name, 'value': loc.place_id, raw: loc}
-      if Object.keys(matches).length == 0
-        toastr.warning('No results found.')
-        return
+      matches = _.map Object.keys(res), (key) -> {'label': res[key].formattedAddress, 'value': res[key].extra.googlePlaceId, raw: res[key]}
       callback(matches)
   )
 
@@ -259,7 +254,7 @@ Template.survey_admin_forms_edit.events
       toastr.error('Invalid address, please select one from the search results.')
       $('.twitter-typeahead').show()
       return
-    latLng = L.latLng(e.attrs.raw.lat, e.attrs.raw.lon)
+    latLng = L.latLng(e.attrs.raw.latitude, e.attrs.raw.longitude)
     addMarker(latLng, true)
   'submit form': (event, instance)->
     event.preventDefault()

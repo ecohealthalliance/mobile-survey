@@ -2,6 +2,12 @@ getSurveys = => @Surveys
 getForms = => @Forms
 getQuestions = => @Questions
 
+geo = new GeoCoder(
+  geocoderProvider: "google",
+  httpAdapter: "https",
+  apiKey: Meteor.settings.googleApiKey
+)
+
 Meteor.methods
   createSurvey: (fields)->
     if not fields?.title or fields.title.length == 0
@@ -33,6 +39,9 @@ Meteor.methods
       order: order
     getSurveys().update({_id: surveyId}, {$addToSet: {forms: formId}})
     formId
+
+  geocode: (address) ->
+    geo.geocode(address)
 
   editForm: (formId, props) ->
     trigger = null
