@@ -72,17 +72,15 @@ Meteor.methods
         # Even though actual authentication takes place on the OpenAM server, we
         # will also log the user in locally to setup the base session. That is why
         # it is important to store the current password in the local db as well.
-        # Meteor.loginWithPassword(email, password)
-        # console.log userData
         tokenObject =
           token: userData.headers.iplanetDirectoryPro
           when: new Date
         user = Accounts.findUserByEmail(email)
+        unless user
+          Accounts.createUser { email: email, password: password }
+          user = Accounts.findUserByEmail(email)
         Accounts._insertLoginToken(user._id, tokenObject)
-        # Meteor.loginWithToken(tokenObject);
-        # console.log "userData:",tokenObject
-        # console.log "user: ", user
-        future["return"](tokenObject.token)
+        future.return(tokenObject.token)
     future.wait()
 
   changeUserPassword: (currentPassword, newPassword) ->
