@@ -8,16 +8,14 @@ Meteor.startup ->
 
 exposed = FlowRouter.group {}
 
-loggedIn = FlowRouter.group
+adminRoutes = FlowRouter.group
+  prefix: '/admin'
+  name: 'admin'
   triggersEnter: [ ->
     unless Meteor.loggingIn() or Meteor.userId()
       route = FlowRouter.current()
       FlowRouter.go 'login'
   ]
-
-adminRoutes = loggedIn.group
-  prefix: '/admin'
-  name: 'admin'
 
 
 exposed.route '/login',

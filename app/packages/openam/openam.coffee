@@ -54,18 +54,18 @@ createUser = (userCreateData, callback) ->
 
 Meteor.methods
   registerNewUser: (email, password) ->
-    console.log email, password
+    @unblock()
     initiateAdminAuthentication (authData) ->
       authenticate authData, (userData) ->
-        userData.data = {
-          "username": email,
-          "userpassword": password,
-          "mail":email
-        }
+        userData.data =
+          username: email
+          userpassword: password
+          mail: email
         createUser userData, (result) ->
           console.log result
 
   loginUser: (email, password) ->
+    @unblock()
     future = new Future()
     initiateAuthentication email, password, (authData) ->
       authenticate authData, (userData) ->
@@ -84,10 +84,12 @@ Meteor.methods
     future.wait()
 
   changeUserPassword: (currentPassword, newPassword) ->
+    @unblock()
     # make sure that we change the password in both OpenAM and in the Meteor db
     # (even thought we don't use the local password for anything...)
     console.log "implement this"
 
   logoutUser: () ->
+    @unblock()
     Accounts.logout()
     #logout of openAM also

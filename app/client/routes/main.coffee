@@ -8,24 +8,14 @@ FlowRouter.route '/',
     else
       FlowRouter.go 'login'
 
-
-loggedIn = FlowRouter.group
+adminRoutes = FlowRouter.group
+  prefix: '/admin'
+  name: 'admin'
   triggersEnter: [ ->
     unless Meteor.loggingIn() or Meteor.userId()
       route = FlowRouter.current()
-      # unless route.route.name is 'login'
-        # Session.set 'redirectAfterLogin', route.path
       FlowRouter.go 'login'
   ]
-
-
-adminRoutes = loggedIn.group
-  prefix: '/admin'
-  name: 'admin'
-  # triggersEnter: [ ->
-  #   unless Roles.userIsInRole Meteor.user(), [ 'admin' ]
-  #     FlowRouter.go FlowRouter.path('dashboard')
-  # ]
 
 
 adminRoutes.route '/surveys',
