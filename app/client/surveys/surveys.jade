@@ -4,8 +4,13 @@ template(name="surveys")
       h2 Surveys
         a#add-survey.btn.btn-sm(data-toggle="modal" data-target="#create-survey-modal")
           i.mdi.mdi-plus-circle Add Survey
-        +reactiveTableFilter id="tableFilter" label="Search"
-      +reactiveTable settings=tableSettings collection="administratedSurveys"
+
+      if subscribed
+        ul.list-group
+          each surveys
+            li.list-group-item.form-link
+              a(href="{{pathFor 'survey_admin_details' id=id}}")= attributes.title
+
     +create_survey_modal
     +delete_survey_modal
 
