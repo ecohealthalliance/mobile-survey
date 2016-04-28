@@ -17,8 +17,6 @@ Template.survey_admin.helpers
   subscribed: ->
     Template.instance().subscribed.get()
   survey: ->
-    Template.instance().survey.attributes
-  surveyObj: ->
     Template.instance().survey
   data: ->
     instanceData = Template.instance().data
