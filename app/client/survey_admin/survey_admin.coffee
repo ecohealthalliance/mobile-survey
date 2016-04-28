@@ -1,9 +1,25 @@
+Parse = require 'parse'
+
 Template.survey_admin.onCreated ->
-  @subscribe 'survey', @data.id
+  @subscribed = new ReactiveVar false
+  surveyId = @data.id
+  self = @
+  query = new Parse.Query Survey
+
+  query.get(surveyId).then (survey) ->
+      self.subscribed.set true
+      self.survey = survey
+    ,
+    (obj, error) ->
+      throw new Meteor.Error 'server', error.message
 
 Template.survey_admin.helpers
+  subscribed: ->
+    Template.instance().subscribed.get()
   survey: ->
-    Surveys.findOne _id: Template.instance().data.id
+    Template.instance().survey.attributes
+  surveyObj: ->
+    Template.instance().survey
   data: ->
     instanceData = Template.instance().data
     surveyId: instanceData.id

@@ -3,7 +3,6 @@ Template.create_survey_modal.onCreated ->
 
 Template.create_survey_modal.helpers
   creating: ->
-    console.log Template.instance().creating.get()
     Template.instance().creating.get()
 
 Template.create_survey_modal.events
