@@ -71,7 +71,7 @@ Template.add_question.events
     
     unless form.checkValidity()
       toastr.error('Please fill out all required fields')
-      throw new Meteor.Error('Invalid form')
+      return
 
     formData = _.object $(form).serializeArray().map(
       ({name, value})-> [name, value]
@@ -80,18 +80,18 @@ Template.add_question.events
 
     if not instance.type.get()
       toastr.error('Please select a type')
-      throw new Meteor.Error('Invalid form')
+      return
 
     if instance.type.get() == 'multipleChoice' or instance.type.get() == 'checkboxes'
       console.log instance.choices
       if instance.choices.find().count() == 0
         toastr.error('Please add some choices')
-        throw new Meteor.Error('Invalid form')
+        return
       else
         choiceStrings = instance.choices.find().map(({name})-> name)
         if _.any(choiceStrings, _.isEmpty)
           toastr.error('Please fill in all the choices')
-          throw new Meteor.Error('Invalid form')
+          return
         questionProperties.choices = choiceStrings
 
     questionProperties.required = questionProperties.required is 'on'

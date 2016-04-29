@@ -1,3 +1,7 @@
 {
-  "googleApiKey": "ADD-YOUR-API-KEY"
+  "googleApiKey": "ADD-YOUR-API-KEY",
+  "private": {
+    "open_AM_admin": "amAdmin",
+    "open_AM_password": "zBLPuWe+ylyqt0"
+  }
 }

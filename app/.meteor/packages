@@ -10,12 +10,16 @@ mongo                   # The database Meteor supports right now
 blaze-html-templates    # Compile .html files into Meteor Blaze views
 reactive-var            # Reactive variable for tracker
 underscore
+accounts-base
+accounts-password
 
 standard-minifier-css   # CSS minifier run for production mode
 standard-minifier-js    # JS minifier run for production mode
 es5-shim                # ECMAScript 5 compatibility for older browsers.
 ecmascript              # Enable ECMAScript2015+ syntax in app code
 check
+
+goodquestion:openam
 
 # Third-party
 twbs:bootstrap
@@ -30,13 +34,13 @@ fortawesome:fontawesome@4.5.0
 ajduke:bootstrap-tokenfield@0.5.0
 fourq:typeahead@1.0.0
 aldeed:geocoder@0.3.8
+kadira:flow-router
+kadira:blaze-layout
 
 # Our stack
 coffeescript
 mquandalle:jade
 stylus
-kadira:flow-router
-kadira:blaze-layout
 
 # testing
 goodquestion:fixtures
