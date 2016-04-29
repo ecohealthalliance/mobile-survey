@@ -7,13 +7,9 @@ template(name="survey_admin_forms")
           | Add Form
 
       if hasForms
-        ul.list-group
-          +sortable(
-            items=forms
-            handle='.sortable-handle'
-            ghostClass='sortable-ghost')
-
+        ul.list-group#forms
+          each forms
             li.list-group-item.form-link
               span.sortable-handle
                 i.mdi.mdi-drag
-              a(href="{{pathFor 'survey_admin_form_details' id=survey.id formId=_id}}")= title
+              a(href="{{pathFor 'survey_admin_form_details' id=surveyId formId=parseId}}")= title
