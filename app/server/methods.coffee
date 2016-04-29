@@ -12,8 +12,10 @@ geo = new GeoCoder(
 
 Meteor.methods
   createSurvey: (fields) ->
+    @unblock()
+    unless @userId then throw new Meteor.Error(500, 'Not Authorized')
     if not fields?.title or fields.title.length == 0
-      throw new Meteor.Error("The title field cannot be empty")
+      throw new Meteor.Error(501, 'The title field cannot be empty')
     fields.createdBy = @userId
     survey = new Survey()
     survey.save(fields).then ((survey) ->
@@ -21,7 +23,9 @@ Meteor.methods
     ), (error) ->
       throw new Meteor.Error error
 
-  createForm: (surveyId, props)->
+  createForm: (surveyId, props) ->
+    @unblock()
+    unless @userId then throw new Meteor.Error(500, 'Not Authorized')
     #TODO Authenticate
     #TODO Validate
 
@@ -56,19 +60,25 @@ Meteor.methods
         trigger.datetime = new Date(trigger.datetime)
     getForms().update(_id: formId, { $set: props })
 
-  updateForm: (formId, form)->
+  updateForm: (formId, form) ->
+    @unblock()
+    unless @userId then throw new Meteor.Error(500, 'Not Authorized')
     getForms().update(_id: formId, { $set: form })
 
   getSurvey: (id)->
+    @unblock()
+    unless @userId then throw new Meteor.Error(500, 'Not Authorized')
     getSurveys().findOne
       _id: id
 
   addQuestion: (formId, data) ->
+    @unblock()
+    unless @userId then throw new Meteor.Error(500, 'Not Authorized')
     form = getForms().findOne(formId)
     formQuestions = form.questions
     if formQuestions?.length
       lastQuestion = getQuestions().findOne
-        _id: {$in: formQuestions}, {sort: order: -1}
+        _id: { $in: formQuestions }, { sort: order: -1 }
       data.order = ++lastQuestion.order
     else
       data.order = 1
@@ -78,6 +88,8 @@ Meteor.methods
       getForms().update(formId, $set: {questions: form.questions})
 
   removeQuestion: (questionId) ->
+    @unblock()
+    unless @userId then throw new Meteor.Error(500, 'Not Authorized')
     getForms().find(questions: questionId).forEach (item) ->
       questions = _.without(item.questions, questionId)
       getForms().update(item._id, $set: questions: questions)
