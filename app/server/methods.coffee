@@ -1,13 +1,19 @@
+Parse = require 'parse/node'
+
 getSurveys = => @Surveys
 getForms = => @Forms
 getQuestions = => @Questions
 
 Meteor.methods
-  createSurvey: (fields)->
+  createSurvey: (fields) ->
     if not fields?.title or fields.title.length == 0
       throw new Meteor.Error("The title field cannot be empty")
     fields.createdBy = @userId
-    getSurveys().insert(fields)
+    survey = new Survey()
+    survey.save(fields).then ((survey) ->
+      survey.id
+    ), (error) ->
+      throw new Meteor.Error error
 
   createForm: (surveyId, props)->
     #TODO Authenticate
