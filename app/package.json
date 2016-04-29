@@ -13,6 +13,7 @@
     "faker": "^3.0.1",
     "meteor-node-stubs": "^0.2.3",
     "parse": "^1.8.3",
+    "sortablejs": "^1.4.2",
     "utf-8-validate": "^1.2.1"
   },
   "devDependencies": {

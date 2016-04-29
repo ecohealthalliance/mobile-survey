@@ -4,8 +4,8 @@ Template.survey_admin.onCreated ->
   @subscribed = new ReactiveVar false
   surveyId = @data.id
   self = @
-  query = new Parse.Query Survey
 
+  query = new Parse.Query Survey
   query.get(surveyId).then (survey) ->
       self.subscribed.set true
       self.survey = survey
