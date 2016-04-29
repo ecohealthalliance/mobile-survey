@@ -1,3 +1,12 @@
+
+verticallyCenter($position=true)
+  if $position
+    position absolute
+  top 50%
+  transform translate(0,-50%)
+
+$blue = #337AB7
+
 .survey-admin
   h3
     font-size 1.2em
@@ -60,10 +69,10 @@
 .map-floating-row
   position relative
   z-index 1
-  margin-left -10%
-  margin-right -10%
-  margin-bottom -110px
-  top -90px
+  margin-left -4%
+  margin-right -4%
+  margin-bottom -115px
+  top -95px
 
 .buttons-floating-row
   position relative
@@ -102,3 +111,83 @@
 .trigger-nav-small
   margin-bottom 5px
   border-bottom none
+
+.address-searching-spinner
+  position relative
+  top -22px
+  float right
+  margin-right 20px
+  font-weight bold
+  color $blue
+
+.visible
+  opacity 1
+
+.invisible
+  opacity 0
+
+input.inline-30
+  width 29.5%
+  display inline
+
+input.inline-70
+  width 69.5%
+  display inline
+  float right
+
+.searchBar
+  position relative
+  width 100%
+  border-left 0
+  border-right 0
+  font-size 1em
+
+#searchIcon
+  verticallyCenter()
+  left 10px
+  color $blue
+
+.token
+  max-width 95% !important
+
+.token-label
+  overflow hidden !important
+  max-width 100% !important
+
+.tokenfield
+  padding-left 25px
+
+.twitter-typeahead
+  width 80% !important
+  margin-left 5px
+
+.token-input.tt-input
+  width 100% !important
+
+.typeahead-code
+  min-width 15%
+  font-size 115%
+  font-weight bold
+  font-weight 800
+  color #666
+
+.typeahead-info
+  color #666
+  font-size 95%
+  .typeahead-additional-info
+    display block
+    font-size 85%
+    color #999
+    font-style italic
+  > span
+    text-transform capitalize
+
+.typeahead-footer
+  color #666
+  font-size 95%
+  margin 2px 0 2px 15px
+
+.pull-middle
+  display table-cell
+  vertical-align middle
+  float none

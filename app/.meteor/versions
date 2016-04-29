@@ -1,4 +1,6 @@
 accounts-base@1.2.7
+ajduke:bootstrap-tokenfield@0.5.0
+aldeed:geocoder@0.3.8
 accounts-password@1.1.8
 allow-deny@1.0.4
 anti:i18n@0.4.3
@@ -38,6 +40,8 @@ ejson@1.0.11
 email@1.0.12
 es5-shim@4.5.10
 fastclick@1.0.11
+fortawesome:fontawesome@4.5.0
+fourq:typeahead@1.0.0
 geojson-utils@1.0.8
 goodquestion:fixtures@0.1.0
 goodquestion:openam@0.1.0

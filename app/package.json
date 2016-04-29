@@ -2,7 +2,7 @@
   "name": "app",
   "private": true,
   "scripts": {
-    "start": "meteor -p 13000 --settings settings-dev.json",
+    "start": "meteor -p 13000 --settings settings.json",
     "pretest": "npm install --only=dev",
     "test": ".scripts/run-tests.sh",
     "test-watch": "WATCH=true .scripts/run-tests.sh"
