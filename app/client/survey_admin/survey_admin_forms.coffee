@@ -3,7 +3,7 @@ Sort = require 'sortablejs'
 {updateSortOrder} = require '../../imports/list_helpers'
 
 Template.survey_admin_forms.onCreated ->
-  @subscribed = new ReactiveVar false
+  @fetched = new ReactiveVar false
   @forms = new Meteor.Collection null
   @survey = @data.survey
   instance = @
@@ -11,7 +11,7 @@ Template.survey_admin_forms.onCreated ->
   relation = @survey.relation 'forms'
   formQuery = relation.query()
   formQuery.each (form) ->
-    instance.subscribed.set true
+    instance.fetched.set true
     formProps =
       parseId: form.id
       title: form.get 'title'
@@ -23,17 +23,15 @@ Template.survey_admin_forms.onCreated ->
 Template.survey_admin_forms.onRendered ->
   instance = @
   Meteor.autorun ->
-    subscribed = instance.subscribed.get()
+    fetched = instance.fetched.get()
     Meteor.defer ->
-      if subscribed
+      if fetched
         Sort.create forms,
           handle: '.sortable-handle'
           onSort: (event) ->
             updateSortOrder(event, instance.survey, 'forms')
 
 Template.survey_admin_forms.helpers
-  subscribed: ->
-    Template.instance().subscribed.get()
   forms: ->
     Template.instance().forms?.find {}, sort: {order: 1}
   hasForms: ->
