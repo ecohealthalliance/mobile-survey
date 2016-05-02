@@ -12,4 +12,5 @@ template(name="survey_admin_forms")
             li.list-group-item.form-link(data-id=parseId)
               span.sortable-handle
                 i.mdi.mdi-drag
-              a(href="{{pathFor 'survey_admin_form_details' id=surveyId formId=parseId}}")= title
+              a(href="{{pathFor 'survey_admin_form_details' id=surveyId formId=parseId}}")=title
+              a.btn.btn-default.edit(href="forms/#{parseId}/edit") Edit
