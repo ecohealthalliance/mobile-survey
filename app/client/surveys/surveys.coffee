@@ -1,4 +1,5 @@
 Parse = require 'parse'
+{Survey} = require '../../imports/models'
 
 Template.surveys.onCreated ->
   @fetched = new ReactiveVar false

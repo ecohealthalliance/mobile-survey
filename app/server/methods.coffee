@@ -1,4 +1,5 @@
 Parse = require 'parse/node'
+{Survey, Form} = require '../imports/models'
 
 # getSurveys = => @Surveys
 getForms = => @Forms
