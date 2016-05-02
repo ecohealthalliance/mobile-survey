@@ -181,7 +181,7 @@ onMapClick = (event) ->
 
 Template.survey_admin_forms_edit.onCreated ->
   @isAddressSearching = new ReactiveVar(false)
-  @surveyId = @data.surveyId
+  @survey = @data.survey
   @formId = @data.formId
   @form = new ReactiveVar(null)
   @subscribe 'form', @formId,
@@ -209,7 +209,7 @@ Template.survey_admin_forms_edit.events
       resizeMap()
   'click #cancelForm': (event, instance) ->
     # upon canceling, go to the list
-    FlowRouter.go("/admin/surveys/#{instance.surveyId}/forms")
+    FlowRouter.go("/admin/surveys/#{instance.survey.id}/forms")
   'keyup #searchAddress': (event, instance) ->
     q = getAddress()
     if q == null
@@ -280,13 +280,13 @@ Template.survey_admin_forms_edit.events
         if error
           toastr.error 'Error'
         else
-          FlowRouter.go "/admin/surveys/#{instance.surveyId}/forms"
+          FlowRouter.go "/admin/surveys/#{instance.survey.id}/forms"
     else
-      Meteor.call 'createForm', instance.surveyId, props, (error, formId)->
+      Meteor.call 'createForm', instance.survey.id, props, (error, formId)->
         if error
           toastr.error 'Error'
         else
-          FlowRouter.go "/admin/surveys/#{instance.surveyId}/forms/#{formId}"
+          FlowRouter.go "/admin/surveys/#{instance.survey.id}/forms/#{formId}"
 
 Template.survey_admin_forms_edit.onRendered ->
   # the map is recreated each time the page is rendered, so clear any old

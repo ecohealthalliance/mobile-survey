@@ -1,10 +1,10 @@
 template(name="survey_admin_form_details")
   .survey-admin--content
-    h4=form.name
-    if Template.subscriptionsReady
+    if fetched
+      h4=form.attributes.title
       .form-details
         .row
           .col-md-4
             +add_question form=form
           .col-md-8
-            +edit_questions form=form
+            //- +edit_questions form=form

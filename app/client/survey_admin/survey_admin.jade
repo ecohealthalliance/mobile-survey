@@ -14,18 +14,17 @@ template(name="survey_admin")
               a.survey-admin--view-link(href="{{pathFor 'survey_admin_users' id=survey.id}}" data-page='users') Users
 
       .container-fluid
+        if isActiveRoute 'survey_admin_details'
+          +survey_admin_details survey=survey
 
-          if isActiveRoute 'survey_admin_details'
-            +survey_admin_details survey=survey
+        else if isActiveRoute 'survey_admin_forms'
+          +survey_admin_forms survey=survey
 
-          else if isActiveRoute 'survey_admin_forms'
-            +survey_admin_forms survey=survey
+        else if isActiveRoute 'survey_admin_forms_edit'
+          +survey_admin_forms_edit data
 
-          else if isActiveRoute 'survey_admin_forms_edit'
-            +survey_admin_forms_edit data
+        else if isActiveRoute 'survey_admin_form_details'
+          +survey_admin_form_details data
 
-          else if isActiveRoute 'survey_admin_form_details'
-            +survey_admin_form_details
-
-          else if isActiveRoute 'survey_admin_users'
-            +survey_admin_users survey=survey
+        else if isActiveRoute 'survey_admin_users'
+          +survey_admin_users survey=survey

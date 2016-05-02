@@ -31,6 +31,7 @@ Meteor.methods
         trigger.datetime = new Date trigger.datetime
 
     query = new Parse.Query Survey
+    console.log surveyId
     query.get(surveyId).then (survey) ->
       # Get the order prop of the last form of survey to set order of new form
       relation = survey.relation 'forms'
@@ -55,8 +56,11 @@ Meteor.methods
           relation.add form
           survey.save()
           form.id
-        , (ob, error) ->
+        , (form, error) ->
+          console.log error
           throw new Meteor.Error 'server', error.message
+      , (obj, error) ->
+        console.log error
 
   geocode: (address) ->
     geo.geocode(address)
