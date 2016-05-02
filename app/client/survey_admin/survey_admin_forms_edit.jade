@@ -1,62 +1,61 @@
 template(name="survey_admin_forms_edit")
   .survey-admin--content
-    form.edit-form
-      .form-group
-        .row
-          .col-xs-12.col-sm-8
-            label
-              span Name
-            input.form-control(type='string' name='name' maxlength='128' value='#{form.name}')
-        .row(style='margin-top: 5px;')
-          .col-xs-12.col-sm-8
-            label
-              span Trigger
-              a#toggleTrigger.btn.btn-sm
-                i.mdi.mdi-plus-circle
+    if fetched
+      form.edit-form
+        .form-group
+          .row
+            .col-xs-12.col-sm-8
+              label
+                span Name
+              input.form-control(type='string' name='name' maxlength='128' value='#{form.attributes.title}')
+          .row(style='margin-top: 5px;')
+            .col-xs-12.col-sm-8
+              label
+                span Trigger
 
-        .trigger-container(style='display: none;')
-          .nav-floating-row
-            ul#tabs.nav.nav-tabs.trigger-nav-small(data-tabs='tabs')
-              li.active
-                a(href='#location' data-toggle='tab') Location
-              li
-                a(href='#datetime' data-toggle='tab') Date/Time
+          .trigger-container
+            .nav-floating-row
+              ul#tabs.nav.nav-tabs.trigger-nav-small(data-tabs='tabs')
+                li(class="{{#if triggerTypeState 'location'}} active {{/if}}")
+                  a(href='#location' data-toggle='tab' data-type='location') Location
+                li(class="{{#if triggerTypeState 'datetime'}} active {{/if}}")
+                  a(href='#datetime' data-toggle='tab' data-type='datetime') Date/Time
 
-          .tab-content.trigger-tabs
-              #location.tab-pane.active
-                .tab-content-floating-row
-                  .col-xs-12.col-sm-8.clearfix
-                    .searchBar
-                      .tokenized.main
-                        i#searchIcon.fa.fa-search
-                        input#searchBar.input-sm(name='searchBar', placeholder='Search for an address or click on the map')
-                        if isAddressSearching
-                          i.fa.fa-spinner.fa-spin.address-searching-spinner.visible
-                        else
-                          i.fa.fa-spinner.fa-spin.address-searching-spinner.invisible
-                  .col-xs-12.col-sm-8.clearfix(style='top: -10px')
-                    input#radiusTrigger.form-control.input-sm.inline-30(type='number' min='0' step='.1' name='radiusTrigger' value='#{radius}' placeholder='Enter radius in miles')
-                    input#coordinateBox.form-control.input-sm.inline-70(type='string' name='coordinateBox', value='#{coordinates}' placeholder='' readonly)
-                .map-floating-row
-                  #map
+            .tab-content.trigger-tabs
+                #location.tab-pane(class="{{#if triggerTypeState 'location'}} active {{/if}}")
+                  .tab-content-floating-row
+                    .col-xs-12.col-sm-8.clearfix
+                      .searchBar
+                        .tokenized.main
+                          i#searchIcon.fa.fa-search
+                          input#searchBar.input-sm(name='searchBar', placeholder='Search for an address or click on the map')
+                          if isAddressSearching
+                            i.fa.fa-spinner.fa-spin.address-searching-spinner.visible
+                          else
+                            i.fa.fa-spinner.fa-spin.address-searching-spinner.invisible
+                    .col-xs-12.col-sm-8.clearfix(style='top: -10px')
+                      input#radiusTrigger.form-control.input-sm.inline-30(type='number' min='0' step='.1' name='radiusTrigger' value='#{form.attributes.trigger.radius}' placeholder='Enter radius in miles')
+                      input#coordinateBox.form-control.input-sm.inline-70(type='string' name='coordinateBox', value='#{form.attributes.trigger.coordinates}' placeholder='' readonly)
+                  .map-floating-row
+                    #map
 
-              #datetime.tab-pane
-                .tab-content-floating-row
-                  .col-xs-12.col-sm-8
-                    #datetimeTrigger.input-group.date
-                      input.form-control.datetime-trigger(type='string' name='datetimeTrigger' value='' placeholder='Choose a date and time')
-                      span.input-group-addon
-                        span.glyphicon.glyphicon-calendar
-                  .clearfix(style='margin-bottom: 15px;')
+                #datetime.tab-pane(class="{{#if triggerTypeState 'datetime'}} active {{/if}}")
+                  .tab-content-floating-row
+                    .col-xs-12.col-sm-8
+                      #datetimeTrigger.input-group.date
+                        input.form-control.datetime-trigger(type='string' name='datetimeTrigger' value='form.attributes.trigger.datetime' placeholder='Choose a date and time')
+                        span.input-group-addon
+                          span.glyphicon.glyphicon-calendar
+                    .clearfix(style='margin-bottom: 15px;')
 
-        .buttons-floating-row
-          button.btn.btn-primary#save-form
-            i.mdi.mdi-plus-circle
-            span
-              if formId
-                | Save Form
-              else
-                | Create Form
-          button.btn.btn-default#cancelForm(type="button")
-            i.mdi.mdi-close-circle-outline
-            span Cancel
+          .buttons-floating-row
+            button.btn.btn-primary#save-form
+              i.mdi.mdi-plus-circle
+              span
+                if formId
+                  | Save Form
+                else
+                  | Create Form
+            button.btn.btn-default#cancelForm(type="button")
+              i.mdi.mdi-close-circle-outline
+              span Cancel

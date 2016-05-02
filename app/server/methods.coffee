@@ -5,6 +5,9 @@ Parse = require 'parse/node'
 getForms = => @Forms
 getQuestions = => @Questions
 
+handleError = (code, error) ->
+  throw new Meteor.Error code, error.message
+
 geo = new GeoCoder(
   geocoderProvider: "google",
   httpAdapter: "https",
@@ -25,13 +28,11 @@ Meteor.methods
   createForm: (surveyId, props)->
     #TODO Authenticate
     #TODO Validate
-    trigger = null
-    if props.trigger
-      if props.trigger.type == 'datetime'
-        trigger.datetime = new Date trigger.datetime
+    trigger = props.trigger
+    if trigger and trigger.type == 'datetime'
+      trigger.datetime = new Date trigger.datetime
 
     query = new Parse.Query Survey
-    console.log surveyId
     query.get(surveyId).then (survey) ->
       # Get the order prop of the last form of survey to set order of new form
       relation = survey.relation 'forms'
@@ -42,7 +43,7 @@ Meteor.methods
         if lastForm
           order = lastForm.get('order') + 1
         formProps =
-          title: props.name
+          title: props.title
           trigger: trigger
           createdBy: @userId
           questions: []
@@ -57,20 +58,27 @@ Meteor.methods
           survey.save()
           form.id
         , (form, error) ->
-          console.log error
-          throw new Meteor.Error 'server', error.message
-      , (obj, error) ->
-        console.log error
+          handleError('code', error)
+      , (form, error) ->
+        handleError('code', error)
+    , (form, error) ->
+      handleError('code', error)
+
 
   geocode: (address) ->
     geo.geocode(address)
 
   editForm: (formId, props) ->
-    trigger = null
-    if props.trigger
-      if props.trigger.type == 'datetime'
+    trigger = props.trigger
+    if trigger
+      if trigger.type == 'datetime'
         trigger.datetime = new Date(trigger.datetime)
-    getForms().update(_id: formId, { $set: props })
+
+    query = new Parse.Query Form
+    query.get(formId).then (form) ->
+      form.save props, ->
+        error: (form, error) ->
+          handleError('code', error)
 
   updateForm: (formId, form)->
     getForms().update(_id: formId, { $set: form })
