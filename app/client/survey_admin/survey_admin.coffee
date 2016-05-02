@@ -1,14 +1,15 @@
 Parse = require 'parse'
+{Survey} = require '../../imports/models'
 
 Template.survey_admin.onCreated ->
   @fetched = new ReactiveVar false
   surveyId = @data.id
-  self = @
+  instance = @
 
   query = new Parse.Query Survey
   query.get(surveyId).then (survey) ->
-      self.fetched.set true
-      self.survey = survey
+      instance.fetched.set true
+      instance.survey = survey
     ,
     (obj, error) ->
       throw new Meteor.Error 'server', error.message
