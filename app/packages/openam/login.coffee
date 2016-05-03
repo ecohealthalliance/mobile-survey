@@ -6,6 +6,6 @@ Template.login.events
     email = form.username.value.trim()
     passw = form.password.value.trim()
 
-    Meteor.call("loginUser", email, passw, (err, token) ->
+    Meteor.call 'loginUser', email, passw, (err, token) ->
       Meteor.loginWithToken(token)
-    )
+      Parse.User.logIn email, passw
