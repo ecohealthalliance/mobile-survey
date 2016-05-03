@@ -1,12 +1,8 @@
 Parse = require 'parse/node'
-{Survey, Form} = require '../imports/models'
+{Survey, Form, Question} = require '../imports/models'
 
-# getSurveys = => @Surveys
-getForms = => @Forms
-getQuestions = => @Questions
-
-handleError = (code, error) ->
-  throw new Meteor.Error code, error.message
+handleError = (parse, error) ->
+  throw new Meteor.Error parse, error.message
 
 geo = new GeoCoder(
   geocoderProvider: "google",
@@ -50,9 +46,7 @@ Meteor.methods
           title: props.title
           trigger: trigger
           createdBy: @userId
-          questions: []
           order: order or 1
-          parent: survey
         form = new Form()
 
         form.save(formProps).then (form) ->
@@ -62,11 +56,11 @@ Meteor.methods
           survey.save()
           form.id
         , (form, error) ->
-          handleError('code', error)
+          handleError 'parse', error
       , (form, error) ->
-        handleError('code', error)
+        handleError 'parse', error
     , (form, error) ->
-      handleError('code', error)
+      handleError 'parse', error
 
 
   geocode: (address) ->
@@ -82,39 +76,33 @@ Meteor.methods
     query.get(formId).then (form) ->
       form.save props, ->
         error: (form, error) ->
-          handleError('code', error)
+          handleError 'parse', error
 
   updateForm: (formId, form) ->
     @unblock()
     unless @userId then throw new Meteor.Error(500, 'Not Authorized')
     getForms().update(_id: formId, { $set: form })
 
-  getSurvey: (id)->
-    @unblock()
-    unless @userId then throw new Meteor.Error(500, 'Not Authorized')
-    getSurveys().findOne
-      _id: id
+  createQuestion: (formId, data) ->
+    query = new Parse.Query Form
+    query.get(formId).then (form) ->
+      form.getLastQuestionOrder().then (lastQuestionOrder) ->
+        data.order = ++lastQuestionOrder or 1
+        question = new Question()
+        question.save(data).then (question) ->
+          relation = form.relation 'questions'
+          relation.add question
+          form.save()
+          question.id
+        , (obj, error) ->
+          handleError 'parse', error
+      , (obj, error) ->
+        handleError 'parse', error
+    , (obj, error) ->
+      handleError 'parse', error
 
-  addQuestion: (formId, data) ->
-    @unblock()
-    unless @userId then throw new Meteor.Error(500, 'Not Authorized')
-    form = getForms().findOne(formId)
-    formQuestions = form.questions
-    if formQuestions?.length
-      lastQuestion = getQuestions().findOne
-        _id: { $in: formQuestions }, { sort: order: -1 }
-      data.order = ++lastQuestion.order
-    else
-      data.order = 1
-    questionId = getQuestions().insert data
-    if questionId
-      form.questions.push questionId
-      getForms().update(formId, $set: {questions: form.questions})
-
-  removeQuestion: (questionId) ->
-    @unblock()
-    unless @userId then throw new Meteor.Error(500, 'Not Authorized')
-    getForms().find(questions: questionId).forEach (item) ->
-      questions = _.without(item.questions, questionId)
-      getForms().update(item._id, $set: questions: questions)
-    getQuestions().remove questionId
+  # removeQuestion: (questionId) ->
+  #   getForms().find(questions: questionId).forEach (item) ->
+  #     questions = _.without(item.questions, questionId)
+  #     getForms().update(item._id, $set: questions: questions)
+  #   getQuestions().remove questionId

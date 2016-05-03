@@ -57,7 +57,7 @@ Template.add_question.helpers
 
 Template.add_question.events
   'keyup .choice': (event, instance) ->
-    instance.choices.update($(event.currentTarget).data('id'), 
+    instance.choices.update($(event.currentTarget).data('id'),
       name: $(event.currentTarget).val()
     )
   'click .delete-choice': (event, instance)->
@@ -66,9 +66,9 @@ Template.add_question.events
     instance.type.set $(event.currentTarget).data 'type'
   'submit form': (event, instance) ->
     event.preventDefault()
-    
+
     form = event.currentTarget
-    
+
     unless form.checkValidity()
       toastr.error('Please fill out all required fields')
       return
@@ -95,7 +95,7 @@ Template.add_question.events
         questionProperties.choices = choiceStrings
 
     questionProperties.required = questionProperties.required is 'on'
-    
+
     if questionProperties.min?.length
       questionProperties.min = Number(questionProperties.min)
     else
@@ -111,15 +111,15 @@ Template.add_question.events
       question_type: instance.type.get()
       properties: questionProperties
 
-    console.log question
-    Meteor.call "addQuestion", instance.form._id, question, (error, response) ->
-      if error
-        toastr.error("Something went wrong")
-      else
-        form.reset()
-        instance.choices.find().forEach ({_id})->
-          instance.choices.remove(_id)
-        instance.type.set('inputText')
-        toastr.success('Question added')
+    Meteor.call "createQuestion", instance.form.id, question,
+      (error, response) ->
+        if error
+          toastr.error("Something went wrong")
+        else
+          form.reset()
+          instance.choices.find().forEach ({_id})->
+            instance.choices.remove(_id)
+          instance.type.set('inputText')
+          toastr.success('Question added')
   'click .add-choice': (event, instance)->
     instance.choices.insert({})
