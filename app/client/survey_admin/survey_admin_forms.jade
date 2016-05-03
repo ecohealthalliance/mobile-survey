@@ -5,13 +5,12 @@ template(name="survey_admin_forms")
         i.mdi.mdi-plus-circle
         | Add Form
 
-    ul.list-group
-      +sortable(
-        items=forms
-        handle='.sortable-handle'
-        ghostClass='sortable-ghost')
-
-        li.list-group-item.form-link
-          span.sortable-handle
-            i.mdi.mdi-drag
-          a(href="{{pathFor 'survey_admin_form_details' id=survey.id formId=_id}}")= name
+    if fetched
+      if hasForms
+        ul.list-group#forms
+          each forms
+            li.list-group-item.form-link(data-id=parseId)
+              span.sortable-handle
+                i.mdi.mdi-drag
+              a(href="{{pathFor 'survey_admin_form_details' id=surveyId formId=parseId}}")=title
+              a.btn.btn-default.edit(href="forms/#{parseId}/edit") Edit

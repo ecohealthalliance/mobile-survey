@@ -110,10 +110,10 @@ radiusToZoomLevel = () ->
 #
 # @return [Array] the user defined coordinates as geoJSON Point or null
 getCoordinates = () ->
-  if _geofenceShape == null
-    return null
-  latLng = _geofenceShape.getLatLng()
-  return {type: 'Point', coordinates: [latLng.lng, latLng.lat]}
+  latLng = _geofenceMarker.getLatLng()
+
+  type: 'Point'
+  coordinates: [latLng.lng, latLng.lat]
 
 # set the UI to the L.latLng object
 #
@@ -128,19 +128,6 @@ setCoordinateBox = (latLng) ->
 # @return [Ingeter] timestamp, the unix timestamp
 getDatetime = () ->
   return _datetimeTrigger.data('DateTimePicker').date().toISOString()
-
-# returns the active trigger type or null
-#
-# @return [String] the type of trigger 'location' or 'datetime'
-getActiveTrigger = () ->
-  type = null
-  if ($('.trigger-container').is(':visible'))
-    active = $('#tabs li.active a').attr('href')
-    if active == '#location'
-      type = 'location'
-    if active == '#datetime'
-      type = 'datatime'
-  return type
 
 # perform a http get to geoCode an address
 #
@@ -180,20 +167,30 @@ onMapClick = (event) ->
   addMarker(event.latlng)
 
 Template.survey_admin_forms_edit.onCreated ->
-  @isAddressSearching = new ReactiveVar(false)
-  @surveyId = @data.surveyId
+  @fetched = new ReactiveVar false
+  @triggerType = new ReactiveVar 'location'
+  @isAddressSearching = new ReactiveVar false
+  @survey = @data.survey
   @formId = @data.formId
-  @form = new ReactiveVar(null)
-  @subscribe 'form', @formId,
-    onReady: () =>
-      form = Forms.findOne _id: @formId
-      @form.set(form)
+  relation = @survey.relation 'forms'
+  query = relation.query()
+  instance = @
+  query.equalTo 'objectId', @data.formId
+  query.first().then (form) ->
+    instance.form = form
+    instance.fetched.set true
+  , (form, error) ->
+    toastr.error error.message
 
 Template.survey_admin_forms_edit.helpers
   form: ->
-    Template.instance().form.get()
+    Template.instance().form
   isAddressSearching: ->
     Template.instance().isAddressSearching.get()
+  showingTriggers: ->
+    Template.instance().showingTriggers.get()
+  triggerTypeState: (type) ->
+    type == Template.instance().triggerType.get()
 
 Template.survey_admin_forms_edit.events
   'keydown .edit-form': (event, instance) ->
@@ -201,34 +198,38 @@ Template.survey_admin_forms_edit.events
       event.preventDefault()
       event.stopPropagation()
       return
-  'click #toggleTrigger': (event, instance) ->
-    if $('.trigger-container').is(':visible')
-      $('.trigger-container').hide()
-    else
-      $('.trigger-container').show()
-      resizeMap()
+
+  'click #tabs li a': (event, instance) ->
+    type = instance.triggerType
+    type.set $(event.currentTarget).data 'type'
+    if type.get() == 'location'
+      Meteor.defer ->
+        resizeMap()
+
   'click #cancelForm': (event, instance) ->
     # upon canceling, go to the list
-    FlowRouter.go("/admin/surveys/#{instance.surveyId}/forms")
+    FlowRouter.go("/admin/surveys/#{instance.survey.id}/forms")
+
   'keyup #searchAddress': (event, instance) ->
     q = getAddress()
     if q == null
       return
     instance.isAddressSearching.set(true)
     debounceAddressSearch(q, instance)
+
   'keyup #radiusTrigger, mouseup #radiusTrigger': (event, instance) ->
     if _geofenceMarker != null
       debounceAddShape(_geofenceMarker.getLatLng(), true)
+
   'tokenfield:initialize': (e) ->
     $target = $(e.target)
     $container = $target.closest('.tokenized')
     id = $target.attr('id')
     #$container.find('.tokenized.main').prepend($("#searchIcon"))
-    $('#' + id + '-tokenfield').on('blur', (e) ->
+    $('#' + id + '-tokenfield').on 'blur', (e) ->
       # only allow tokens
       $container.find('.token-input.tt-input').val("")
-    )
-    return
+
   'tokenfield:createtoken': (e) ->
     if e.keyCode == 13 or e.keyCode == 9
       e.preventDefault()
@@ -240,12 +241,14 @@ Template.survey_admin_forms_edit.events
       e.preventDefault()
       return
     $('.twitter-typeahead').hide()
+
   'tokenfield:removedtoken': (e) ->
     $target = $(e.target)
     tokens = $target.tokenfield('getTokens')
     if tokens.length == 0
       $('.twitter-typeahead').show()
       resetMap()
+
   'tokenfield:createdtoken': (e) ->
     $target = $(e.target)
     obj = e.attrs
@@ -256,37 +259,45 @@ Template.survey_admin_forms_edit.events
       return
     latLng = L.latLng(e.attrs.raw.latitude, e.attrs.raw.longitude)
     addMarker(latLng, true)
+
   'submit form': (event, instance)->
     event.preventDefault()
-    formId = instance.formId
+    formId = instance.form?.id
     form = event.currentTarget
     trigger = null
     # what trigger is active
-    type = getActiveTrigger()
+    type = instance.triggerType.get()
     if type == 'location'
+      if not getRadius()
+        toastr.error 'Please select a radius.'
+        return
       trigger =
         type: type
         radius: getRadius()
         loc: getCoordinates()
     if type == 'datetime'
+      if not getDatetime()
+        toastr.error 'Please select a date and time.'
+        return
       trigger =
         type: type
         datetime: getDatetime()
     props =
-      name: form.name.value
+      title: form.name.value
       trigger: trigger
+
     if formId
       Meteor.call 'editForm', formId, props, (error)->
         if error
-          toastr.error 'Error'
+          toastr.error 'Error', error.message
         else
-          FlowRouter.go "/admin/surveys/#{instance.surveyId}/forms"
+          FlowRouter.go "/admin/surveys/#{instance.survey.id}/forms"
     else
-      Meteor.call 'createForm', instance.surveyId, props, (error, formId)->
+      Meteor.call 'createForm', instance.survey.id, props, (error, formId)->
         if error
           toastr.error 'Error'
         else
-          FlowRouter.go "/admin/surveys/#{instance.surveyId}/forms/#{formId}"
+          FlowRouter.go "/admin/surveys/#{instance.survey.id}/forms/#{formId}"
 
 Template.survey_admin_forms_edit.onRendered ->
   # the map is recreated each time the page is rendered, so clear any old
@@ -308,40 +319,42 @@ Template.survey_admin_forms_edit.onRendered ->
     layers: [CartoDB]
 
   # create the map
-  _map = L.map 'map', mapOptions
-  _map.addControl L.control.zoom {position: 'bottomright'}
-  _map.on 'click', onMapClick
-  Template.survey_admin_forms_edit.map = _map
-
-  _datetimeTrigger = $('#datetimeTrigger').datetimepicker {format: 'MM/DD/YY hh:mm'}
-  _datetimeTrigger.data('DateTimePicker').widgetPositioning {vertical: 'bottom', horizontal: 'right'}
-
-  instance = this
-  _searchBar = $('#searchBar').tokenfield({
-    typeahead: [{hint: false, highlight: true}, {
-      display: (match) ->
-        if _.isUndefined(match)
-          return
-        return match.label
-      templates:
-        suggestion: _suggestionTemplate
-        footer: _typeaheadFooter
-      source: (query, callback) ->
-        suggestionGenerator(instance, query, callback)
-        return
-    }]
-  })
-
   @autorun =>
-    # populate custom form objects when our form is ready
-    form = @form.get()
-    if form and form.trigger
-      $('.trigger-container').show()
-      $('#tabs a[href="#'+form.trigger.type+'"]').tab('show')
-      if form.trigger.type == 'datetime'
-        _datetimeTrigger.data('DateTimePicker').date(new Date(form.trigger.datetime))
-      else
-        $('#radiusTrigger').val(form.trigger.radius)
-        latLng = L.latLng(form.trigger.loc.coordinates[1], form.trigger.loc.coordinates[0])
-        addMarker(latLng, true)
-        resizeMap()
+    fetched = @fetched.get()
+    if fetched
+      Meteor.defer =>
+        _map = L.map 'map', mapOptions
+        _map.addControl L.control.zoom position: 'bottomright'
+        _map.on 'click', onMapClick
+        Template.survey_admin_forms_edit.map = _map
+
+        _datetimeTrigger = $('#datetimeTrigger').datetimepicker
+          format: 'MM/DD/YY hh:mm'
+        _datetimeTrigger.data('DateTimePicker').widgetPositioning
+          vertical: 'bottom'
+          horizontal: 'right'
+
+        instance = @
+        _searchBar = $('#searchBar').tokenfield
+          typeahead: [
+            {hint: false, highlight: true},
+            display: (match) ->
+              match?.label
+            templates:
+              suggestion: _suggestionTemplate
+              footer: _typeaheadFooter
+            source: (query, callback) ->
+              suggestionGenerator instance, query, callback
+          ]
+
+        # update input fields if editing
+        form = @form
+        trigger = form?.get 'trigger'
+        if form and trigger
+          @triggerType.set trigger.type
+          if trigger.type == 'datetime'
+            _datetimeTrigger.data('DateTimePicker').date new Date trigger.datetime
+          else
+            latLng = L.latLng trigger.loc.coordinates[1], trigger.loc.coordinates[0]
+            addMarker latLng, true
+            resizeMap()

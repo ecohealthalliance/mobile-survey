@@ -1,8 +1,12 @@
 Parse = require 'parse/node'
+{Survey, Form} = require '../imports/models'
 
-getSurveys = => @Surveys
+# getSurveys = => @Surveys
 getForms = => @Forms
 getQuestions = => @Questions
+
+handleError = (code, error) ->
+  throw new Meteor.Error code, error.message
 
 geo = new GeoCoder(
   geocoderProvider: "google",
@@ -24,37 +28,57 @@ Meteor.methods
   createForm: (surveyId, props)->
     #TODO Authenticate
     #TODO Validate
+    trigger = props.trigger
+    if trigger and trigger.type == 'datetime'
+      trigger.datetime = new Date trigger.datetime
 
-    trigger = null
-    if props.trigger
-      if props.trigger.type == 'datetime'
-        trigger.datetime = new Date(trigger.datetime)
+    query = new Parse.Query Survey
+    query.get(surveyId).then (survey) ->
+      # Get the order prop of the last form of survey to set order of new form
+      relation = survey.relation 'forms'
+      query = relation.query()
+      query.descending 'order'
+      query.select 'order'
+      query.first().then (lastForm) ->
+        if lastForm
+          order = lastForm.get('order') + 1
+        formProps =
+          title: props.title
+          trigger: trigger
+          createdBy: @userId
+          questions: []
+          order: order or 1
+          parent: survey
+        form = new Form()
 
-    surveyForms = getSurveys().findOne(surveyId).forms
-    if surveyForms?.length
-      lastForm = getForms().findOne
-        _id: {$in: surveyForms}, {sort: order: -1}
-      order = ++lastForm.order
-    else
-      order = 1
-    formId = getForms().insert
-      name: props.name
-      trigger: trigger
-      createdBy: @userId
-      questions: []
-      order: order
-    getSurveys().update({_id: surveyId}, {$addToSet: {forms: formId}})
-    formId
+        form.save(formProps).then (form) ->
+          # Set relation for new form
+          relation = survey.relation 'forms'
+          relation.add form
+          survey.save()
+          form.id
+        , (form, error) ->
+          handleError('code', error)
+      , (form, error) ->
+        handleError('code', error)
+    , (form, error) ->
+      handleError('code', error)
+
 
   geocode: (address) ->
     geo.geocode(address)
 
   editForm: (formId, props) ->
-    trigger = null
-    if props.trigger
-      if props.trigger.type == 'datetime'
+    trigger = props.trigger
+    if trigger
+      if trigger.type == 'datetime'
         trigger.datetime = new Date(trigger.datetime)
-    getForms().update(_id: formId, { $set: props })
+
+    query = new Parse.Query Form
+    query.get(formId).then (form) ->
+      form.save props, ->
+        error: (form, error) ->
+          handleError('code', error)
 
   updateForm: (formId, form)->
     getForms().update(_id: formId, { $set: form })
