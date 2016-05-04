@@ -1,8 +1,8 @@
 'use strict'
 
 
-Future = Npm.require('fibers/future')
-
+Future = Npm.require 'fibers/future'
+Parse = Npm.require 'parse/node'
 
 initiateAdminAuthentication = (callback) ->
   initiateAuthentication Meteor.settings.private.open_AM_admin, Meteor.settings.private.open_AM_password, (result) ->
@@ -45,11 +45,22 @@ createUser = (userCreateData, callback) ->
       console.log "ERROR: ", err if err
       throw err if err
       #add the user in the local meteor database
-      Accounts.createUser
-        email: userCreateData.data.mail,
+      meteorId = Accounts.createUser
+        email: userCreateData.data.mail
         password: userCreateData.data.userpassword
-      callback(result)
-      # console.log result
+      #Create Parse User
+      parseUser = new Parse.User()
+      parseUserData =
+        username: userCreateData.data.mail
+        password: userCreateData.data.userpassword
+        email   : userCreateData.data.mail
+        meteorId: meteorId
+        role    : 'admin'
+      parseUser.signUp parseUserData,
+        success: ->
+          callback result
+        error: (user, err) ->
+          throw err
 
 
 Meteor.methods

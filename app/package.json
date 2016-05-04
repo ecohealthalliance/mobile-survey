@@ -2,14 +2,18 @@
   "name": "app",
   "private": true,
   "scripts": {
-    "start": "meteor -p 13000 --settings settings-dev.json",
+    "start": "meteor -p 13000 --settings settings.json",
     "pretest": "npm install --only=dev",
     "test": ".scripts/run-tests.sh",
     "test-watch": "WATCH=true .scripts/run-tests.sh"
   },
   "dependencies": {
     "autoprefixer": "^6.3.1",
-    "faker": "^3.0.1"
+    "bufferutil": "^1.2.1",
+    "faker": "^3.0.1",
+    "meteor-node-stubs": "^0.2.3",
+    "parse": "^1.8.3",
+    "utf-8-validate": "^1.2.1"
   },
   "devDependencies": {
     "underscore": "^1.8.3",
