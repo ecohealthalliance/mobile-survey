@@ -18,6 +18,11 @@ exports.Survey = Parse.Object.extend 'Survey',
         forms
 
 exports.Form = Parse.Object.extend 'Form',
+  getQuestions: ->
+    query = @relation('questions').query()
+    query.find().then (questions) ->
+      questions
+
   getLastQuestionOrder: ->
     query = @relation('questions').query()
     query.descending 'order'
