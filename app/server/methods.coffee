@@ -1,4 +1,3 @@
-Parse = require 'parse/node'
 {Survey, Form, Question} = require '../imports/models'
 
 handleError = (parse, error) ->

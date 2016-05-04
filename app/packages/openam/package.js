@@ -6,10 +6,6 @@ Package.describe({
 
 Package.onUse(function (api) {
 
-  Npm.depends({
-    parse: '1.8.3'
-  });
-
   api.versionsFrom('1.2.1');
 
   api.use('coffeescript');

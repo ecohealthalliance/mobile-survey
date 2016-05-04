@@ -44,6 +44,7 @@ fourq:typeahead@1.0.0
 geojson-utils@1.0.8
 goodquestion:fixtures@0.1.0
 goodquestion:openam@0.1.0
+goodquestion:parse@0.1.0
 hot-code-push@1.0.4
 html-tools@1.0.9
 htmljs@1.0.9
