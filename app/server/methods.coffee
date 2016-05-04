@@ -1,8 +1,8 @@
 Parse = require 'parse/node'
 {Survey, Form, Question} = require '../imports/models'
 
-handleError = (parse, error) ->
-  throw new Meteor.Error parse, error.message
+handleError = (error) ->
+  throw new Meteor.Error error.code, error.message
 
 geo = new GeoCoder(
   geocoderProvider: "google",
@@ -18,10 +18,9 @@ Meteor.methods
       throw new Meteor.Error(501, 'The title field cannot be empty')
     fields.createdBy = @userId
     survey = new Survey()
-    survey.save(fields).then ((survey) ->
+    survey.save(fields).then (survey) ->
       survey.id
-    ), (error) ->
-      throw new Meteor.Error error
+    , handleError
 
   createForm: (surveyId, props) ->
     @unblock()
@@ -55,13 +54,7 @@ Meteor.methods
           relation.add form
           survey.save()
           form.id
-        , (form, error) ->
-          handleError 'parse', error
-      , (form, error) ->
-        handleError 'parse', error
-    , (form, error) ->
-      handleError 'parse', error
-
+        , handleError
 
   geocode: (address) ->
     geo.geocode(address)
@@ -74,9 +67,9 @@ Meteor.methods
 
     query = new Parse.Query Form
     query.get(formId).then (form) ->
-      form.save props, ->
-        error: (form, error) ->
-          handleError 'parse', error
+      form.save(props).then (form) ->
+        form
+      , handleError
 
   updateForm: (formId, form) ->
     @unblock()
