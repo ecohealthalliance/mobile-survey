@@ -1,17 +1,6 @@
-//-
-//- Question wrapper templates
-//-
-
 template(name="question")
   .form-group
     +Template.dynamic template=questionTemplateName
-
-template(name="question_edit")
-  span.sortable-handle
-    i.mdi.mdi-drag
-  span= text
-  .delete.warning
-    i.mdi.mdi-delete
 
 //-
 //- Text input field

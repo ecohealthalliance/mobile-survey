@@ -111,6 +111,8 @@ Template.add_question.events
       question_type: instance.type.get()
       properties: questionProperties
 
+    console.log question
+
     Meteor.call "createQuestion", instance.form.id, question,
       (error, response) ->
         if error

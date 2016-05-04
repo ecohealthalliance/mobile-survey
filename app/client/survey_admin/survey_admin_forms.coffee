@@ -1,4 +1,3 @@
-Parse = require 'parse'
 Sort = require 'sortablejs'
 {updateSortOrder} = require '../../imports/list_helpers'
 
@@ -14,9 +13,8 @@ Template.survey_admin_forms.onCreated ->
 Template.survey_admin_forms.onRendered ->
   instance = @
   Meteor.autorun ->
-    fetched = instance.fetched.get()
     Meteor.defer ->
-      if fetched and instance.forms?.findOne()
+      if instance.fetched.get() and instance.forms?.findOne()
         Sort.create document.getElementById 'forms',
           handle: '.sortable-handle'
           onSort: (event) ->
