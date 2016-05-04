@@ -25,7 +25,6 @@ goodquestion:openam
 # Third-party
 twbs:bootstrap
 chrismbeckett:toastr
-rubaxa:sortable
 dapearce:material-icons
 arillo:flow-router-helpers
 zimme:active-route
