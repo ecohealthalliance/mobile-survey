@@ -1,5 +1,3 @@
-Parse = require 'parse/node'
-
 getSurveys = => @Surveys
 getForms = => @Forms
 getQuestions = => @Questions

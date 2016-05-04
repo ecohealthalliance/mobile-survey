@@ -1,7 +1,7 @@
 accounts-base@1.2.7
+accounts-password@1.1.8
 ajduke:bootstrap-tokenfield@0.5.0
 aldeed:geocoder@0.3.8
-accounts-password@1.1.8
 allow-deny@1.0.4
 anti:i18n@0.4.3
 arillo:flow-router-helpers@0.5.1
@@ -45,6 +45,7 @@ fourq:typeahead@1.0.0
 geojson-utils@1.0.8
 goodquestion:fixtures@0.1.0
 goodquestion:openam@0.1.0
+goodquestion:parse@0.1.0
 hot-code-push@1.0.4
 html-tools@1.0.9
 htmljs@1.0.9
