@@ -4,29 +4,20 @@ Sort = require 'sortablejs'
 
 Template.survey_admin_forms.onCreated ->
   @fetched = new ReactiveVar false
-  @forms = new Meteor.Collection null
   @survey = @data.survey
   instance = @
 
-  relation = @survey.relation 'forms'
-  formQuery = relation.query()
-  formQuery.each (form) ->
+  @survey.getForms(true).then (forms) ->
+    instance.forms = forms
     instance.fetched.set true
-    formProps =
-      parseId: form.id
-      title: form.get 'title'
-      order: form.get 'order'
-    instance.forms.insert formProps
-  , (obj, error) ->
-    toastr.error error.message
 
 Template.survey_admin_forms.onRendered ->
   instance = @
   Meteor.autorun ->
     fetched = instance.fetched.get()
     Meteor.defer ->
-      if fetched
-        Sort.create forms,
+      if fetched and instance.forms?.findOne()
+        Sort.create document.getElementById 'forms',
           handle: '.sortable-handle'
           onSort: (event) ->
             updateSortOrder(event, instance.survey, 'forms')

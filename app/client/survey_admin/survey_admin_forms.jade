@@ -14,3 +14,5 @@ template(name="survey_admin_forms")
                 i.mdi.mdi-drag
               a(href="{{pathFor 'survey_admin_form_details' id=surveyId formId=parseId}}")=title
               a.btn.btn-default.edit(href="forms/#{parseId}/edit") Edit
+      else
+        p This survey has no forms
