@@ -18,11 +18,11 @@ exports.Survey = Parse.Object.extend 'Survey',
         forms
 
 exports.Form = Parse.Object.extend 'Form',
-  getQuestions: (returnMeteorCollection) ->
+  getQuestions: (returnMeteorCollection, collection) ->
     query = @relation('questions').query()
     query.find().then (questions) ->
       if returnMeteorCollection and questions
-        questionCollection = new Meteor.Collection null
+        questionCollection = collection or new Meteor.Collection(null)
         _.each questions, (question) ->
           props = _.extend {}, question.attributes
           props.parseId = question.id

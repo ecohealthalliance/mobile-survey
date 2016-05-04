@@ -9,6 +9,7 @@ Template.registerHelper 'isEmpty', (val)->
 
 Template.add_question.onCreated ->
   @form = @data.form
+  @questions = @data.questions
   @type = new ReactiveVar 'inputText'
   @choices = new Meteor.Collection(null)
 
@@ -111,8 +112,6 @@ Template.add_question.events
       question_type: instance.type.get()
       properties: questionProperties
 
-    console.log question
-
     Meteor.call "createQuestion", instance.form.id, question,
       (error, response) ->
         if error
@@ -122,6 +121,9 @@ Template.add_question.events
           instance.choices.find().forEach ({_id})->
             instance.choices.remove(_id)
           instance.type.set('inputText')
+          question.parseId = response.id
+          instance.questions.insert question
           toastr.success('Question added')
+
   'click .add-choice': (event, instance)->
     instance.choices.insert({})

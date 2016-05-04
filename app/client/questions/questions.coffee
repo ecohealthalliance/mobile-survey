@@ -3,9 +3,10 @@ Sort = require 'sortablejs'
 
 Template.questions.onCreated ->
   @fetched = new ReactiveVar false
+  @questions = @data.questions
   @form = @data.form
   instance = @
-  @form.getQuestions(true).then (questions) ->
+  @form.getQuestions(true, @questions).then (questions) ->
     instance.fetched.set true
     instance.questions = questions
 
