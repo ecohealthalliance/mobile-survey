@@ -2,7 +2,7 @@ template(name="survey_admin")
   if fetched
     .survey-admin
       nav.navbar.navbar-default.survey-admin--nav
-        .container-fluid
+        .container-fluid-padded
           .navbar-header
             h2=survey.attributes.title
           ul.nav.navbar-nav.navbar-right
@@ -13,7 +13,7 @@ template(name="survey_admin")
             li(class="{{isActiveRoute 'survey_admin_users'}}")
               a.survey-admin--view-link(href="{{pathFor 'survey_admin_users' id=survey.id}}" data-page='users') Users
 
-      .container-fluid
+      .container-fluid-padded
         if isActiveRoute 'survey_admin_details'
           +survey_admin_details survey=survey
 

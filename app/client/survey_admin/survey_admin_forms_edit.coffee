@@ -330,6 +330,8 @@ Template.survey_admin_forms_edit.onRendered ->
 
         _datetimeTrigger = $('#datetimeTrigger').datetimepicker
           format: 'MM/DD/YY hh:mm'
+          inline: true
+          sideBySide: true
         _datetimeTrigger.data('DateTimePicker').widgetPositioning
           vertical: 'bottom'
           horizontal: 'right'
