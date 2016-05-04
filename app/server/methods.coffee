@@ -100,9 +100,3 @@ Meteor.methods
         handleError 'parse', error
     , (obj, error) ->
       handleError 'parse', error
-
-  # removeQuestion: (questionId) ->
-  #   getForms().find(questions: questionId).forEach (item) ->
-  #     questions = _.without(item.questions, questionId)
-  #     getForms().update(item._id, $set: questions: questions)
-  #   getQuestions().remove questionId

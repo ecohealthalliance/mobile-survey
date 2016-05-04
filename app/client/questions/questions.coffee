@@ -1,5 +1,7 @@
+Parse = require 'parse'
 Sort = require 'sortablejs'
 {updateSortOrder} = require '../../imports/list_helpers'
+{Question} = require '../../imports/models'
 
 Template.questions.onCreated ->
   @fetched = new ReactiveVar false
@@ -25,3 +27,10 @@ Template.questions.helpers
     Template.instance().questions?.findOne()
   questions: ->
     Template.instance().questions?.find {}, sort: {order: 1}
+
+Template.questions.events
+  'click .delete': (event, instance) ->
+    query = new Parse.Query Question
+    query.get(@parseId).then (question) =>
+      question.destroy().then () =>
+        instance.questions.remove @_id
