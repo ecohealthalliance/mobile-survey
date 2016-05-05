@@ -27,8 +27,9 @@ Meteor.methods
     #TODO Validate
     query = new Parse.Query Survey
     query.get(surveyId).then (survey) ->
-      survey.createForm(props).then (formId) ->
+      survey.addForm(props).then (formId) ->
         formId
+    , handleError
 
   geocode: (address) ->
     geo.geocode(address)
@@ -44,6 +45,7 @@ Meteor.methods
       form.save(props).then (form) ->
         form
       , handleError
+    , handleError
 
   updateForm: (formId, form) ->
     @unblock()
@@ -61,9 +63,6 @@ Meteor.methods
           relation.add question
           form.save()
           question.id
-        , (obj, error) ->
-          handleError 'parse', error
-      , (obj, error) ->
-        handleError 'parse', error
-    , (obj, error) ->
-      handleError 'parse', error
+        , handleError
+      , handleError
+    , handleError
