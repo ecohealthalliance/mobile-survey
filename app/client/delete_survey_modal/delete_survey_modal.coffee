@@ -1,5 +1,3 @@
-Parse = require 'parse'
-
 Template.delete_survey_modal.onCreated ->
   @deleting = new ReactiveVar false
 

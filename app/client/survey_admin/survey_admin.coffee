@@ -1,4 +1,3 @@
-Parse = require 'parse'
 {Survey} = require '../../imports/models'
 
 Template.survey_admin.onCreated ->

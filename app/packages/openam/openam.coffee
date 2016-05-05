@@ -2,7 +2,6 @@
 
 
 Future = Npm.require 'fibers/future'
-Parse = Npm.require 'parse/node'
 
 initiateAdminAuthentication = (callback) ->
   initiateAuthentication Meteor.settings.private.open_AM_admin, Meteor.settings.private.open_AM_password, (result) ->
