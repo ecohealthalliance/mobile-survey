@@ -322,6 +322,7 @@ Template.survey_admin_forms_edit.onRendered ->
   mapOptions =
     height: '400px'
     zoomControl: false
+
     minZoom: _minZoom
     maxZoom: _maxZoom
     zoom: _defaultZoom
@@ -334,8 +335,9 @@ Template.survey_admin_forms_edit.onRendered ->
     if fetched
       Meteor.defer =>
         _map = L.map 'map', mapOptions
-        _map.addControl L.control.zoom position: 'bottomright'
+        _map.addControl L.control.zoom position: 'topright'
         _map.on 'click', onMapClick
+        _map.scrollWheelZoom.disable()
         Template.survey_admin_forms_edit.map = _map
 
         _datetimeTrigger = $('#datetimeTrigger').datetimepicker
