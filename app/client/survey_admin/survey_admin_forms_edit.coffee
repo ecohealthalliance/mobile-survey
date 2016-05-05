@@ -175,16 +175,26 @@ Template.survey_admin_forms_edit.onCreated ->
   relation = @survey.relation 'forms'
   query = relation.query()
   instance = @
+
+  # If creating a new form, show form fields
+  unless @formId
+    instance.fetched.set true
+    return
+
   query.equalTo 'objectId', @data.formId
   query.first().then (form) ->
     instance.form = form
-    instance.fetched.set true
+    form.getTrigger().then (trigger) ->
+      instance.trigger = trigger
+      instance.fetched.set true
   , (form, error) ->
     toastr.error error.message
 
 Template.survey_admin_forms_edit.helpers
   form: ->
     Template.instance().form
+  trigger: ->
+    Template.instance().trigger
   isAddressSearching: ->
     Template.instance().isAddressSearching.get()
   showingTriggers: ->
@@ -312,6 +322,7 @@ Template.survey_admin_forms_edit.onRendered ->
   mapOptions =
     height: '400px'
     zoomControl: false
+
     minZoom: _minZoom
     maxZoom: _maxZoom
     zoom: _defaultZoom
@@ -324,8 +335,9 @@ Template.survey_admin_forms_edit.onRendered ->
     if fetched
       Meteor.defer =>
         _map = L.map 'map', mapOptions
-        _map.addControl L.control.zoom position: 'bottomright'
+        _map.addControl L.control.zoom position: 'topright'
         _map.on 'click', onMapClick
+        _map.scrollWheelZoom.disable()
         Template.survey_admin_forms_edit.map = _map
 
         _datetimeTrigger = $('#datetimeTrigger').datetimepicker
@@ -350,13 +362,13 @@ Template.survey_admin_forms_edit.onRendered ->
           ]
 
         # update input fields if editing
-        form = @form
-        trigger = form?.get 'trigger'
-        if form and trigger
-          @triggerType.set trigger.type
-          if trigger.type == 'datetime'
-            _datetimeTrigger.data('DateTimePicker').date new Date trigger.datetime
+        if @form and @trigger
+          type = @trigger.get 'type'
+          @triggerType.set type
+          if type == 'datetime'
+            _datetimeTrigger.data('DateTimePicker').date new Date @trigger.get 'datetime'
           else
-            latLng = L.latLng trigger.loc.coordinates[1], trigger.loc.coordinates[0]
+            coordinates = @trigger.get('loc').coordinates
+            latLng = L.latLng coordinates[1], coordinates[0]
             addMarker latLng, true
             resizeMap()

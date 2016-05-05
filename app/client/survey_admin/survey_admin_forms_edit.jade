@@ -12,6 +12,7 @@ template(name="survey_admin_forms_edit")
                 name='name'
                 maxlength='128'
                 value='#{form.attributes.title}')
+        .form-group
           .row(style='margin-top: 5px;')
             .col-xs-12.col-sm-8
               label
@@ -43,13 +44,13 @@ template(name="survey_admin_forms_edit")
                       min='0'
                       step='.1'
                       name='radiusTrigger'
-                      value='#{form.attributes.trigger.radius}'
+                      value='#{trigger.attributes.radius}'
                       placeholder='Enter radius in miles')
                     input#coordinateBox.form-control.input-sm.inline-70(
                       type='string'
                       name='coordinateBox',
-                      value='#{form.attributes.trigger.coordinates}'
-                      placeholder=''
+                      value='#{trigger.attributes.coordinates}'
+                      placeholder='GPS Coordinates'
                       readonly)
                 .map-floating-row
                   #map

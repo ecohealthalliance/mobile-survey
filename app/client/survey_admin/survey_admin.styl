@@ -22,6 +22,7 @@ $blue = #337AB7
 
 .survey-admin--content
   margin-top 15px
+  padding-bottom 100px
 
 .create-form
   margin-bottom 20px
@@ -68,6 +69,8 @@ $blue = #337AB7
   height 400px
   width 100%
   top -15px
+  .leaflet-right
+    right 5%
 
 .nav-floating-row
   bottom 0
@@ -77,8 +80,11 @@ $blue = #337AB7
 .tab-content-floating-row
   position absolute
   top 25px
-  left calc(10% - 15px)
+  left 15px
+  padding 30px 20px
   z-index 2
+  background rgba(255, 255, 255, .8)
+  border-radius 4px
 
 .map-floating-row
   position relative
@@ -206,11 +212,12 @@ input.inline-70
 #location
 #datetime
   min-height 400px
-  margin -15px -10% 0 -10%
 
 #location
+  width 100%
   position relative
 
 #datetime
-  padding 60px 10%
+  margin -15px -10% 0 -10%
+  padding 60px 12%
   background #f9f9f9

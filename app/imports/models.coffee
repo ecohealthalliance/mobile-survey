@@ -1,4 +1,4 @@
-exports.Survey = Parse.Object.extend 'Survey',
+Survey = Parse.Object.extend 'Survey',
   getForms: (returnMeteorCollection, collection) ->
     query = @relation('forms').query()
     query.find().then (forms) ->
@@ -12,7 +12,41 @@ exports.Survey = Parse.Object.extend 'Survey',
       else
         forms
 
-exports.Form = Parse.Object.extend 'Form',
+  getForm: (formId) ->
+    query = @relation('forms').query()
+    query.equalTo 'objectId', formId
+    query.first().then (form) ->
+      form
+    , (form, error) ->
+      error
+
+  getLastFormOrder: ->
+    query = @relation('forms').query()
+    query.descending 'order'
+    query.select 'order'
+    query.first().then (lastForm) ->
+      lastForm?.get('order')
+
+  buildForm: (props) ->
+    @getLastFormOrder().then (lastFormOrder) ->
+      props.order = ++lastFormOrder or 1
+      title: props.title
+      createdBy: Parse.User.current()?
+      order: props.order
+
+  addForm: (props) ->
+    survey = @
+    @buildForm(props).then (formProps) ->
+      form = new Form()
+      form.create(formProps, survey).then (form) ->
+        triggerProps = props.trigger
+        if triggerProps
+          form.addTrigger(triggerProps, form).then ->
+            form.id
+        else
+          form.id
+
+Form = Parse.Object.extend 'Form',
   getQuestions: (returnMeteorCollection, collection) ->
     query = @relation('questions').query()
     query.find().then (questions) ->
@@ -33,4 +67,40 @@ exports.Form = Parse.Object.extend 'Form',
     query.first().then (lastQuestion) ->
       lastQuestion?.get('order')
 
-exports.Question = Parse.Object.extend 'Question'
+  create: (props, survey) ->
+    @save(props).then (form) ->
+      relation = survey.relation 'forms'
+      relation.add form
+      survey.save().then ->
+        form
+
+  addTrigger: (props) ->
+    trigger = new Trigger()
+    form = @
+    trigger.create(props, form).then (triggerId) ->
+      triggerId
+
+  getTrigger: ->
+    query = @relation('triggers').query()
+    query.first().then (trigger) ->
+      trigger
+    , (trigger, error) ->
+      error
+
+Trigger = Parse.Object.extend 'Trigger',
+  create: (props, form) ->
+    if props.type == 'datetime'
+      props.datetime = new Date props.datetime
+    @save(props).then (trigger) ->
+      relation = form.relation 'triggers'
+      relation.add trigger
+      form.save().then ->
+        trigger.id
+
+
+Question = Parse.Object.extend 'Question'
+
+module.exports =
+  Survey: Survey
+  Form: Form
+  Question: Question
