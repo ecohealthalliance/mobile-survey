@@ -55,6 +55,8 @@ Template.add_question.helpers
     @name is Template.instance().type.get()
   choices: ->
     Template.instance().choices.find()
+  questions: ->
+    Template.instance().questions.find {}, sort: {order: 1}
 
 Template.add_question.events
   'keyup .choice': (event, instance) ->
@@ -113,17 +115,19 @@ Template.add_question.events
       properties: questionProperties
 
     Meteor.call "createQuestion", instance.form.id, question,
-      (error, response) ->
+      (error, questionId) ->
         if error
-          toastr.error("Something went wrong")
+          toastr.error error.message
         else
           form.reset()
           instance.choices.find().forEach ({_id})->
-            instance.choices.remove(_id)
-          instance.type.set('inputText')
-          question.parseId = response.id
+            instance.choices.remove _id
+          instance.type.set 'inputText'
+          lastItemOrder = instance.questions.findOne({}, sort: {order: -1})?.order
+          question.parseId = questionId
+          question.order = ++lastItemOrder or 1
           instance.questions.insert question
-          toastr.success('Question added')
+          toastr.success 'Question added'
 
   'click .add-choice': (event, instance)->
-    instance.choices.insert({})
+    instance.choices.insert {}
