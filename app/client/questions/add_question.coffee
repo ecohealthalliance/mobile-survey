@@ -109,7 +109,7 @@ Template.add_question.events
 
     question =
       text: formData.text
-      question_type: instance.type.get()
+      questionType: instance.type.get()
       properties: questionProperties
 
     Meteor.call "createQuestion", instance.form.id, question,
