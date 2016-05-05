@@ -23,15 +23,11 @@ Meteor.methods
 
   createForm: (surveyId, props) ->
     @unblock()
-    unless @userId then throw new Meteor.Error(500, 'Not Authorized')
     #TODO Authenticate
     #TODO Validate
-    trigger = props.trigger
-    if trigger and trigger.type == 'datetime'
-      trigger.datetime = new Date trigger.datetime
-
     query = new Parse.Query Survey
     query.get(surveyId).then (survey) ->
+<<<<<<< HEAD
       # Get the order prop of the last form of survey to set order of new form
       relation = survey.relation 'forms'
       query = relation.query()
@@ -54,6 +50,10 @@ Meteor.methods
           survey.save()
           form.id
         , handleError
+=======
+      survey.createForm(props).then (formId) ->
+        formId
+>>>>>>> Refactor - add methods to Survey class
 
   geocode: (address) ->
     geo.geocode(address)

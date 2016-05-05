@@ -3,10 +3,7 @@ Template.survey_admin_form_details.onCreated ->
   @questionCollection = new Meteor.Collection null
   survey = @data.survey
   instance = @
-  relation = survey.relation 'forms'
-  query = relation.query()
-  query.equalTo 'objectId', @data.formId
-  query.first().then (form) ->
+  survey.getForm(@data.formId).then (form) ->
     instance.form = form
     instance.fetched.set true
   , (form, error) ->

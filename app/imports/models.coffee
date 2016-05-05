@@ -1,4 +1,4 @@
-exports.Survey = Parse.Object.extend 'Survey',
+Survey = Parse.Object.extend 'Survey',
   getForms: (returnMeteorCollection, collection) ->
     query = @relation('forms').query()
     query.find().then (forms) ->
@@ -12,7 +12,38 @@ exports.Survey = Parse.Object.extend 'Survey',
       else
         forms
 
-exports.Form = Parse.Object.extend 'Form',
+  getForm: (formId) ->
+    query = @relation('forms').query()
+    query.equalTo 'objectId', formId
+    query.first().then (form) ->
+      form
+    , (form, error) ->
+      error
+
+  getLastFormOrder: ->
+    query = @relation('forms').query()
+    query.descending 'order'
+    query.select 'order'
+    query.first().then (lastForm) ->
+      lastForm?.get('order')
+
+  createForm: (props) ->
+    survey = @
+    @getLastFormOrder().then (lastFormOrder) ->
+      props.order = ++lastFormOrder or 1
+      trigger = props.trigger
+      if trigger and trigger.type == 'datetime'
+        trigger.datetime = new Date trigger.datetime
+      formProps =
+        title: props.title
+        trigger: trigger
+        createdBy: Parse.User.current()?
+        order: props.order
+      form = new Form()
+      form.create(formProps, survey).then (formId) ->
+        formId
+
+Form = Parse.Object.extend 'Form',
   getQuestions: (returnMeteorCollection, collection) ->
     query = @relation('questions').query()
     query.find().then (questions) ->
@@ -33,4 +64,19 @@ exports.Form = Parse.Object.extend 'Form',
     query.first().then (lastQuestion) ->
       lastQuestion?.get('order')
 
-exports.Question = Parse.Object.extend 'Question'
+  create: (props, survey) ->
+    @save(props).then (form) ->
+      relation = survey.relation 'forms'
+      relation.add form
+      survey.save().then ->
+        form.id
+
+  addTrigger: ->
+    return
+
+Question = Parse.Object.extend 'Question'
+
+module.exports =
+  Survey: Survey
+  Form: Form
+  Question: Question

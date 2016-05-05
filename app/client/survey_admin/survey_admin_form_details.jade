@@ -6,7 +6,7 @@ template(name="survey_admin_form_details")
           a.btn-back(href="{{pathFor 'survey_admin_forms' id=survey.id }}")
             i.mdi.mdi-arrow-left-bold-circle-outline
           h4=form.attributes.title
-          a.btn.btn-default(href="#{form.id}/edit") Edit
+          a.btn.btn-default(href="#{formId}/edit") Edit
 
         .form--details
           .row
