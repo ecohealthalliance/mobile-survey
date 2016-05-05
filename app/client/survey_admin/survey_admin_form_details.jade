@@ -11,6 +11,6 @@ template(name="survey_admin_form_details")
         .form--details
           .row
             .col-md-4
-              +add_question form=form
+              +add_question form=form questions=questionsCollection
             .col-md-8
-              //- +edit_questions form=form
+              +questions form=form questions=questionsCollection

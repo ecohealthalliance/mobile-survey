@@ -2,6 +2,7 @@ Parse = require 'parse'
 
 Template.survey_admin_form_details.onCreated ->
   @fetched = new ReactiveVar false
+  @questionCollection = new Meteor.Collection null
   survey = @data.survey
   instance = @
   relation = survey.relation 'forms'
@@ -16,3 +17,5 @@ Template.survey_admin_form_details.onCreated ->
 Template.survey_admin_form_details.helpers
   form: ->
     Template.instance().form
+  questionsCollection: ->
+    Template.instance().questionCollection
