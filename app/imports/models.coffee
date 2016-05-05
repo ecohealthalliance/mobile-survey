@@ -1,8 +1,3 @@
-if Meteor.isServer
-  Parse = require 'parse/node'
-else
-  Parse = require 'parse'
-
 exports.Survey = Parse.Object.extend 'Survey',
   getForms: (returnMeteorCollection, collection) ->
     query = @relation('forms').query()

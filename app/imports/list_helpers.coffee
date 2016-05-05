@@ -1,5 +1,3 @@
-Parse = require 'parse'
-
 exports.updateSortOrder = (event, parentObj, relatedObjString) ->
   objId    = $(event.item).data 'id'
   oldOrder = ++event.oldIndex

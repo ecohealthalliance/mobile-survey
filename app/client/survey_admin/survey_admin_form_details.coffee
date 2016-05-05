@@ -1,5 +1,3 @@
-Parse = require 'parse'
-
 Template.survey_admin_form_details.onCreated ->
   @fetched = new ReactiveVar false
   @questionCollection = new Meteor.Collection null
