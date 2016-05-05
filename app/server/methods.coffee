@@ -27,33 +27,8 @@ Meteor.methods
     #TODO Validate
     query = new Parse.Query Survey
     query.get(surveyId).then (survey) ->
-<<<<<<< HEAD
-      # Get the order prop of the last form of survey to set order of new form
-      relation = survey.relation 'forms'
-      query = relation.query()
-      query.descending 'order'
-      query.select 'order'
-      query.first().then (lastForm) ->
-        if lastForm
-          order = lastForm.get('order') + 1
-        formProps =
-          title: props.title
-          trigger: trigger
-          createdBy: @userId
-          order: order or 1
-        form = new Form()
-
-        form.save(formProps).then (form) ->
-          # Set relation for new form
-          relation = survey.relation 'forms'
-          relation.add form
-          survey.save()
-          form.id
-        , handleError
-=======
       survey.createForm(props).then (formId) ->
         formId
->>>>>>> Refactor - add methods to Survey class
 
   geocode: (address) ->
     geo.geocode(address)

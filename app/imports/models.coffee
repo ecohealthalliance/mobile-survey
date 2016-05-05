@@ -27,21 +27,24 @@ Survey = Parse.Object.extend 'Survey',
     query.first().then (lastForm) ->
       lastForm?.get('order')
 
-  createForm: (props) ->
-    survey = @
+  buildForm: (props) ->
     @getLastFormOrder().then (lastFormOrder) ->
       props.order = ++lastFormOrder or 1
-      trigger = props.trigger
-      if trigger and trigger.type == 'datetime'
-        trigger.datetime = new Date trigger.datetime
-      formProps =
-        title: props.title
-        trigger: trigger
-        createdBy: Parse.User.current()?
-        order: props.order
+      title: props.title
+      createdBy: Parse.User.current()?
+      order: props.order
+
+  addForm: (props) ->
+    survey = @
+    @buildForm(props).then (formProps) ->
       form = new Form()
-      form.create(formProps, survey).then (formId) ->
-        formId
+      form.create(formProps, survey).then (form) ->
+        triggerProps = props.trigger
+        if triggerProps
+          form.addTrigger(triggerProps, form).then ->
+            form.id
+        else
+          form.id
 
 Form = Parse.Object.extend 'Form',
   getQuestions: (returnMeteorCollection, collection) ->
@@ -69,10 +72,31 @@ Form = Parse.Object.extend 'Form',
       relation = survey.relation 'forms'
       relation.add form
       survey.save().then ->
-        form.id
+        form
 
-  addTrigger: ->
-    return
+  addTrigger: (props) ->
+    trigger = new Trigger()
+    form = @
+    trigger.create(props, form).then (triggerId) ->
+      triggerId
+
+  getTrigger: ->
+    query = @relation('triggers').query()
+    query.first().then (trigger) ->
+      trigger
+    , (trigger, error) ->
+      error
+
+Trigger = Parse.Object.extend 'Trigger',
+  create: (props, form) ->
+    if props.type == 'datetime'
+      props.datetime = new Date props.datetime
+    @save(props).then (trigger) ->
+      relation = form.relation 'triggers'
+      relation.add trigger
+      form.save().then ->
+        trigger.id
+
 
 Question = Parse.Object.extend 'Question'
 
