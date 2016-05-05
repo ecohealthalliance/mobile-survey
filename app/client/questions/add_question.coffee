@@ -122,7 +122,6 @@ Template.add_question.events
           form.reset()
           instance.choices.find().forEach ({_id})->
             instance.choices.remove _id
-          instance.type.set 'inputText'
           lastItemOrder = instance.questions.findOne({}, sort: {order: -1})?.order
           question.parseId = questionId
           question.order = ++lastItemOrder or 1
