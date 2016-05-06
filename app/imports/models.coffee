@@ -72,6 +72,16 @@ Form = Parse.Object.extend 'Form',
       survey.save().then ->
         form
 
+  update: (props) ->
+    form = @
+    # Stash the trigger properties and remove from props
+    # so they aren't saved to form
+    triggerProps = props.trigger
+    delete props.trigger
+    @save(props).then ->
+      form.updateTrigger(triggerProps).then ->
+        form
+
   addTrigger: (props) ->
     trigger = new Trigger()
     form = @
@@ -83,6 +93,16 @@ Form = Parse.Object.extend 'Form',
     query.first().then (trigger) ->
       trigger
 
+  updateTrigger: (props) ->
+    @getTrigger().then (trigger) ->
+      # Transform date and set old type data to null
+      if props.type == 'datetime'
+        props.datetime = new Date props.datetime
+        props.loc = null
+      else
+        props.datetime = null
+      trigger.update props
+
 Trigger = Parse.Object.extend 'Trigger',
   create: (props, form) ->
     if props.type == 'datetime'
@@ -92,6 +112,11 @@ Trigger = Parse.Object.extend 'Trigger',
       relation.add trigger
       form.save().then ->
         trigger.id
+
+  update: (props) ->
+    if props.type == 'datetime'
+      props.datetime = new Date(props.datetime)
+    @save(props)
 
 Question = Parse.Object.extend 'Question'
 
