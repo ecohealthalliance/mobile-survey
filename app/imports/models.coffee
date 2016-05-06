@@ -1,4 +1,4 @@
-{buildMeteorCollection} = require './model_helpers'
+{buildMeteorCollection} = require './helpers'
 
 Survey = Parse.Object.extend 'Survey',
   getForms: (returnMeteorCollection, collection) ->

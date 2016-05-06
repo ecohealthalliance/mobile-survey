@@ -1,3 +1,10 @@
+###
+  Updates the order property of Parse objects after the position
+  of an object changes using sortablejs
+  @param [Object] event, Event triggered by sort
+  @param [Object] parentObj, Parent Parse object of sorted object
+  @param [String] relatedObjString, property of parenObj containing relation
+###
 exports.updateSortOrder = (event, parentObj, relatedObjString) ->
   objId    = $(event.item).data 'id'
   oldOrder = ++event.oldIndex
@@ -31,3 +38,18 @@ exports.updateSortOrder = (event, parentObj, relatedObjString) ->
     # Set new order of mov list item and save
     obj.set 'order', newOrder
     obj.save()
+
+###
+  Accpets an array of Parse objects and returns a Meteor Collection
+  of documents containing the Parse object's attributes and id
+  @param [Array] objs, Parse objects
+  @param [Object] collection, Meteor Collection to contain Parse objects
+  @return [Object] Meteor collection of Parse objects
+###
+exports.buildMeteorCollection = (objs, collection) ->
+  objCollection = collection or new Meteor.Collection null
+  _.each objs, (obj) ->
+    props = _.extend {}, obj.attributes
+    props.parseId = obj.id
+    objCollection.insert props
+  objCollection
