@@ -13,12 +13,12 @@ Template.survey_admin_forms.onCreated ->
 Template.survey_admin_forms.onRendered ->
   instance = @
   Meteor.autorun ->
-    Meteor.defer ->
-      if instance.fetched.get() and instance.forms?.findOne()
-        Sort.create document.getElementById 'forms',
+    if instance.fetched.get() and instance.forms?.findOne()
+      Meteor.defer ->
+        Sort.create formList,
           handle: '.sortable-handle'
           onSort: (event) ->
-            updateSortOrder(event, instance.survey, 'forms')
+            updateSortOrder event, instance.survey, 'forms'
 
 Template.survey_admin_forms.helpers
   forms: ->

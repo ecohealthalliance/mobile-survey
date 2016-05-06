@@ -22,6 +22,7 @@ exports.updateSortOrder = (event, parentObj, relatedObjString) ->
     query.ascending 'order'
     if movingUp
       query.greaterThanOrEqualTo 'order', newOrder
+      query.lessThanOrEqualTo 'order', oldOrder
     else
       query.lessThanOrEqualTo 'order', newOrder
       query.greaterThan 'order', oldOrder

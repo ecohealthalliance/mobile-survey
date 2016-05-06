@@ -7,7 +7,7 @@ template(name="survey_admin_forms")
 
     if fetched
       if hasForms
-        ul.list-group#forms
+        ul.list-group#formList
           each forms
             li.list-group-item.form-link(data-id=parseId)
               span.sortable-handle

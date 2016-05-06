@@ -17,7 +17,7 @@ Template.questions.onRendered ->
   Meteor.autorun ->
     if instance.fetched.get() and instance.questions?.findOne()
       Meteor.defer ->
-        Sort.create questions,
+        Sort.create questionList,
           handle: '.sortable-handle'
           onSort: (event) ->
             updateSortOrder event, instance.form, 'questions'

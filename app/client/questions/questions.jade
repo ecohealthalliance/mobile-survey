@@ -5,7 +5,7 @@ template(name="questions")
 
     if fetched
       if hasQuestions
-        ul.list-group#questions
+        ul.list-group#questionList
           each questions
             li.list-group-item.question-link(data-id=parseId)
               span.sortable-handle
