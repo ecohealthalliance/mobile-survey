@@ -283,15 +283,17 @@ Template.survey_admin_forms_edit.events
         return
       trigger =
         type: type
-        radius: getRadius()
-        loc: getCoordinates()
+        properties:
+          radius: getRadius()
+          loc: getCoordinates()
     if type == 'datetime'
       if not getDatetime()
         toastr.error 'Please select a date and time.'
         return
       trigger =
         type: type
-        datetime: getDatetime()
+        properties:
+          datetime: getDatetime()
     props =
       title: form.name.value
       trigger: trigger
@@ -365,10 +367,11 @@ Template.survey_admin_forms_edit.onRendered ->
         if @form and @trigger
           type = @trigger.get 'type'
           @triggerType.set type
+          triggerProps = @trigger.get 'properties'
           if type == 'datetime'
-            _datetimeTrigger.data('DateTimePicker').date new Date @trigger.get 'datetime'
+            _datetimeTrigger.data('DateTimePicker').date new Date triggerProps.datetime
           else
-            coordinates = @trigger.get('loc').coordinates
+            coordinates = triggerProps.loc.coordinates
             latLng = L.latLng coordinates[1], coordinates[0]
             addMarker latLng, true
             resizeMap()

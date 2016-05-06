@@ -97,16 +97,13 @@ Form = Parse.Object.extend 'Form',
     @getTrigger().then (trigger) ->
       # Transform date and set old type data to null
       if props.type == 'datetime'
-        props.datetime = new Date props.datetime
-        props.loc = null
-      else
-        props.datetime = null
+        props.properties.datetime = new Date props.properties.datetime
       trigger.update props
 
 Trigger = Parse.Object.extend 'Trigger',
   create: (props, form) ->
     if props.type == 'datetime'
-      props.datetime = new Date props.datetime
+      props.properties.datetime = new Date props.properties.datetime
     @save(props).then (trigger) ->
       relation = form.relation 'triggers'
       relation.add trigger
@@ -115,7 +112,7 @@ Trigger = Parse.Object.extend 'Trigger',
 
   update: (props) ->
     if props.type == 'datetime'
-      props.datetime = new Date(props.datetime)
+      props.properties.datetime = new Date(props.properties.datetime)
     @save(props)
 
 Question = Parse.Object.extend 'Question'

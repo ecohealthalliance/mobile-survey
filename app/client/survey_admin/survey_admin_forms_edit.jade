@@ -44,12 +44,12 @@ template(name="survey_admin_forms_edit")
                       min='0'
                       step='.1'
                       name='radiusTrigger'
-                      value='#{trigger.attributes.radius}'
+                      value='#{trigger.attributes.properties.radius}'
                       placeholder='Enter radius in miles')
                     input#coordinateBox.form-control.input-sm.inline-70(
                       type='string'
                       name='coordinateBox',
-                      value='#{trigger.attributes.coordinates}'
+                      value='#{trigger.attributes.properties.coordinates}'
                       placeholder='GPS Coordinates'
                       readonly)
                 .map-floating-row
