@@ -1,6 +1,6 @@
 Parse = require 'parse'
 Sort = require 'sortablejs'
-{updateSortOrder} = require '../../imports/list_helpers'
+{updateSortOrder} = require '../../imports/helpers'
 {Question} = require '../../imports/models'
 
 Template.questions.onCreated ->

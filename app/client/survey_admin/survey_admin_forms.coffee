@@ -1,5 +1,5 @@
 Sort = require 'sortablejs'
-{updateSortOrder} = require '../../imports/list_helpers'
+{updateSortOrder} = require '../../imports/helpers'
 
 Template.survey_admin_forms.onCreated ->
   @fetched = new ReactiveVar false
