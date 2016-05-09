@@ -5,6 +5,7 @@ Sort = require 'sortablejs'
 
 Template.questions.onCreated ->
   @fetched = new ReactiveVar false
+  @survey = @data.survey
   @questions = @data.questions
   @form = @data.form
   instance = @
@@ -14,7 +15,7 @@ Template.questions.onCreated ->
 
 Template.questions.onRendered ->
   instance = @
-  Meteor.autorun ->
+  instance.autorun ->
     if instance.fetched.get() and instance.questions?.findOne()
       Meteor.defer ->
         Sort.create questionList,
@@ -23,6 +24,10 @@ Template.questions.onRendered ->
             updateSortOrder event, instance.form, 'questions'
 
 Template.questions.helpers
+  surveyId: ->
+    Template.instance().survey.id
+  formId: ->
+    Template.instance().form.id
   hasQuestions: ->
     Template.instance().questions?.findOne()
   questions: ->

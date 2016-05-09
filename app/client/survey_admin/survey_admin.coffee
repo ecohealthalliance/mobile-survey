@@ -4,7 +4,6 @@ Template.survey_admin.onCreated ->
   @fetched = new ReactiveVar false
   surveyId = @data.id
   instance = @
-
   query = new Parse.Query Survey
   query.get(surveyId).then (survey) ->
     instance.fetched.set true
@@ -19,3 +18,4 @@ Template.survey_admin.helpers
     instance = Template.instance()
     survey: instance.survey
     formId: instance.data.formId
+    questionId: instance.data.questionId
