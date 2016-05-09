@@ -111,9 +111,8 @@ radiusToZoomLevel = () ->
 # @return [Array] the user defined coordinates as geoJSON Point or null
 getCoordinates = () ->
   latLng = _geofenceMarker.getLatLng()
-
-  type: 'Point'
-  coordinates: [latLng.lng, latLng.lat]
+  latitude: latLng.lat
+  longitude: latLng.lng
 
 # set the UI to the L.latLng object
 #
@@ -285,7 +284,7 @@ Template.survey_admin_forms_edit.events
         type: type
         properties:
           radius: getRadius()
-          loc: getCoordinates()
+        location: getCoordinates()
     if type == 'datetime'
       if not getDatetime()
         toastr.error 'Please select a date and time.'

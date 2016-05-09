@@ -29,6 +29,7 @@ Meteor.methods
     query.get(surveyId).then (survey) ->
       survey.addForm(props).then (formId) ->
         formId
+      , handleError
     , handleError
 
   geocode: (address) ->
