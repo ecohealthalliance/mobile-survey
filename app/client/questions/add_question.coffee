@@ -1,3 +1,5 @@
+{Survey, Form, Question} = require '../../imports/models'
+
 Template.registerHelper 'match', (val, {hash:{regex}})->
   val.match(new RegExp(regex))
 
@@ -111,20 +113,31 @@ Template.add_question.events
       type: instance.type.get()
       properties: questionProperties
       required: questionProperties.required is 'on'
-
-    Meteor.call "createQuestion", instance.form.id, question,
-      (error, questionId) ->
-        if error
-          toastr.error error.message
-        else
-          form.reset()
-          instance.choices.find().forEach ({_id})->
-            instance.choices.remove _id
-          lastItemOrder = instance.questions.findOne({}, sort: {order: -1})?.order
-          question.parseId = questionId
-          question.order = ++lastItemOrder or 1
-          instance.questions.insert question
-          toastr.success 'Question added'
+    parseForm = null
+    query = new Parse.Query Form
+    query.get(instance.form.id)
+      .then (_parseForm) ->
+        parseForm = _parseForm
+        parseForm.getLastQuestionOrder()
+      .then (lastQuestionOrder) ->
+        question.order = ++lastQuestionOrder or 1
+        parseQuestion = new Question()
+        parseQuestion.save(question)
+      .then (parseQuestion) ->
+        question.parseId = parseQuestion.id
+        relation = parseForm.relation 'questions'
+        relation.add parseQuestion
+        parseForm.save()
+      .then (parseForm)->
+        form.reset()
+        instance.choices.find().forEach ({_id})->
+          instance.choices.remove _id
+        lastItemOrder = instance.questions.findOne({}, sort: {order: -1})?.order
+        question.order = ++lastItemOrder or 1
+        instance.questions.insert question
+        toastr.success 'Question added'
+      .fail (error)->
+        toastr.error error.message
 
   'click .add-choice': (event, instance)->
     instance.choices.insert {}

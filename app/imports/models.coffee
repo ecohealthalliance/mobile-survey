@@ -1,26 +1,34 @@
 {buildMeteorCollection} = require './helpers'
 
 Survey = Parse.Object.extend 'Survey',
+  validate: (props) ->
+    if not props?.title or props.title.length == 0
+      return new Parse.Error(Parse.VALIDATION_ERROR, 'The title field cannot be empty')
+    return false
+
   getForms: (returnMeteorCollection, collection) ->
     query = @relation('forms').query()
-    query.find().then (forms) ->
-      if returnMeteorCollection and forms
-        buildMeteorCollection forms, collection
-      else
-        forms
+    query.find()
+      .then (forms) ->
+        if returnMeteorCollection and forms
+          buildMeteorCollection forms, collection
+        else
+          forms
 
   getForm: (formId) ->
     query = @relation('forms').query()
     query.equalTo 'objectId', formId
-    query.first().then (form) ->
-      form
+    query.first()
+      .then (form) ->
+        form
 
   getLastFormOrder: ->
     query = @relation('forms').query()
     query.descending 'order'
     query.select 'order'
-    query.first().then (lastForm) ->
-      lastForm?.get('order')
+    query.first()
+      .then (lastForm) ->
+        lastForm?.get('order')
 
   buildForm: (props) ->
     @getLastFormOrder().then (lastFormOrder) ->
@@ -31,52 +39,69 @@ Survey = Parse.Object.extend 'Survey',
 
   addForm: (props) ->
     survey = @
-    @buildForm(props).then (formProps) ->
-      form = new Form()
-      form.create(formProps, survey).then (form) ->
+    parseForm = new Form()
+    window.F = parseForm
+    window.S = survey
+    @buildForm(props)
+      .then (formProps) ->
+        parseForm.save(formProps)
+      .then ->
         triggerProps = props.trigger
         if triggerProps
-          form.addTrigger(triggerProps, form).then ->
-            form.id
-        else
-          form.id
+          parseForm.addTrigger(triggerProps)
+      .then ->
+        console.log parseForm
+        relation = survey.relation 'forms'
+        relation.add parseForm
+        survey.save()
+      .then ->
+        parseForm
 
 Form = Parse.Object.extend 'Form',
+
   getQuestions: (returnMeteorCollection, collection) ->
     query = @relation('questions').query()
-    query.find().then (questions) ->
-      if returnMeteorCollection and questions
-        buildMeteorCollection questions, collection
-      else
-        questions
+    query.find()
+      .then (questions) ->
+        if returnMeteorCollection and questions
+          buildMeteorCollection questions, collection
+        else
+          questions
 
   getLastQuestionOrder: ->
     query = @relation('questions').query()
     query.descending 'order'
     query.select 'order'
-    query.first().then (lastQuestion) ->
-      lastQuestion?.get('order')
+    query.first()
+      .then (lastQuestion) ->
+        lastQuestion?.get('order')
 
   getQuestion: (questionId) ->
     query = @relation('questions').query()
     query.equalTo 'objectId', questionId
-    query.first().then (question) ->
-      question
+    query.first()
+      .then (question) ->
+        question
 
   addQuestion: (props) ->
     form = @
-    @getLastQuestionOrder().then (lastQuestionOrder) ->
-      props.order = ++lastQuestionOrder or 1
-      question = new Question()
-      question.save(props).then (question) ->
-        question.addToForm(form).then ->
-          question.id
+    @getLastQuestionOrder()
+      .then (lastQuestionOrder) ->
+        props.order = ++lastQuestionOrder or 1
+        question = new Question()
+        question.save(props)
+      .then (question) ->
+        question.addToForm(form)
+      .then ->
+        question.id
 
   create: (props, survey) ->
-    @save(props).then (form) ->
-      relation = survey.relation 'forms'
-      relation.add form
-      survey.save().then ->
+    @save(props)
+      .then (form) ->
+        relation = survey.relation 'forms'
+        relation.add form
+        survey.save()
+      .then ->
         form
 
   update: (props) ->
@@ -85,19 +110,23 @@ Form = Parse.Object.extend 'Form',
     # so they aren't saved to form
     triggerProps = props.trigger
     delete props.trigger
-    @save(props).then ->
-      form.updateTrigger(triggerProps).then ->
+    @save(props)
+      .then ->
+        form.updateTrigger(triggerProps)
+      .then ->
         form
 
   addTrigger: (props) ->
     trigger = new Trigger()
-    trigger.create(props, @).then (triggerId) ->
-      triggerId
+    trigger.create(props, @)
+      .then (triggerId) ->
+        triggerId
 
   getTrigger: ->
     query = @relation('triggers').query()
-    query.first().then (trigger) ->
-      trigger
+    query.first()
+      .then (trigger) ->
+        trigger
 
   updateTrigger: (props) ->
     @getTrigger().then (trigger) ->
@@ -106,24 +135,25 @@ Form = Parse.Object.extend 'Form',
 Trigger = Parse.Object.extend 'Trigger',
   create: (props, form) ->
     @setProperties props
-    @save().then (trigger) =>
-      @addToForm(form).then ->
+    @save()
+      .then (trigger) =>
+        @addToForm(form)
+      .then ->
         trigger.id
 
   setProperties: (props) ->
     @set 'type', props.type
     properties = props.properties
-    if props.type == 'datetime'
-      properties.datetime = new Date(properties.datetime)
-    else
+    if props.type == 'location'
       @set 'location', new Parse.GeoPoint props.location
       delete props.location
     @set 'properties', properties
 
   update: (props) ->
     @setProperties()
-    @save().then (trigger) ->
-      trigger
+    @save()
+      .then (trigger) ->
+        trigger
 
   addToForm: (form) ->
     relation = form.relation 'triggers'

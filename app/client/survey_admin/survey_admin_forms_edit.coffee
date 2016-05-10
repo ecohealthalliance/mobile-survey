@@ -1,3 +1,5 @@
+{Survey, Form} = require '../../imports/models'
+
 L.Icon.Default.imagePath = '/packages/bevanhunt_leaflet/images'
 _map = null # the map instance for the geofence trigger
 _minZoom = 3 # the minimum zoom level of the map
@@ -291,24 +293,30 @@ Template.survey_admin_forms_edit.events
         return
       trigger =
         type: type
-        properties:
-          datetime: getDatetime()
+        datetime: new Date getDatetime()
     props =
       title: form.name.value
       trigger: trigger
 
     if formId
-      Meteor.call 'editForm', formId, props, (error)->
-        if error
-          toastr.error error.message
-        else
+      query = new Parse.Query Form
+      query.get(formId)
+        .then (form) ->
+          form.save(props)
+        .then (form) ->
           FlowRouter.go "/admin/surveys/#{instance.survey.id}/forms"
-    else
-      Meteor.call 'createForm', instance.survey.id, props, (error, formId)->
-        if error
+        .fail (error) ->
           toastr.error error.message
-        else
-          FlowRouter.go "/admin/surveys/#{instance.survey.id}/forms/#{formId}"
+    else
+      query = new Parse.Query Survey
+      query.get(instance.survey.id)
+        .then (survey) ->
+          survey.addForm(props)
+        .then (form)->
+          FlowRouter.go "/admin/surveys/#{instance.survey.id}/forms/#{form.id}"
+        .fail (error)->
+          console.log error
+          toastr.error error.message
 
 Template.survey_admin_forms_edit.onRendered ->
   # the map is recreated each time the page is rendered, so clear any old
