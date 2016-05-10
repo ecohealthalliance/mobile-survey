@@ -116,6 +116,19 @@ Form = Parse.Object.extend 'Form',
       .then ->
         form
 
+  addQuestion: (props) ->
+    form = @
+    @getLastQuestionOrder()
+      .then (lastQuestionOrder) ->
+        props.order = ++lastQuestionOrder or 1
+        question = new Question()
+        question.save(props)
+          .then (question) ->
+            relation = form.relation 'questions'
+            relation.add question
+            form.save().then ->
+              question
+
   addTrigger: (props) ->
     trigger = new Trigger()
     trigger.create(props, @)
