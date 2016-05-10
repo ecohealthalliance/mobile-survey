@@ -1,0 +1,23 @@
+template(name="survey_details")
+  .survey-admin--content
+    h3 Details
+    .survey--details
+      if fetched
+        p.description= survey.attributes.description
+        if forms
+          ul.forms.list-unstyled
+            each forms
+              li.form
+                h4
+                  span.trigger(class=trigger.type)
+                  span=title
+                  a(href="{{pathFor 'form_details' id=../survey.id formId=parseId}}")
+                    i.fa.fa-link
+                if questions
+                  ul.questions.list-unstyled
+                    each questions
+                      li.question
+                        span.question-type(class=questionType)
+                        span=text
+      else
+        .fa.fa-spinner.fa-pulse.fa-3x.fa-fw.margin-bottom

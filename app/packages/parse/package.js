@@ -1,5 +1,5 @@
 Package.describe({
-  name: 'goodquestion:parse',
+  name: 'gq:parse',
   version: '0.1.0',
   summary: 'Integration with parse'
 });
