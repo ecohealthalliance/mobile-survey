@@ -8,4 +8,9 @@ Template.login.events
 
     Meteor.call 'loginUser', email, passw, (err, token) ->
       Meteor.loginWithToken(token)
-      Parse.User.logIn email, passw
+      Parse.User.logIn(email, passw)
+        .then ()->
+          console.log(Parse.User.current())
+        .fail (error)->
+          toastr.error('Could not log into Parse.')
+          console.log(error)
