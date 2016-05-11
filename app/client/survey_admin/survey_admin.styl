@@ -222,8 +222,46 @@ input.inline-70
   padding 60px 12%
   background #f9f9f9
 
+$trigger-types = {
+  location: '\f041'
+  datetime: '\f017'
+}
+
+$question-types = {
+  multipleChoice: '\f0ca'
+  checkboxes: '\f046'
+  shortAnswer: '\f068'
+  longAnswer: '\f036'
+  number: '\f292'
+  date: '\f073'
+  datetime: '\f017'
+  scale: '\f1de'
+}
+
 .survey--details
   .form
     margin-bottom 30px
   .description
     margin-bottom 30px
+  .questions
+    margin-left 15px
+  .question
+    margin-bottom 5px
+  .trigger
+  .question-type
+    margin-right 4px
+    &::before
+      font-family 'FontAwesome'
+      font-size 1em
+      color #555
+  .trigger
+    content '\f0e7'
+    for type, unicode in $trigger-types
+      &.{type}
+        &::before
+          content unicode
+  .question-type
+    for type, unicode in $question-types
+      &.{type}
+        &::before
+          content unicode

@@ -3,6 +3,7 @@
 Template.survey_admin_details.onCreated ->
   @survey = @data.survey
   @forms = new Meteor.Collection null
+  @fetched = new ReactiveVar false
   instance = @
   @survey.getForms()
     .then (forms) ->
@@ -19,6 +20,7 @@ Template.survey_admin_details.onCreated ->
               formQuestions.push questionProps
             formProps.questions = formQuestions
             instance.forms.insert formProps
+            instance.fetched.set true
 
 Template.survey_admin_details.helpers
   forms: ->
