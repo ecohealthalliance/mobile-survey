@@ -2,4 +2,18 @@ template(name="survey_admin_details")
   .survey-admin--content
     h3 Details
     .survey--details
-      p= survey.attributes.description
+      p.description= survey.attributes.description
+      if forms
+        ul.forms.list-unstyled
+          each forms
+            li.form
+              h4=title
+              .trigger= trigger.type
+              if questions
+                h5 Questions
+                ul.questions
+                  each questions
+                    li.question
+                      p=text
+      else
+        h1 loading
