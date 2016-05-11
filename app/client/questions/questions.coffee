@@ -1,4 +1,3 @@
-Parse = require 'parse'
 Sort = require 'sortablejs'
 {updateSortOrder} = require '../../imports/helpers'
 {Question} = require '../../imports/models'
