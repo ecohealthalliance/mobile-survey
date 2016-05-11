@@ -273,7 +273,6 @@ Template.survey_admin_forms_edit.events
 
   'submit form': (event, instance)->
     event.preventDefault()
-    formId = instance.form?.id
     form = event.currentTarget
     trigger = null
     # what trigger is active
@@ -298,24 +297,18 @@ Template.survey_admin_forms_edit.events
       title: form.name.value
       trigger: trigger
 
-    if formId
-      query = new Parse.Query Form
-      query.get(formId)
-        .then (form) ->
-          form.save(props)
-        .then (form) ->
+    form = instance.form
+    if form
+      form.save(props)
+        .then ->
           FlowRouter.go "/admin/surveys/#{instance.survey.id}/forms"
         .fail (error) ->
           toastr.error error.message
     else
-      query = new Parse.Query Survey
-      query.get(instance.survey.id)
-        .then (survey) ->
-          survey.addForm(props)
-        .then (form)->
+      instance.survey.addForm(props)
+        .then (form) ->
           FlowRouter.go "/admin/surveys/#{instance.survey.id}/forms/#{form.id}"
-        .fail (error)->
-          console.log error
+        .fail (error) ->
           toastr.error error.message
 
 Template.survey_admin_forms_edit.onRendered ->
