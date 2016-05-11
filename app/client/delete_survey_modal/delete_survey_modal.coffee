@@ -1,3 +1,5 @@
+{Survey} = require '../../imports/models'
+
 Template.delete_survey_modal.onCreated ->
   @deleting = new ReactiveVar false
 
@@ -14,9 +16,11 @@ Template.delete_survey_modal.events
     event.preventDefault()
     instance.data.surveys.remove parseId: instance.surveyId
     query = new Parse.Query Survey
-    query.get(instance.surveyId).then (survey) ->
-      survey.destroy().then (obj) ->
+    query.get(instance.surveyId)
+      .then (survey) ->
+        survey.destroy()
+      .then (obj) ->
         $('#delete-survey-modal').modal('hide')
         instance.deleting.set false
-    , (error) ->
-      toastr.error error.message
+      .fail (error) ->
+        toastr.error error.message
