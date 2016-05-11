@@ -29,20 +29,16 @@ Meteor.methods
     query.get(surveyId).then (survey) ->
       survey.addForm(props).then (formId) ->
         formId
+      , handleError
     , handleError
 
   geocode: (address) ->
     geo.geocode(address)
 
   editForm: (formId, props) ->
-    trigger = props.trigger
-    if trigger
-      if trigger.type == 'datetime'
-        trigger.datetime = new Date(trigger.datetime)
-
     query = new Parse.Query Form
     query.get(formId).then (form) ->
-      form.save(props).then (form) ->
+      form.update(props).then (form) ->
         form
       , handleError
     , handleError

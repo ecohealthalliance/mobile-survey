@@ -64,6 +64,16 @@ Form = Parse.Object.extend 'Form',
       survey.save().then ->
         form
 
+  update: (props) ->
+    form = @
+    # Stash the trigger properties and remove from props
+    # so they aren't saved to form
+    triggerProps = props.trigger
+    delete props.trigger
+    @save(props).then ->
+      form.updateTrigger(triggerProps).then ->
+        form
+
   addTrigger: (props) ->
     trigger = new Trigger()
     form = @
@@ -75,15 +85,36 @@ Form = Parse.Object.extend 'Form',
     query.first().then (trigger) ->
       trigger
 
+  updateTrigger: (props) ->
+    @getTrigger().then (trigger) ->
+      trigger.update props
+
 Trigger = Parse.Object.extend 'Trigger',
   create: (props, form) ->
-    if props.type == 'datetime'
-      props.datetime = new Date props.datetime
-    @save(props).then (trigger) ->
-      relation = form.relation 'triggers'
-      relation.add trigger
-      form.save().then ->
+    @setProperties props
+    @save().then (trigger) =>
+      @addToForm(form).then ->
         trigger.id
+
+  setProperties: (props) ->
+    @set 'type', props.type
+    properties = props.properties
+    if props.type == 'datetime'
+      properties.datetime = new Date(properties.datetime)
+    else
+      @set 'location', new Parse.GeoPoint props.location
+      delete props.location
+    @set 'properties', properties
+
+  update: (props) ->
+    @setProperties()
+    @save().then (trigger) ->
+      trigger
+
+  addToForm: (form) ->
+    relation = form.relation 'triggers'
+    relation.add @
+    form.save()
 
 Question = Parse.Object.extend 'Question'
 
