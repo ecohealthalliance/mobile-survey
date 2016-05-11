@@ -113,11 +113,8 @@ Template.add_question.events
       type: instance.type.get()
       properties: questionProperties
       required: questionProperties.required is 'on'
-    parseForm = null
-    query = new Parse.Query Form
-    query.get(instance.form.id)
-      .then (form) ->
-        form.addQuestion(question)
+
+    instance.form.addQuestion(question)
       .then (question) ->
         form.reset()
         instance.choices.find().forEach ({_id})->
