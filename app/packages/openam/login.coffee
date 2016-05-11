@@ -7,10 +7,14 @@ Template.login.events
     passw = form.password.value.trim()
 
     Meteor.call 'loginUser', email, passw, (err, token) ->
-      Meteor.loginWithToken(token)
-      Parse.User.logIn(email, passw)
-        .then ()->
-          console.log(Parse.User.current())
-        .fail (error)->
-          toastr.error('Could not log into Parse.')
-          console.log(error)
+      Meteor.loginWithToken token, (err)->
+        if err
+          toastr.error('Could not log into Meteor')
+          return
+        Parse.User.logIn(email, passw)
+          .then ()->
+            console.log(Parse.User.current())
+          .fail (error)->
+            toastr.error('Could not log into Parse.')
+            console.log(error)
+            Meteor.logout()
