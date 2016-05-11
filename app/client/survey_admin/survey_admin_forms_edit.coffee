@@ -370,7 +370,7 @@ Template.survey_admin_forms_edit.onRendered ->
           if type == 'datetime'
             _datetimeTrigger.data('DateTimePicker').date new Date triggerProps.datetime
           else
-            coordinates = triggerProps.loc.coordinates
-            latLng = L.latLng coordinates[1], coordinates[0]
+            location = @trigger.get 'location'
+            latLng = L.latLng location.latitude, location.longitude
             addMarker latLng, true
             resizeMap()
