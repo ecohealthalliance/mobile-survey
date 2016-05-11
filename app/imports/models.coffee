@@ -1,10 +1,10 @@
 {buildMeteorCollection} = require './helpers'
 
 Survey = Parse.Object.extend 'Survey',
-  # validate: (props) ->
-  #   if not props?.title or props.title.length == 0
-  #     return new Parse.Error(Parse.VALIDATION_ERROR, 'The title field cannot be empty')
-  #   return
+  validate: (props) ->
+    if props?.title?.length == 0
+      return new Parse.Error(Parse.VALIDATION_ERROR, 'The title field cannot be empty')
+    Parse.Object.prototype.validate.call(this, props)
 
   getForms: (returnMeteorCollection, collection) ->
     query = @relation('forms').query()
@@ -51,7 +51,7 @@ Form = Parse.Object.extend 'Form',
     form = @
     @save(props)
       .then ->
-        form.addTrigger(props.trigger, form)
+        form.addTrigger(props.trigger)
       .then ->
         relation = survey.relation 'forms'
         relation.add form
