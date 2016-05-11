@@ -1,4 +1,5 @@
 Template.header.events
   'click #logout': (event, instance) ->
     event.preventDefault()
-    Meteor.logout()
+    Parse.User.logOut().then ->
+      Meteor.logout()
