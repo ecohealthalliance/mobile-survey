@@ -5,13 +5,16 @@ template(name="form_edit")
         .form-group
           .row
             .col-sm-6
-              label
+              label.control-label
                 span Name
               input.form-control(
-                type='string'
+                type='text'
                 name='name'
                 maxlength='128'
-                value='#{form.attributes.title}')
+                minlength='3'
+                value='#{form.attributes.title}'
+                required)
+              .help-block.with-errors
         .form-group
           .row(style='margin-top: 5px;')
             .col-xs-12.col-sm-8
@@ -45,13 +48,15 @@ template(name="form_edit")
                       step='.1'
                       name='radiusTrigger'
                       value='#{trigger.attributes.properties.radius}'
-                      placeholder='Enter radius in miles')
+                      placeholder='Enter radius in miles'
+                      required)
                     input#coordinateBox.form-control.input-sm.inline-70(
-                      type='string'
+                      type='text'
                       name='coordinateBox',
                       value='#{trigger.attributes.properties.coordinates}'
                       placeholder='GPS Coordinates'
                       readonly)
+                    .help-block.with-errors
                 .map-floating-row
                   #map
 

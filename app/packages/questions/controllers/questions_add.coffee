@@ -1,7 +1,8 @@
 {Survey, Form, Question} = require 'meteor/gq:models'
+validator = require 'bootstrap-validator'
 
 Template.registerHelper 'match', (val, {hash:{regex}})->
-  val?.match(new RegExp(regex))
+  val?.match new RegExp regex
 
 Template.registerHelper 'isEmpty', (val)->
   if val.count
@@ -14,6 +15,9 @@ Template.questions_add.onCreated ->
   @questions = @data.questions
   @type = new ReactiveVar null
   @choices = new Meteor.Collection null
+
+Template.add_question.onRendered ->
+  @$('.question-form').validator()
 
 Template.questions_add.helpers
   types: ->
@@ -73,10 +77,6 @@ Template.questions_add.events
     event.preventDefault()
 
     form = event.currentTarget
-
-    unless form.checkValidity()
-      toastr.error('Please fill out all required fields')
-      return
 
     formData = _.object $(form).serializeArray().map(
       ({name, value})-> [name, value]

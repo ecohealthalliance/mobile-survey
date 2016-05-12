@@ -1,3 +1,5 @@
+validator = require 'bootstrap-validator'
+
 Template.questions_edit.onCreated ->
   instance = @
   @type = new ReactiveVar 'inputText'
@@ -14,6 +16,9 @@ Template.questions_edit.onCreated ->
       console.error error
   , (error) ->
     console.error error
+
+Template.questions_edit.onRendered ->
+  @$('.question-form').validator()
 
 Template.questions_edit.helpers
   types: ->
@@ -74,10 +79,6 @@ Template.questions_edit.events
     event.preventDefault()
 
     form = event.currentTarget
-
-    unless form.checkValidity()
-      toastr.error('Please fill out all required fields')
-      return
 
     formData = _.object $(form).serializeArray().map(
       ({name, value})-> [name, value]
