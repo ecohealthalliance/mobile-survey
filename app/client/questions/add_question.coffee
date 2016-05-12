@@ -1,5 +1,7 @@
+validator = require 'bootstrap-validator'
+
 Template.registerHelper 'match', (val, {hash:{regex}})->
-  val.match(new RegExp(regex))
+  val?.match new RegExp regex
 
 Template.registerHelper 'isEmpty', (val)->
   if val.count
@@ -10,8 +12,11 @@ Template.registerHelper 'isEmpty', (val)->
 Template.add_question.onCreated ->
   @form = @data.form
   @questions = @data.questions
-  @type = new ReactiveVar 'inputText'
-  @choices = new Meteor.Collection(null)
+  @type = new ReactiveVar null
+  @choices = new Meteor.Collection null
+
+Template.add_question.onRendered ->
+  @$('.question-form').validator()
 
 Template.add_question.helpers
   types: ->
@@ -71,10 +76,6 @@ Template.add_question.events
     event.preventDefault()
 
     form = event.currentTarget
-
-    unless form.checkValidity()
-      toastr.error('Please fill out all required fields')
-      return
 
     formData = _.object $(form).serializeArray().map(
       ({name, value})-> [name, value]

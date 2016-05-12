@@ -4,10 +4,11 @@ template(name="survey_admin_questions_edit")
       .panel-heading
         h4 Edit question
       .panel-body
-        form(novalidate='novalidate')
-          .form-group(data-required='true')
+        form.question-form
+          .form-group
             label.control-label(for='new-label') Question *
-            input#new-label.form-control(type='text' name='text' required value=text)
+            input#new-label.form-control(type='text' minlength='5' name='text' value=text required)
+            .help-block.with-errors
           .form-group(data-required='true')
             label.control-label(for='new-type') Question Type
             .btn-grid
@@ -22,7 +23,7 @@ template(name="survey_admin_questions_edit")
               input#new-placeholder.form-control(type='text', name='placeholder' value=properties.placeholder)
           if match type regex='checkboxes|multipleChoice'
             label Choices
-            .form-group(data-required='true')
+            .form-group
               each choices
                 .choice-container
                   input.form-control.choice(type='text' data-id=_id value=name)
