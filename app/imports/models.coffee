@@ -131,7 +131,11 @@ Trigger = Parse.Object.extend 'Trigger',
     form.save()
 
 
-Question = Parse.Object.extend 'Question'
+Question = Parse.Object.extend 'Question',
+  addToForm: (form) ->
+    relation = form.relation 'questions'
+    relation.add @
+    form.save()
 
 module.exports =
   Survey: Survey
