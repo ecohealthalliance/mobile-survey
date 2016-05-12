@@ -1,0 +1,30 @@
+template(name="survey")
+  if fetched
+    .survey-admin
+      nav.navbar.navbar-default.survey-admin--nav
+        .container-fluid-padded
+          .navbar-header
+            h2=survey.attributes.title
+          ul.nav.navbar-nav.navbar-right
+            li(class="{{isActiveRoute 'survey_details'}}")
+              a.survey-admin--view-link(href="{{pathFor 'survey_details' id=survey.id}}" data-page='details') Details
+            li(class="{{isActiveRoute regex='forms|forms_new|form_details'}}")
+              a.survey-admin--view-link(href="{{pathFor 'forms' id=survey.id}}" data-page='forms') Forms
+            li(class="{{isActiveRoute 'survey_users'}}")
+              a.survey-admin--view-link(href="{{pathFor 'survey_users' id=survey.id}}" data-page='users') Users
+
+      .container-fluid-padded
+        if isActiveRoute 'survey_details'
+          +survey_details survey=survey
+
+        else if isActiveRoute 'forms'
+          +forms survey=survey
+
+        else if isActiveRoute 'form_edit'
+          +form_edit data
+
+        else if isActiveRoute 'form_details'
+          +form_details data
+
+        else if isActiveRoute 'survey_users'
+          +survey_users survey=survey

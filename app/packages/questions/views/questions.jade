@@ -1,0 +1,17 @@
+template(name="questions")
+  .panel.panel-default
+    .panel-heading
+      h4 Questions
+    if fetched
+      if hasQuestions
+        ul.list-group#questionList
+          each questions
+            li.list-group-item.question-link(data-id=parseId)
+              span.sortable-handle
+                i.mdi.mdi-drag
+              a(href="{{pathFor 'questions_edit' id=surveyId formId=formId questionId=parseId}}")= text
+              .delete.warning(data-id=parseId)
+                i.mdi.mdi-delete
+      else
+        .panel-body
+          p No questions specified

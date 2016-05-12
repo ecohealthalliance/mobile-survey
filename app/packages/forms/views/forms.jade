@@ -1,0 +1,18 @@
+template(name="forms")
+  .survey-admin--content
+    h3 Forms
+      a(href="{{pathFor 'form_edit' id=survey.id}}")#add-form.btn.btn-sm
+        i.mdi.mdi-plus-circle
+        | Add Form
+
+    if fetched
+      if hasForms
+        ul.list-group#formList
+          each forms
+            li.list-group-item.form-link(data-id=parseId)
+              span.sortable-handle
+                i.mdi.mdi-drag
+              a(href="{{pathFor 'form_details' id=surveyId formId=parseId}}")=title
+              a.btn.btn-default.edit(href="forms/#{parseId}/edit") Edit
+      else
+        p This survey has no forms

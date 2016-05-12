@@ -1,0 +1,71 @@
+template(name="form_edit")
+  .survey-admin--content
+    if fetched
+      form.edit-form
+        .form-group
+          .row
+            .col-sm-6
+              label
+                span Name
+              input.form-control(
+                type='string'
+                name='name'
+                maxlength='128'
+                value='#{form.attributes.title}')
+        .form-group
+          .row(style='margin-top: 5px;')
+            .col-xs-12.col-sm-8
+              label
+                span Trigger
+
+          .trigger-container
+            .nav-floating-row
+              ul#tabs.nav.nav-tabs.trigger-nav-small(data-tabs='tabs')
+                li(class="{{#if triggerTypeState 'location'}} active {{/if}}")
+                  a(href='#location' data-toggle='tab' data-type='location') Location
+                li(class="{{#if triggerTypeState 'datetime'}} active {{/if}}")
+                  a(href='#datetime' data-toggle='tab' data-type='datetime') Date/Time
+
+            .tab-content.trigger-tabs
+              #location.tab-pane(class="{{#if triggerTypeState 'location'}} active {{/if}}")
+                .tab-content-floating-row
+                  .col-sm-12.clearfix
+                    .searchBar
+                      .tokenized.main
+                        i#searchIcon.fa.fa-search
+                        input#searchBar.input-sm(name='searchBar', placeholder='Search for an address or click on the map')
+                        if isAddressSearching
+                          i.fa.fa-spinner.fa-spin.address-searching-spinner.visible
+                        else
+                          i.fa.fa-spinner.fa-spin.address-searching-spinner.invisible
+                  .col-sm-12.clearfix
+                    input#radiusTrigger.form-control.input-sm.inline-30(
+                      type='number'
+                      min='0'
+                      step='.1'
+                      name='radiusTrigger'
+                      value='#{trigger.attributes.properties.radius}'
+                      placeholder='Enter radius in miles')
+                    input#coordinateBox.form-control.input-sm.inline-70(
+                      type='string'
+                      name='coordinateBox',
+                      value='#{trigger.attributes.properties.coordinates}'
+                      placeholder='GPS Coordinates'
+                      readonly)
+                .map-floating-row
+                  #map
+
+              #datetime.tab-pane(class="{{#if triggerTypeState 'datetime'}} active {{/if}}")
+                #datetimeTrigger.input-group.date
+
+          .buttons-floating-row
+            button.btn.btn-primary#save-form
+              i.mdi.mdi-plus-circle
+              span
+                if formId
+                  | Save Form
+                else
+                  | Create Form
+            button.btn.btn-default#cancelForm(type="button")
+              i.mdi.mdi-close-circle-outline
+              span Cancel
