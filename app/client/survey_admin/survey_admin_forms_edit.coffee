@@ -63,7 +63,7 @@ onMapClick = (event) ->
 Template.survey_admin_forms_edit.onCreated ->
   @surveyId = @data.surveyId
   @formId = @data.formId
-  @subscribe 'form', @formId
+  @subscribe 'form', @formId if @formId?
 
 Template.survey_admin_forms_edit.helpers
   form: ->

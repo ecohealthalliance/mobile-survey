@@ -4,6 +4,7 @@ getQuestions = => @Questions
 
 Meteor.methods
   createSurvey: (fields)->
+    check(fields, Object)
     if not fields?.title or fields.title.length == 0
       throw new Meteor.Error("The title field cannot be empty")
     fields.createdBy = @userId
@@ -12,6 +13,7 @@ Meteor.methods
   createForm: (surveyId, props)->
     #TODO Authenticate
     #TODO Validate
+    check(surveyId, String)
     surveyForms = getSurveys().findOne(surveyId).forms
     if surveyForms?.length
       lastForm = getForms().findOne
@@ -29,13 +31,17 @@ Meteor.methods
     formId
 
   updateForm: (formId, form)->
+    check(formId, String)
+    check(form, Object)
     getForms().update(_id: formId, { $set: form })
 
   getSurvey: (id)->
+    check(id, String)
     getSurveys().findOne
       _id: id
 
   addQuestion: (formId, data) ->
+    check(formId, String)
     form = getForms().findOne(formId)
     formQuestions = form.questions
     if formQuestions?.length
@@ -50,6 +56,7 @@ Meteor.methods
       getForms().update(formId, $set: {questions: form.questions})
 
   removeQuestion: (questionId) ->
+    check(questionId, String)
     getForms().find(questions: questionId).forEach (item) ->
       questions = _.without(item.questions, questionId)
       getForms().update(item._id, $set: questions: questions)
