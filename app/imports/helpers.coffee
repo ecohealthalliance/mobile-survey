@@ -54,3 +54,13 @@ exports.buildMeteorCollection = (objs, collection) ->
     props.parseId = obj.id
     objCollection.insert props
   objCollection
+
+
+###
+  @param [Object] Parse object to transform
+  @return [Object] Object containing Parse object's attrs including id as parseId
+###
+exports.transformObj = (obj) ->
+  props = _.extend {}, obj.attributes
+  props.parseId = obj.id
+  props
