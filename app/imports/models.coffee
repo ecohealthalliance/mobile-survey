@@ -26,16 +26,16 @@ Survey = Parse.Object.extend 'Survey',
     query = @relation('forms').query()
     query.descending 'order'
     query.select 'order'
-    query.first()
-      .then (lastForm) ->
-        lastForm?.get('order')
+    query.first().then (lastForm) ->
+      lastForm?.get('order')
 
   buildForm: (props) ->
     @getLastFormOrder().then (lastFormOrder) ->
-      props.order = ++lastFormOrder or 1
+      order = ++lastFormOrder or 1
       title: props.title
       createdBy: Parse.User.current()?
-      order: props.order
+      order: order
+      trigger: props.trigger
 
   addForm: (props) ->
     survey = @
@@ -44,18 +44,22 @@ Survey = Parse.Object.extend 'Survey',
       .then (formProps) ->
         form.create(formProps, survey)
       .then (form) ->
-        form
-
-Form = Parse.Object.extend 'Form',
-  create: (props, survey) ->
-    form = @
-    @save(props)
-      .then ->
-        form.addTrigger(props.trigger)
-      .then ->
         relation = survey.relation 'forms'
         relation.add form
         survey.save()
+      .then ->
+        form
+
+Form = Parse.Object.extend 'Form',
+  create: (props) ->
+    form = @
+    # Stash the trigger properties and remove from props
+    # so they aren't saved to form
+    triggerProps = props.trigger
+    delete props.trigger
+    @save(props)
+      .then ->
+        form.addTrigger(triggerProps)
       .then ->
         form
 
@@ -83,27 +87,6 @@ Form = Parse.Object.extend 'Form',
       .then (question) ->
         question
 
-  addQuestion: (props) ->
-    form = @
-    @getLastQuestionOrder()
-      .then (lastQuestionOrder) ->
-        props.order = ++lastQuestionOrder or 1
-        question = new Question()
-        question.save(props)
-      .then (question) ->
-        question.addToForm(form)
-      .then ->
-        question.id
-
-  create: (props, survey) ->
-    @save(props)
-      .then (form) ->
-        relation = survey.relation 'forms'
-        relation.add form
-        survey.save()
-      .then ->
-        form
-
   update: (props) ->
     form = @
     # Stash the trigger properties and remove from props
@@ -123,11 +106,12 @@ Form = Parse.Object.extend 'Form',
         props.order = ++lastQuestionOrder or 1
         question = new Question()
         question.save(props)
-          .then (question) ->
-            relation = form.relation 'questions'
-            relation.add question
-            form.save().then ->
-              question
+      .then (question) ->
+        relation = form.relation 'questions'
+        relation.add question
+        form.save()
+      .then ->
+        question
 
   addTrigger: (props) ->
     trigger = new Trigger()
@@ -149,21 +133,22 @@ Trigger = Parse.Object.extend 'Trigger',
   create: (props, form) ->
     @setProperties props
     @save()
-      .then (trigger) =>
+      .then =>
         @addToForm(form)
       .then ->
-        trigger.id
+        @id
 
   setProperties: (props) ->
-    @set 'type', props.type
+    type = props.type
+    @set 'type', type
     properties = props.properties
-    if props.type == 'location'
+    if type == 'location'
       @set 'location', new Parse.GeoPoint props.location
       delete props.location
     @set 'properties', properties
 
   update: (props) ->
-    @setProperties()
+    @setProperties(props)
     @save()
       .then (trigger) ->
         trigger

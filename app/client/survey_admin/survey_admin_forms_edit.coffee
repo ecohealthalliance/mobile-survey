@@ -298,14 +298,15 @@ Template.survey_admin_forms_edit.events
         return
       trigger =
         type: type
-        datetime: new Date getDatetime()
+        properties:
+          datetime: new Date getDatetime()
     props =
       title: form.name.value
       trigger: trigger
 
     form = instance.form
     if form
-      form.save(props)
+      form.update(props)
         .then ->
           FlowRouter.go "/admin/surveys/#{instance.survey.id}/forms"
         .fail (error) ->
