@@ -33,7 +33,7 @@ Survey = Parse.Object.extend 'Survey',
     @getLastFormOrder().then (lastFormOrder) ->
       order = ++lastFormOrder or 1
       title: props.title
-      createdBy: Parse.User.current()?
+      createdBy: Parse.User.current()
       order: order
       trigger: props.trigger
 
@@ -104,6 +104,7 @@ Form = Parse.Object.extend 'Form',
     @getLastQuestionOrder()
       .then (lastQuestionOrder) ->
         props.order = ++lastQuestionOrder or 1
+        props.createdBy = Parse.User.current()
         question = new Question()
         question.save(props)
       .then (question) ->
