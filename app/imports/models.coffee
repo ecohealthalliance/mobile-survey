@@ -103,22 +103,16 @@ Form = Parse.Object.extend 'Form',
     form = @
     @getLastQuestionOrder()
       .then (lastQuestionOrder) ->
-        props.order = ++lastQuestionOrder or 1
-        props.createdBy = Parse.User.current()
         question = new Question()
-        question.save(props)
+        question.create(props, lastQuestionOrder, form)
       .then (question) ->
-        relation = form.relation 'questions'
-        relation.add question
-        form.save()
-      .then ->
         question
 
   addTrigger: (props) ->
     trigger = new Trigger()
     trigger.create(props, @)
-      .then (triggerId) ->
-        triggerId
+      .then (trigger) ->
+        trigger
 
   getTrigger: ->
     query = @relation('triggers').query()
@@ -132,12 +126,13 @@ Form = Parse.Object.extend 'Form',
 
 Trigger = Parse.Object.extend 'Trigger',
   create: (props, form) ->
+    trigger = @
     @setProperties props
     @save()
-      .then =>
-        @addToForm(form)
       .then ->
-        @id
+        trigger.addToForm(form)
+      .then ->
+        trigger
 
   setProperties: (props) ->
     type = props.type
@@ -158,13 +153,26 @@ Trigger = Parse.Object.extend 'Trigger',
     relation = form.relation 'triggers'
     relation.add @
     form.save()
-
+      .then =>
+        @
 
 Question = Parse.Object.extend 'Question',
+  create: (props, lastQuestionOrder, form) ->
+    question = @
+    props.order = ++lastQuestionOrder or 1
+    props.createdBy = Parse.User.current()
+    question.save(props)
+      .then ->
+        question.addToForm(form)
+      .then ->
+        question
+
   addToForm: (form) ->
     relation = form.relation 'questions'
     relation.add @
     form.save()
+      .then =>
+        @
 
 module.exports =
   Survey: Survey
