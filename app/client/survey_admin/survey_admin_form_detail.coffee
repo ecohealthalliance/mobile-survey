@@ -1,5 +1,5 @@
 Template.survey_admin_form_details.onCreated ->
-  @subscribe 'form', @data.formId
+  @subscribe 'form', @data.formId if @data.formId?
 
 Template.survey_admin_form_details.helpers
   form: ->
