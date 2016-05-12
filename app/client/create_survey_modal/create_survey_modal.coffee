@@ -18,7 +18,7 @@ Template.create_survey_modal.events
     surveyProps = _.object $(event.target).serializeArray().map(
       ({name, value})-> [name, value]
     )
-    surveyProps.createdBy = Meteor.userId()
+    surveyProps.createdBy = Parse.User.current()
     survey = new Survey()
     survey.save(surveyProps)
       .then (survey)->
