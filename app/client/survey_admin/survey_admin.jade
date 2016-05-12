@@ -4,7 +4,8 @@ template(name="survey_admin")
       nav.navbar.navbar-default.survey-admin--nav
         .container-fluid-padded
           .navbar-header
-            h2=survey.attributes.title
+            h2
+              a(href="{{pathFor 'survey_admin_details' id=survey.id}}")= survey.attributes.title
           ul.nav.navbar-nav.navbar-right
             li(class="{{isActiveRoute 'survey_admin_details'}}")
               a.survey-admin--view-link(href="{{pathFor 'survey_admin_details' id=survey.id}}" data-page='details') Details
@@ -25,6 +26,9 @@ template(name="survey_admin")
 
         else if isActiveRoute 'survey_admin_form_details'
           +survey_admin_form_details data
+
+        else if isActiveRoute 'survey_admin_questions_edit'
+          +survey_admin_questions_edit data
 
         else if isActiveRoute 'survey_admin_users'
           +survey_admin_users survey=survey

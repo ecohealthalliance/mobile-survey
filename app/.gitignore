@@ -1,6 +1,13 @@
+# NPM
 node_modules/
 npm-debug.log
 
+# Acceptance tests
 tests/dump/
 
+# Settings JSON
 settings-dev.json
+
+# Parse server logs
+logs/
+

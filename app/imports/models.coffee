@@ -57,6 +57,21 @@ Form = Parse.Object.extend 'Form',
     query.first().then (lastQuestion) ->
       lastQuestion?.get('order')
 
+  getQuestion: (questionId) ->
+    query = @relation('questions').query()
+    query.equalTo 'objectId', questionId
+    query.first().then (question) ->
+      question
+
+  addQuestion: (props) ->
+    form = @
+    @getLastQuestionOrder().then (lastQuestionOrder) ->
+      props.order = ++lastQuestionOrder or 1
+      question = new Question()
+      question.save(props).then (question) ->
+        question.addToForm(form).then ->
+          question.id
+
   create: (props, survey) ->
     @save(props).then (form) ->
       relation = survey.relation 'forms'
@@ -76,8 +91,7 @@ Form = Parse.Object.extend 'Form',
 
   addTrigger: (props) ->
     trigger = new Trigger()
-    form = @
-    trigger.create(props, form).then (triggerId) ->
+    trigger.create(props, @).then (triggerId) ->
       triggerId
 
   getTrigger: ->
@@ -115,6 +129,7 @@ Trigger = Parse.Object.extend 'Trigger',
     relation = form.relation 'triggers'
     relation.add @
     form.save()
+
 
 Question = Parse.Object.extend 'Question'
 

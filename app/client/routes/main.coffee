@@ -64,3 +64,11 @@ adminRoutes.route '/surveys/:id/forms/:formId',
     BlazeLayout.render 'layout',
       main: 'survey_admin'
       params: params
+
+# Edit Question
+adminRoutes.route '/surveys/:id/forms/:formId/questions/:questionId/edit',
+  name: 'survey_admin_questions_edit'
+  action: (params) ->
+    BlazeLayout.render 'layout',
+      main: 'survey_admin'
+      params: params

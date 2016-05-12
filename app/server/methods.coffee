@@ -1,6 +1,7 @@
 {Survey, Form, Question} = require '../imports/models'
 
 handleError = (error) ->
+  console.log error
   throw new Meteor.Error error.code, error.message
 
 geo = new GeoCoder(
@@ -23,7 +24,7 @@ Meteor.methods
 
   createForm: (surveyId, props) ->
     @unblock()
-    #TODO Authenticate
+    unless @userId then throw new Meteor.Error(500, 'Not Authorized')
     #TODO Validate
     query = new Parse.Query Survey
     query.get(surveyId).then (survey) ->
@@ -36,6 +37,8 @@ Meteor.methods
     geo.geocode(address)
 
   editForm: (formId, props) ->
+    @unblock()
+    unless @userId then throw new Meteor.Error(500, 'Not Authorized')
     query = new Parse.Query Form
     query.get(formId).then (form) ->
       form.update(props).then (form) ->
@@ -48,17 +51,12 @@ Meteor.methods
     unless @userId then throw new Meteor.Error(500, 'Not Authorized')
     getForms().update(_id: formId, { $set: form })
 
-  createQuestion: (formId, data) ->
+  createQuestion: (formId, props) ->
+    @unblock()
+    unless @userId then throw new Meteor.Error(500, 'Not Authorized')
     query = new Parse.Query Form
     query.get(formId).then (form) ->
-      form.getLastQuestionOrder().then (lastQuestionOrder) ->
-        data.order = ++lastQuestionOrder or 1
-        question = new Question()
-        question.save(data).then (question) ->
-          relation = form.relation 'questions'
-          relation.add question
-          form.save()
-          question.id
-        , handleError
+      form.addQuestion(props).then (questionId) ->
+        questionId
       , handleError
     , handleError

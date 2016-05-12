@@ -2,7 +2,6 @@ template(name="questions")
   .panel.panel-default
     .panel-heading
       h4 Questions
-
     if fetched
       if hasQuestions
         ul.list-group#questionList
@@ -10,7 +9,7 @@ template(name="questions")
             li.list-group-item.question-link(data-id=parseId)
               span.sortable-handle
                 i.mdi.mdi-drag
-              a(href='')=text
+              a(href="{{pathFor 'survey_admin_questions_edit' id=surveyId formId=formId questionId=parseId}}")= text
               .delete.warning(data-id=parseId)
                 i.mdi.mdi-delete
       else
