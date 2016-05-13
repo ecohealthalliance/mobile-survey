@@ -1,7 +1,11 @@
 Meteor.startup ->
   Meteor.autorun ->
     if Meteor.userId()
-      FlowRouter.go '/admin/surveys'
+      curentPath = FlowRouter.current().path
+      if curentPath == '/login'
+        FlowRouter.go '/admin/surveys'
+      else
+        FlowRouter.go curentPath
     else
       FlowRouter.go 'login'
 

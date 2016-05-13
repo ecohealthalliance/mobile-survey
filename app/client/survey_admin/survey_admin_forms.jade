@@ -1,17 +1,18 @@
 template(name="survey_admin_forms")
   .survey-admin--content
     h3 Forms
-      a(href="{{pathFor 'survey_admin_forms_edit' id=survey._id}}")#add-form.btn.btn-sm
+      a(href="{{pathFor 'survey_admin_forms_edit' id=survey.id}}")#add-form.btn.btn-sm
         i.mdi.mdi-plus-circle
         | Add Form
 
-    ul.list-group
-      +sortable(
-        items=forms
-        handle='.sortable-handle'
-        ghostClass='sortable-ghost')
-
-        li.list-group-item.form-link
-          span.sortable-handle
-            i.mdi.mdi-drag
-          a(href="{{pathFor 'survey_admin_form_details' id=../survey._id formId=_id}}")= name
+    if fetched
+      if hasForms
+        ul.list-group#formList
+          each forms
+            li.list-group-item.form-link(data-id=parseId)
+              span.sortable-handle
+                i.mdi.mdi-drag
+              a(href="{{pathFor 'survey_admin_form_details' id=surveyId formId=parseId}}")=title
+              a.btn.btn-default.edit(href="forms/#{parseId}/edit") Edit
+      else
+        p This survey has no forms

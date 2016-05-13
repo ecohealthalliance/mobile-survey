@@ -1,21 +1,21 @@
-{Survey, Form, Question} = require '../../imports/models'
-
-Template.registerHelper 'match', (val, {hash:{regex}})->
-  val.match(new RegExp(regex))
-
-Template.registerHelper 'isEmpty', (val)->
-  if val.count
-    val.count() == 0
-  else
-    _.isEmpty val
-
-Template.add_question.onCreated ->
-  @form = @data.form
-  @questions = @data.questions
+Template.survey_admin_questions_edit.onCreated ->
+  instance = @
   @type = new ReactiveVar 'inputText'
   @choices = new Meteor.Collection(null)
+  @question = new ReactiveVar null
+  @data.survey.getForm(@data.formId).then (form) ->
+    form.getQuestion(instance.data.questionId).then (question) ->
+      instance.question.set question
+      instance.type.set question.get('type')
+      if question.get('properties').choices
+        question.get('properties').choices.forEach (choice) ->
+          instance.choices.insert(name: choice)
+    , (error) ->
+      console.error error
+  , (error) ->
+    console.error error
 
-Template.add_question.helpers
+Template.survey_admin_questions_edit.helpers
   types: ->
     [
       {
@@ -53,14 +53,14 @@ Template.add_question.helpers
     ]
   type: ->
     Template.instance().type.get()
+  question: (key) ->
+    Template.instance().question.get()?.attributes
   selected: ->
     @name is Template.instance().type.get()
   choices: ->
     Template.instance().choices.find()
-  questions: ->
-    Template.instance().questions.find {}, sort: {order: 1}
 
-Template.add_question.events
+Template.survey_admin_questions_edit.events
   'keyup .choice': (event, instance) ->
     instance.choices.update($(event.currentTarget).data('id'),
       name: $(event.currentTarget).val()
@@ -68,7 +68,8 @@ Template.add_question.events
   'click .delete-choice': (event, instance)->
     instance.choices.remove($(event.currentTarget).data('id'))
   'click .type': (event, instance) ->
-    instance.type.set $(event.currentTarget).data 'type'
+    typeString = $(event.currentTarget).data 'type'
+    instance.type.set(typeString)
   'submit form': (event, instance) ->
     event.preventDefault()
 
@@ -83,7 +84,7 @@ Template.add_question.events
     )
     questionProperties = _.omit(formData, 'text', '_id')
 
-    if not instance.type.get()
+    unless instance.type.get()
       toastr.error('Please select a type')
       return
 
@@ -111,22 +112,11 @@ Template.add_question.events
     question =
       text: formData.text
       type: instance.type.get()
-      properties: questionProperties
       required: questionProperties.required is 'on'
+      properties: questionProperties
 
-    instance.form.addQuestion(question)
-      .then (question) ->
-        form.reset()
-        instance.choices.find().forEach ({_id})->
-          instance.choices.remove _id
-        lastItemOrder = instance.questions.findOne({}, sort: {order: -1})?.order
-        instance.questions.insert
-          parseId: question.id
-          order: ++lastItemOrder or 1
-          text: question.get 'text'
-        toastr.success 'Question added'
-      .fail (error) ->
-        toastr.error error.message
+    instance.question.get().save(question).then ->
+      FlowRouter.go("/admin/surveys")
 
   'click .add-choice': (event, instance)->
     instance.choices.insert {}

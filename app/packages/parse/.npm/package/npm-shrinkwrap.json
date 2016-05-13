@@ -1,0 +1,45 @@
+{
+  "dependencies": {
+    "parse": {
+      "version": "1.8.3",
+      "resolved": "https://registry.npmjs.org/parse/-/parse-1.8.3.tgz",
+      "from": "parse@1.8.3",
+      "dependencies": {
+        "babel-runtime": {
+          "version": "5.8.38",
+          "resolved": "https://registry.npmjs.org/babel-runtime/-/babel-runtime-5.8.38.tgz",
+          "from": "babel-runtime@>=5.8.20 <6.0.0",
+          "dependencies": {
+            "core-js": {
+              "version": "1.2.6",
+              "resolved": "https://registry.npmjs.org/core-js/-/core-js-1.2.6.tgz",
+              "from": "core-js@>=1.0.0 <2.0.0"
+            }
+          }
+        },
+        "ws": {
+          "version": "1.1.0",
+          "resolved": "https://registry.npmjs.org/ws/-/ws-1.1.0.tgz",
+          "from": "ws@>=1.0.1 <2.0.0",
+          "dependencies": {
+            "options": {
+              "version": "0.0.6",
+              "resolved": "https://registry.npmjs.org/options/-/options-0.0.6.tgz",
+              "from": "options@>=0.0.5"
+            },
+            "ultron": {
+              "version": "1.0.2",
+              "resolved": "https://registry.npmjs.org/ultron/-/ultron-1.0.2.tgz",
+              "from": "ultron@>=1.0.0 <1.1.0"
+            }
+          }
+        },
+        "xmlhttprequest": {
+          "version": "1.8.0",
+          "resolved": "https://registry.npmjs.org/xmlhttprequest/-/xmlhttprequest-1.8.0.tgz",
+          "from": "xmlhttprequest@>=1.7.0 <2.0.0"
+        }
+      }
+    }
+  }
+}

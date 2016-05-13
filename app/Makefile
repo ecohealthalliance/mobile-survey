@@ -2,6 +2,10 @@
 run:
 	npm run start
 
+# Local Parse server
+parse_server:
+	npm run server
+
 # Acceptance test
 test:
 	npm run test

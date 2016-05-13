@@ -1,11 +1,29 @@
+Sort = require 'sortablejs'
+{updateSortOrder} = require '../../imports/helpers'
+
 Template.survey_admin_forms.onCreated ->
-  survey = @data.survey
-  if survey.forms
-    @subscribe 'surveyForms', survey.forms
+  @fetched = new ReactiveVar false
+  @survey = @data.survey
+  instance = @
+
+  @survey.getForms(true).then (forms) ->
+    instance.forms = forms
+    instance.fetched.set true
+
+Template.survey_admin_forms.onRendered ->
+  instance = @
+  Meteor.autorun ->
+    if instance.fetched.get() and instance.forms?.findOne()
+      Meteor.defer ->
+        Sort.create formList,
+          handle: '.sortable-handle'
+          onSort: (event) ->
+            updateSortOrder event, instance.survey, 'forms'
 
 Template.survey_admin_forms.helpers
   forms: ->
-    Forms.find {}, sort: {order: 1}
-
-  formToEdit: =>
-    @Forms.findOne(_id: FlowRouter.getParam('formId'))
+    Template.instance().forms?.find {}, sort: {order: 1}
+  hasForms: ->
+    Template.instance().forms?.findOne()
+  surveyId: ->
+    Template.instance().data.survey.id

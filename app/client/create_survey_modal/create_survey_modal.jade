@@ -21,5 +21,8 @@ template(name="create_survey_modal")
                   input.form-control(type='string' name='description')
 
         .modal-footer
-          button.btn.btn-default(data-dismiss='modal' aria-hidden='true') Cancel
-          button.btn.btn-primary#confirm-create-survey Create Survey
+          button.btn.btn-default(data-dismiss='modal' aria-hidden='true' type='button') Cancel
+          button.btn.btn-primary#confirm-create-survey(disabled="{{#if creating}} disabled {{/if}}")
+            | Create Survey
+            unless creating
+              i.mdi.mdi-spinner.mdi-animated

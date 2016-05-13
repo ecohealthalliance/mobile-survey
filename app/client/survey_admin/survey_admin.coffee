@@ -1,10 +1,22 @@
+{Survey} = require '../../imports/models'
+
 Template.survey_admin.onCreated ->
-  @subscribe 'survey', @data.id
+  @fetched = new ReactiveVar false
+  surveyId = @data.id
+  instance = @
+  query = new Parse.Query Survey
+  query.get(surveyId)
+    .then (survey) ->
+      instance.fetched.set true
+      instance.survey = survey
+    .fail (error) ->
+      toastr error.message
 
 Template.survey_admin.helpers
   survey: ->
-    Surveys.findOne _id: Template.instance().data.id
+    Template.instance().survey
   data: ->
-    instanceData = Template.instance().data
-    surveyId: instanceData.id
-    formId: instanceData.formId
+    instance = Template.instance()
+    survey: instance.survey
+    formId: instance.data.formId
+    questionId: instance.data.questionId

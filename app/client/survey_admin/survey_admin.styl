@@ -1,4 +1,14 @@
+
+verticallyCenter($position=true)
+  if $position
+    position absolute
+  top 50%
+  transform translate(0,-50%)
+
+$blue = #337AB7
+
 .survey-admin
+  overflow hidden
   h3
     font-size 1.2em
 
@@ -12,11 +22,22 @@
 
 .survey-admin--content
   margin-top 15px
+  padding-bottom 100px
 
 .create-form
   margin-bottom 20px
 
-.form-details
+.form--header
+  h4
+  button
+  a
+    display inline-block
+    vertical-align middle
+  h4
+    margin-right 10px
+    margin-left 10px
+
+.form--details
   margin 20px 0
 
 .form-link
@@ -47,6 +68,9 @@
 #map
   height 400px
   width 100%
+  top -15px
+  .leaflet-right
+    right 5%
 
 .nav-floating-row
   bottom 0
@@ -54,20 +78,22 @@
   z-index 2
 
 .tab-content-floating-row
-  position relative
+  position absolute
+  top 25px
+  left 15px
+  padding 30px 20px
   z-index 2
+  background rgba(255, 255, 255, .8)
+  border-radius 4px
 
 .map-floating-row
   position relative
   z-index 1
   margin-left -10%
   margin-right -10%
-  margin-bottom -110px
-  top -90px
 
 .buttons-floating-row
-  position relative
-  z-index 1
+  margin-top 25px
 
 .trigger-tabs
   margin-left -15px
@@ -102,3 +128,140 @@
 .trigger-nav-small
   margin-bottom 5px
   border-bottom none
+
+.address-searching-spinner
+  position relative
+  top -22px
+  float right
+  margin-right 20px
+  font-weight bold
+  color $blue
+
+.visible
+  opacity 1
+
+.invisible
+  opacity 0
+
+input.inline-30
+  width 29.5%
+  display inline
+
+input.inline-70
+  width 69.5%
+  display inline
+  float right
+
+.searchBar
+  position relative
+  width 100%
+  border-left 0
+  border-right 0
+  font-size 1em
+
+#searchIcon
+  verticallyCenter()
+  left 10px
+  color $blue
+
+.token
+  max-width 95% !important
+
+.token-label
+  overflow hidden !important
+  max-width 100% !important
+
+.tokenfield
+  padding-left 25px
+
+.twitter-typeahead
+  width 80% !important
+  margin-left 5px
+
+.token-input.tt-input
+  width 100% !important
+
+.typeahead-code
+  min-width 15%
+  font-size 115%
+  font-weight bold
+  font-weight 800
+  color #666
+
+.typeahead-info
+  color #666
+  font-size 95%
+  .typeahead-additional-info
+    display block
+    font-size 85%
+    color #999
+    font-style italic
+  > span
+    text-transform capitalize
+
+.typeahead-footer
+  color #666
+  font-size 95%
+  margin 2px 0 2px 15px
+
+.pull-middle
+  display table-cell
+  vertical-align middle
+  float none
+
+#location
+#datetime
+  min-height 400px
+
+#location
+  width 100%
+  position relative
+
+#datetime
+  margin -15px -10% 0 -10%
+  padding 60px 12%
+  background #f9f9f9
+
+$trigger-types = {
+  location: '\f041'
+  datetime: '\f017'
+}
+
+$question-types = {
+  multipleChoice: '\f0ca'
+  checkboxes: '\f046'
+  shortAnswer: '\f068'
+  longAnswer: '\f036'
+  number: '\f292'
+  date: '\f073'
+  datetime: '\f017'
+  scale: '\f1de'
+}
+
+.survey--details
+  .form
+    margin-bottom 30px
+  .description
+    margin-bottom 30px
+  .questions
+    margin-left 15px
+  .question
+    margin-bottom 5px
+  .trigger
+  .question-type
+    margin-right 4px
+    &::before
+      font-family 'FontAwesome'
+      font-size 1em
+      color #555
+  .trigger
+    content '\f0e7'
+    for type, unicode in $trigger-types
+      &.{type}
+        &::before
+          content unicode
+  .question-type
+    for type, unicode in $question-types
+      &.{type}
+        &::before
+          content unicode

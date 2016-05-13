@@ -5,6 +5,7 @@ Package.describe({
 });
 
 Package.onUse(function (api) {
+
   api.versionsFrom('1.2.1');
 
   api.use('coffeescript');
@@ -15,7 +16,6 @@ Package.onUse(function (api) {
   api.use('mquandalle:jade', 'client');
 
   api.use('http', 'server');
-
   api.addFiles('stylesheets/signin.styl', 'client');
 
   api.addFiles('views/login.jade', 'client');

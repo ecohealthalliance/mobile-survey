@@ -1,8 +1,7 @@
 'use strict'
 
 
-Future = Npm.require('fibers/future')
-
+Future = Npm.require 'fibers/future'
 
 initiateAdminAuthentication = (callback) ->
   initiateAuthentication Meteor.settings.private.open_AM_admin, Meteor.settings.private.open_AM_password, (result) ->
@@ -35,35 +34,25 @@ authenticate = (data, callback) ->
       callback(requestBody)
       # console.log requestBody
 
-createUser = (userCreateData, callback) ->
-  #create the user in OpenAM
-  Meteor.http.call "POST",
-    "http://openam.eha.io:8080/openam/json/users/?_action=create",
-    # headers,
-    userCreateData,
-    (err, result) ->
-      console.log "ERROR: ", err if err
-      throw err if err
-      #add the user in the local meteor database
-      Accounts.createUser
-        email: userCreateData.data.mail,
-        password: userCreateData.data.userpassword
-      callback(result)
-      # console.log result
-
-
 Meteor.methods
   registerNewUser: (email, password) ->
     @unblock()
-    initiateAdminAuthentication (authData) ->
-      authenticate authData, (userData) ->
-        userData.data =
-          username: email
-          userpassword: password
-          mail: email
-        createUser userData, (result) ->
-          console.log result
-
+    (Meteor.wrapAsync (callback)->
+      initiateAdminAuthentication (authData) ->
+        authenticate authData, (userData) ->
+          userData.data =
+            username: email
+            userpassword: password
+            mail: email
+            #create the user in OpenAM
+          Meteor.http.call "POST",
+            "http://openam.eha.io:8080/openam/json/users/?_action=create",
+            # headers,
+            userData,
+            (args...)->
+              console.log args
+              callback(args)
+    )()
   loginUser: (email, password) ->
     @unblock()
     future = new Future()

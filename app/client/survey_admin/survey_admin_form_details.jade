@@ -1,10 +1,16 @@
 template(name="survey_admin_form_details")
   .survey-admin--content
-    h4=form.name
-    if Template.subscriptionsReady
-      .form-details
-        .row
-          .col-md-4
-            +add_question form=form
-          .col-md-8
-            +edit_questions form=form
+    .form
+      if fetched
+        .form--header
+          a.btn-back(href="{{pathFor 'survey_admin_forms' id=survey.id }}")
+            i.mdi.mdi-arrow-left-bold-circle-outline
+          h4=form.attributes.title
+          a.btn.btn-default(href="#{formId}/edit") Edit
+
+        .form--details
+          .row
+            .col-md-4
+              +add_question form=form questions=questionsCollection
+            .col-md-8
+              +questions form=form survey=survey questions=questionsCollection
