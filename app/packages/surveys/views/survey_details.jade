@@ -1,6 +1,10 @@
 template(name="survey_details")
   .survey-admin--content
-    h3 Details
+    h3.inline Details
+    button.btn.btn-primary.activate
+      span(class='{{activateButtonClass}}').mdi
+        =activateButtonText
+        | Survey
     .survey--details
       if fetched
         p.description= survey.attributes.description

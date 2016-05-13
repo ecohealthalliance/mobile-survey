@@ -29,3 +29,21 @@ Template.survey_details.onCreated ->
 Template.survey_details.helpers
   forms: ->
     Template.instance().forms?.find {}, sort: {order: 1}
+  inactive: ->
+    !@survey.attributes.active
+
+  activateButtonText: ->
+    if @survey.attributes.active == true then "Deactivate" else "Activate"
+
+  activateButtonClass: ->
+    if @survey.attributes.active == true then "mdi-arrow-down-bold-circle-outline" else "mdi-arrow-up-bold-circle-outline"
+
+Template.survey_details.events
+  'click .activate': (event, instance)->
+    @survey.active = !@survey.active
+    props =
+      active: @survey.active
+    @survey.save(props).then (survey) ->
+      state = (if survey.active == true then "activated" else "deactivated")
+      toastr.success("You have " + state + " your survey.")
+      FlowRouter.go("/admin/surveys/#{instance.survey.id}")
