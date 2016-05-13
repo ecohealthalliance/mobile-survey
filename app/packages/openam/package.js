@@ -1,5 +1,5 @@
 Package.describe({
-  name: 'goodquestion:openam',
+  name: 'gq:openam',
   version: '0.1.0',
   summary: 'OpenAM ForgeRock authentication module'
 });
@@ -16,7 +16,7 @@ Package.onUse(function (api) {
   api.use('mquandalle:jade', 'client');
 
   api.use('http', 'server');
-  api.addFiles('stylesheets/signin.styl', 'client');
+  api.addFiles('styles/signin.styl', 'client');
 
   api.addFiles('views/login.jade', 'client');
   api.addFiles('views/signup.jade', 'client');
