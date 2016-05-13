@@ -1,25 +1,21 @@
 template(name="create_survey_modal")
   #create-survey-modal.modal.fade(tabindex="-1" role="dialog")
-    form.modal-dialog
+    form.modal-dialog.create-survey-form(data-toggle="validator" role="form")
       .modal-content
         .modal-header
+          h4.modal-title Add a New Survey
           button(type="button" class="close" data-dismiss="modal" aria-label="Close")
             i.mdi.mdi-close-circle
         .modal-body
           .form-group
-            .row
-              .col-sm-8
-                label
-                  span Title
-                  input.form-control(type='string' name='title' maxlength='128')
-
+            label.control-label
+              span Title
+            input.form-control(type='text' id='title' name='title' maxlength='128' minlength="3" required)
+            .help-block.with-errors
           .form-group
-            .row
-              .col-sm-8
-                label
-                  span Description
-                  input.form-control(type='string' name='description')
-
+            label.control-label
+              span Description
+            textarea.form-control(name='description')
         .modal-footer
           button.btn.btn-default(data-dismiss='modal' aria-hidden='true' type='button') Cancel
           button.btn.btn-primary#confirm-create-survey(disabled="{{#if creating}} disabled {{/if}}")
