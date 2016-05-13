@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "start": "meteor -p 13000 --settings settings-dev.json",
+    "start-test": "meteor -p 13000 --settings settings-test.json",
     "server": "parse-server --appId testapp --masterKey testkey --databaseURI mongodb://localhost:13001/meteor",
     "pretest": "npm install --only=dev",
     "test": ".scripts/run-tests.sh",

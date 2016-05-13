@@ -10,7 +10,7 @@ initiateAdminAuthentication = (callback) ->
 initiateAuthentication = (email, password, callback) ->
   #in order to start making requests to the OpenAM API we first need to get a base request framework and token
   Meteor.http.call "POST",
-    "http://openam.eha.io:8080/openam/json/authenticate?Content-Type=application/json",
+    "#{open_AM_url}/openam/json/authenticate?Content-Type=application/json",
     (err, result) ->
       #using the returned framework as a base - set the username/password of the user we want to login as
       result.data.callbacks[0].input[0].value = email
@@ -21,7 +21,7 @@ authenticate = (data, callback) ->
   authData = {}
   authData.data = data
   Meteor.http.call "POST",
-    "http://openam.eha.io:8080/openam/json/authenticate?Content-Type=application/json"
+    "#{open_AM_url}/openam/json/authenticate?Content-Type=application/json"
     authData,
     (err, result) ->
       requestBody = {}
@@ -29,10 +29,37 @@ authenticate = (data, callback) ->
       headers["Content-Type"] = "application/json"
       headers["iplanetDirectoryPro"] = result.data.tokenId
       console.log err if err
-      # console.log result
       requestBody.headers = headers
       callback(requestBody)
       # console.log requestBody
+
+createUser = (userCreateData, callback) ->
+  #create the user in OpenAM
+  Meteor.http.call "POST",
+    "#{open_AM_url}/openam/json/users/?_action=create",
+    # headers,
+    userCreateData,
+    (err, result) ->
+      console.log "ERROR: ", err if err
+      throw err if err
+      #add the user in the local meteor database
+      meteorId = Accounts.createUser
+        email: userCreateData.data.mail
+        password: userCreateData.data.userpassword
+      #Create Parse User
+      parseUser = new Parse.User()
+      parseUserData =
+        username: userCreateData.data.mail
+        password: userCreateData.data.userpassword
+        email   : userCreateData.data.mail
+        meteorId: meteorId
+        role    : 'admin'
+      parseUser.signUp parseUserData,
+        success: ->
+          callback result
+        error: (user, err) ->
+          throw err
+
 
 Meteor.methods
   registerNewUser: (email, password) ->
