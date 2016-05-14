@@ -19,5 +19,7 @@ template(name="survey_admin_details")
                       li.question
                         span.question-type(class=questionType)
                         span=text
+        else
+          p This survey currently has no forms.
       else
         .fa.fa-spinner.fa-pulse.fa-3x.fa-fw.margin-bottom
