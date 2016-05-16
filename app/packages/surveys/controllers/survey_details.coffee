@@ -26,6 +26,6 @@ Template.survey_details.onCreated ->
         instance.forms = null
         instance.fetched.set true
 
-Template.survey_admin_details.helpers
+Template.survey_details.helpers
   forms: ->
     Template.instance().forms?.find {}, sort: {order: 1}

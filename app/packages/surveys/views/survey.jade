@@ -26,5 +26,8 @@ template(name="survey")
         else if isActiveRoute 'form_details'
           +form_details data
 
+        else if isActiveRoute 'questions_edit'
+          +questions_edit data
+
         else if isActiveRoute 'survey_users'
           +survey_users survey=survey

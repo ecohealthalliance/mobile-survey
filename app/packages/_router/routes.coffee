@@ -72,5 +72,5 @@ adminRoutes.route '/surveys/:id/forms/:formId/questions/:questionId/edit',
   name: 'questions_edit'
   action: (params) ->
     BlazeLayout.render 'layout',
-      main: 'survey_admin'
+      main: 'survey'
       params: params

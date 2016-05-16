@@ -1,7 +1,7 @@
 {Survey, Form, Question} = require 'meteor/gq:models'
 
 Template.registerHelper 'match', (val, {hash:{regex}})->
-  val.match(new RegExp(regex))
+  val?.match(new RegExp(regex))
 
 Template.registerHelper 'isEmpty', (val)->
   if val.count
