@@ -16,5 +16,4 @@ Template.login.events
             console.log(Parse.User.current())
           .fail (error)->
             toastr.error('Could not log into Parse.')
-            console.log(error)
             Meteor.logout()

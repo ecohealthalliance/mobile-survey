@@ -1,0 +1,16 @@
+template(name="form_details")
+  .survey-admin--content
+    .form
+      if fetched
+        .form--header
+          a.btn-back(href="{{pathFor 'forms' id=survey.id }}")
+            i.mdi.mdi-arrow-left-bold-circle-outline
+          h4=form.attributes.title
+          a.btn.btn-default(href="#{formId}/edit") Edit
+
+        .form--details
+          .row
+            .col-md-4
+              +questions_add form=form questions=questionsCollection
+            .col-md-8
+              +questions form=form survey=survey questions=questionsCollection
