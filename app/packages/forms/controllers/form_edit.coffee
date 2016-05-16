@@ -311,6 +311,14 @@ Template.form_edit.events
         .fail (error) ->
           toastr.error error.message
 
+  'click .delete': (event, instance) ->
+    survey = instance.survey
+    survey.getForm(instance.formId)
+      .then (form) ->
+        form.remove()
+      .then ->
+        FlowRouter.go "/admin/surveys/#{survey.id}"
+
 Template.form_edit.onRendered ->
   # the map is recreated each time the page is rendered, so clear any old
   # marker/shape

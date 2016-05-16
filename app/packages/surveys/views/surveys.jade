@@ -10,11 +10,12 @@ template(name="surveys")
           each surveys
             li.list-group-item.form-link
               a(href="{{pathFor 'survey_details' id=parseId}}")= title
-              a.btn.btn-danger.delete(
-                data-toggle="modal"
-                data-target="#delete-survey-modal"
-                data-id=parseId)
-                | Delete
+              .actions
+                a.btn.btn-danger.action.delete(
+                  data-toggle="modal"
+                  data-target="#delete-survey-modal"
+                  data-id=parseId)
+                  | Delete
 
     +create_survey_modal survey=surveyCollection
     +delete_survey_modal surveys=surveyCollection

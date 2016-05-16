@@ -2,7 +2,19 @@
   .delete
   .edit
     padding 5px 10px
-  .delete
-    color white
   .edit
     color #666
+
+
+.actions
+  position absolute
+  right 15px
+  top 50%
+  transform translate(0, -50%)
+  .action
+    display inline-block
+    margin-right 5px
+    &:last-of-type
+      margin 0
+    &:hover
+      cursor pointer

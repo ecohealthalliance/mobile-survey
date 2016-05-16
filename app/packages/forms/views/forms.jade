@@ -13,6 +13,8 @@ template(name="forms")
               span.sortable-handle
                 i.mdi.mdi-drag
               a(href="{{pathFor 'form_details' id=surveyId formId=parseId}}")=title
-              a.btn.btn-default.edit(href="forms/#{parseId}/edit") Edit
+              .actions
+                a.btn.btn-default.action.edit(href="forms/#{parseId}/edit") Edit
+                a.btn.btn-danger.action.delete Delete
       else
         p This survey has no forms

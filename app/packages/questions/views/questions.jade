@@ -10,8 +10,9 @@ template(name="questions")
               span.sortable-handle
                 i.mdi.mdi-drag
               a(href="{{pathFor 'questions_edit' id=surveyId formId=formId questionId=parseId}}")= text
-              .delete.warning(data-id=parseId)
-                i.mdi.mdi-delete
+              .actions
+                .action.delete.warning(data-id=parseId)
+                  i.mdi.mdi-delete
       else
         .panel-body
           p No questions specified
