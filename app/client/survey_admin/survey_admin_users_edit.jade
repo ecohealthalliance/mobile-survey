@@ -1,0 +1,19 @@
+template(name="survey_admin_users_edit")
+  .survey-admin--content
+    form.edit-user
+      .form-group
+        .row
+          .col-sm-6
+            label
+              span Email Address
+            input.form-control(
+              type='email'
+              name='email')
+
+        .buttons-floating-row
+          button.btn.btn-primary#save
+            i.mdi.mdi-plus-circle
+            span Create User
+          button.btn.btn-default#cancel(type="button")
+            i.mdi.mdi-close-circle-outline
+            span Cancel

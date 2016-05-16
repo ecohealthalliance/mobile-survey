@@ -29,7 +29,7 @@ Template.signup.events
           meteorId: meteorId
           role    : 'admin'
         currentUserSessionToken = Parse.User.current().getSessionToken()
-        parseUser.signUp(parseUserData)
+        parseUser.signUp(parseUserData.username, parseUserData.password, parseUserData)
           .then ->
             Parse.User.become(currentUserSessionToken)
           .then ->

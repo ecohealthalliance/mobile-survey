@@ -32,3 +32,6 @@ template(name="survey_admin")
 
         else if isActiveRoute 'survey_admin_users'
           +survey_admin_users survey=survey
+
+        else if isActiveRoute 'survey_admin_users_edit'
+          +survey_admin_users_edit survey=survey
