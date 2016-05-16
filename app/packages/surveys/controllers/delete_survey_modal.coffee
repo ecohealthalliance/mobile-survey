@@ -18,7 +18,7 @@ Template.delete_survey_modal.events
     query = new Parse.Query Survey
     query.get(instance.surveyId)
       .then (survey) ->
-        survey.destroy()
+        survey.remove()
       .then (obj) ->
         $('#delete-survey-modal').modal('hide')
         instance.deleting.set false

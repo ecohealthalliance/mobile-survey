@@ -50,6 +50,14 @@ Survey = Parse.Object.extend 'Survey',
       .then ->
         form
 
+  remove: ->
+    survey = @
+    @getForms()
+      .then (forms) ->
+        _.each forms, (form) -> form.remove()
+      .then ->
+        survey.destroy()
+
 Form = Parse.Object.extend 'Form',
   create: (props) ->
     form = @
@@ -123,6 +131,18 @@ Form = Parse.Object.extend 'Form',
   updateTrigger: (props) ->
     @getTrigger().then (trigger) ->
       trigger.update props
+
+  remove: ->
+    form = @
+    @getTrigger()
+      .then (trigger) ->
+        trigger.destroy()
+      .then ->
+        form.getQuestions()
+      .then (questions) ->
+        _.each questions, (question) -> question.destroy()
+      .then ->
+        form.destroy()
 
 Trigger = Parse.Object.extend 'Trigger',
   create: (props, form) ->
