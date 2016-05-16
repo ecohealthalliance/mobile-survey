@@ -15,6 +15,7 @@ Template.create_survey_modal.events
       ({name, value})-> [name, value]
     )
     surveyProps.createdBy = Parse.User.current()
+    surveyProps.active = false
     survey = new Survey()
     survey.save(surveyProps)
       .then (survey)->
