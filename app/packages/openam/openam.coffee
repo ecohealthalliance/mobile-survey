@@ -1,6 +1,9 @@
 'use strict'
 
 
+open_AM_url = Meteor.settings.private.open_AM_url
+
+
 Future = Npm.require 'fibers/future'
 
 initiateAdminAuthentication = (callback) ->
@@ -95,6 +98,7 @@ Meteor.methods
         unless user
           Accounts.createUser { email: email, password: password }
           user = Accounts.findUserByEmail(email)
+        console.log user._id, tokenObject
         Accounts._insertLoginToken(user._id, tokenObject)
         future.return(tokenObject.token)
     future.wait()
