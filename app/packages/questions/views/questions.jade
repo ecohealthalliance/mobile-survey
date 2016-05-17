@@ -11,7 +11,7 @@ template(name="questions")
                 i.mdi.mdi-drag
               a(href="{{pathFor 'questions_edit' id=surveyId formId=formId questionId=parseId}}")= text
               .actions
-                .action.delete.warning(data-id=parseId)
+                .action.delete-question.warning(data-id=parseId)
                   i.mdi.mdi-delete
       else
         .panel-body

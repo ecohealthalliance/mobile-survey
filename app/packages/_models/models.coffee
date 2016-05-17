@@ -6,14 +6,28 @@ Survey = Parse.Object.extend 'Survey',
       return new Parse.Error(Parse.VALIDATION_ERROR, 'The title field cannot be empty')
     Parse.Object.prototype.validate.call(this, props)
 
-  getForms: (returnMeteorCollection, collection) ->
+  getForms: (returnMeteorCollection, collection, limit) ->
     query = @relation('forms').query()
+    if limit == 'deleted'
+      query.equalTo 'deleted', true
+    else if not limit
+      query.notEqualTo 'deleted', true
     query.find()
       .then (forms) ->
         if returnMeteorCollection and forms
           buildMeteorCollection forms, collection
         else
           forms
+
+  getDeletedForms: (returnMeteorCollection, collection) ->
+    @getForms(returnMeteorCollection, collection, 'deleted')
+      .then (forms) ->
+        forms
+
+  getAllForms: (returnMeteorCollection, collection) ->
+    @getForms(returnMeteorCollection, collection, 'all')
+      .then (forms) ->
+        forms
 
   getForm: (formId) ->
     query = @relation('forms').query()
@@ -36,6 +50,7 @@ Survey = Parse.Object.extend 'Survey',
       createdBy: Parse.User.current()
       order: order
       trigger: props.trigger
+      deleted: false
 
   addForm: (props) ->
     survey = @
@@ -49,6 +64,29 @@ Survey = Parse.Object.extend 'Survey',
         survey.save()
       .then ->
         form
+
+  deleteForms: (deleted = true) ->
+    @getForms(false, null, 'all')
+      .then (forms) ->
+        _.each forms, (form) ->
+          form.delete(deleted)
+
+  undeleteForms: () ->
+    @getForms(false, null, 'deleted')
+      .then (forms) ->
+        _.each forms, (form) ->
+          form.delete(false)
+
+
+  delete: (deleted = true) ->
+    survey = @
+    @deleteForms(deleted)
+      .then ->
+        survey.set 'deleted', deleted
+        survey.save()
+
+  undelete: ->
+    @delete(false)
 
   remove: ->
     survey = @
@@ -71,8 +109,12 @@ Form = Parse.Object.extend 'Form',
       .then ->
         form
 
-  getQuestions: (returnMeteorCollection, collection) ->
+  getQuestions: (returnMeteorCollection, collection, limit) ->
     query = @relation('questions').query()
+    if limit == 'deleted'
+      query.equalTo 'deleted', true
+    else if not limit
+      query.notEqualTo 'deleted', true
     query.find()
       .then (questions) ->
         if returnMeteorCollection and questions
@@ -95,6 +137,16 @@ Form = Parse.Object.extend 'Form',
       .then (question) ->
         question
 
+  getDeletedQuestions: (returnMeteorCollection, collection) ->
+    @getQuestions(returnMeteorCollection, collection, 'deleted')
+      .then (questions) ->
+        questions
+
+  getAllQuestions: (returnMeteorCollection, collection) ->
+    @getQuestions(returnMeteorCollection, collection, 'all')
+      .then (questions) ->
+        questions
+
   update: (props) ->
     form = @
     # Stash the trigger properties and remove from props
@@ -112,12 +164,14 @@ Form = Parse.Object.extend 'Form',
     @getLastQuestionOrder()
       .then (lastQuestionOrder) ->
         question = new Question()
+        props.deleted = false
         question.create(props, lastQuestionOrder, form)
       .then (question) ->
         question
 
   addTrigger: (props) ->
     trigger = new Trigger()
+    props.deleted = false
     trigger.create(props, @)
       .then (trigger) ->
         trigger
@@ -131,6 +185,23 @@ Form = Parse.Object.extend 'Form',
   updateTrigger: (props) ->
     @getTrigger().then (trigger) ->
       trigger.update props
+
+  delete: (deleted = true) ->
+    form = @
+    @getTrigger()
+      .then (trigger) ->
+        trigger.delete(deleted)
+      .then (trigger) ->
+        form.getQuestions()
+      .then (questions) ->
+        _.each questions, (question) ->
+          question.delete(deleted)
+      .then ->
+        form.set 'deleted', deleted
+        form.save()
+
+  undelete: ->
+    @delete(false)
 
   remove: ->
     form = @
@@ -176,6 +247,13 @@ Trigger = Parse.Object.extend 'Trigger',
       .then =>
         @
 
+  delete: (deleted = true) ->
+    @set 'deleted', deleted
+    @save()
+
+  undelete: ->
+    @delete(false)
+
 Question = Parse.Object.extend 'Question',
   create: (props, lastQuestionOrder, form) ->
     question = @
@@ -193,6 +271,13 @@ Question = Parse.Object.extend 'Question',
     form.save()
       .then =>
         @
+
+  delete: (deleted = true) ->
+    @set 'deleted', deleted
+    @save()
+
+  undelete: ->
+    @delete(false)
 
 module.exports =
   Survey: Survey

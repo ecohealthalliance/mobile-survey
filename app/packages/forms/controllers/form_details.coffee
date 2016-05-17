@@ -17,10 +17,10 @@ Template.form_details.helpers
     Template.instance().questionCollection
 
 Template.form_details.events
- 'click .delete': (event, instance) ->
+ 'click .delete-form': (event, instance) ->
    survey = instance.survey
    survey.getForm(instance.data.formId)
     .then (form) ->
-      form.remove()
+      form.delete()
     .then ->
       FlowRouter.go "/admin/surveys/#{survey.id}"

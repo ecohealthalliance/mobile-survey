@@ -311,11 +311,11 @@ Template.form_edit.events
         .fail (error) ->
           toastr.error error.message
 
-  'click .delete': (event, instance) ->
+  'click .delete-form': (event, instance) ->
     survey = instance.survey
     survey.getForm(instance.formId)
       .then (form) ->
-        form.remove()
+        form.delete()
       .then ->
         FlowRouter.go "/admin/surveys/#{survey.id}"
 

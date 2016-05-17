@@ -29,10 +29,10 @@ Template.forms.helpers
     Template.instance().data.survey.id
 
 Template.forms.events
- 'click .delete': (event, instance) ->
+ 'click .delete-form': (event, instance) ->
    form = @
    instance.survey.getForm(@parseId)
     .then (form) ->
-      form.remove()
+      form.delete()
     .then ->
       instance.forms.remove form._id
