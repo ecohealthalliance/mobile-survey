@@ -2,6 +2,7 @@
 
 Template.survey_details.onCreated ->
   @survey = @data.survey
+  @surveyAttrs = @data.surveyAttrs
   @forms = new Meteor.Collection null
   @fetched = new ReactiveVar false
   @active = new ReactiveVar @survey.get 'active'
@@ -28,6 +29,8 @@ Template.survey_details.onCreated ->
         instance.fetched.set true
 
 Template.survey_details.helpers
+  survey: ->
+    Template.instance().surveyAttrs.get()
   forms: ->
     Template.instance().forms?.find {}, sort: {order: 1}
 

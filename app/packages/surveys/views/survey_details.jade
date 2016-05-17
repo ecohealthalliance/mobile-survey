@@ -3,7 +3,7 @@ template(name="survey_details")
     h3.inline Details
     .survey--details
       if fetched
-        p.description= survey.attributes.description
+        p.description= survey.description
         button.btn.btn-primary.activate
           span(class='{{activateButtonClass}}').mdi
           span
