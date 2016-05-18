@@ -1,11 +1,13 @@
 {
-  "private": {
-    "open_AM_url": "http://openam-dev.eha.io:8080",
-    "open_AM_admin": "amAdmin",
-    "open_AM_password": "zBLPuWe+ylyqt0"
-  },
   "public": {
     "parseAppId": "Acceptance",
-    "parseServerUrl": "http://localhost:31337/parse"
+    "parseServerUrl": "http://localhost:31337/parse",
+    "parseUserEmail": "yursky555@blurg.com",
+    "parseUserPassword": "P@ssw0rd"
+  },
+  "private": {
+    "open_AM_url": "http://openam.eha.io:8080",
+    "open_AM_admin": "amAdmin",
+    "open_AM_password": "zBLPuWe+ylyqt0"
   }
 }

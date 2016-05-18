@@ -34,34 +34,6 @@ authenticate = (data, callback) ->
       console.log err if err
       requestBody.headers = headers
       callback(requestBody)
-      # console.log requestBody
-
-createUser = (userCreateData, callback) ->
-  #create the user in OpenAM
-  Meteor.http.call "POST",
-    "#{open_AM_url}/openam/json/users/?_action=create",
-    # headers,
-    userCreateData,
-    (err, result) ->
-      console.log "ERROR: ", err if err
-      throw err if err
-      #add the user in the local meteor database
-      meteorId = Accounts.createUser
-        email: userCreateData.data.mail
-        password: userCreateData.data.userpassword
-      #Create Parse User
-      parseUser = new Parse.User()
-      parseUserData =
-        username: userCreateData.data.mail
-        password: userCreateData.data.userpassword
-        email   : userCreateData.data.mail
-        meteorId: meteorId
-        role    : 'admin'
-      parseUser.signUp parseUserData,
-        success: ->
-          callback result
-        error: (user, err) ->
-          throw err
 
 
 Meteor.methods
@@ -76,7 +48,7 @@ Meteor.methods
             mail: email
             #create the user in OpenAM
           Meteor.http.call "POST",
-            "http://openam.eha.io:8080/openam/json/users/?_action=create",
+            "#{open_AM_url}/openam/json/users/?_action=create",
             # headers,
             userData,
             (args...)->
@@ -98,9 +70,11 @@ Meteor.methods
         unless user
           Accounts.createUser { email: email, password: password }
           user = Accounts.findUserByEmail(email)
-        console.log user._id, tokenObject
-        Accounts._insertLoginToken(user._id, tokenObject)
-        future.return(tokenObject.token)
+        if tokenObject.token
+          Accounts._insertLoginToken(user._id, tokenObject)
+          future.return(tokenObject.token)
+        else
+          future.return(null)
     future.wait()
 
   changeUserPassword: (currentPassword, newPassword) ->

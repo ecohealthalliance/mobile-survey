@@ -6,5 +6,5 @@ Feature: Admin
     When I sign in
     And I should see content "Sign Out"
     Then I click "#add-survey"
-    And I fill in the add survey form
+    And I fill out the add survey form
     And I should see content "Test Survey"

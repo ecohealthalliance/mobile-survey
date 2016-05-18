@@ -13,13 +13,10 @@ if [ "$WATCH" == "true" ]; then
   SECONDS=0
 fi
 
-# Initiate Parse server
-PORT=31337 parse-server --appId Acceptance --masterKey test --databaseURI mongodb://localhost:13001/acceptance &
+# Initiate the testing Parse server for acceptnace tests
+# PORT=31337 parse-server --appId Acceptance --masterKey test --databaseURI mongodb://localhost:13001/meteor &
+node .scripts/parse-server-local.js &
 parseServerPID=$!
-
-# sleep 5 # let the parse server to finish initializing
-# node ../tools/populate/index.js -r # reset the parse database
-# node ../tools/populate/index.js -c # populate the database with dummy data
 
 # Clean-up
 function finish {

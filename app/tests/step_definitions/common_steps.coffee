@@ -11,9 +11,6 @@ do ->
     @Before (callback) ->
       @server.call 'resetFixture'
       @client.url(url.resolve(process.env.ROOT_URL, '/'))
-        .execute (->
-          # Meteor.logout()
-        ), callback
 
     @When /^I click "([^"]*)"$/, (selector) ->
       @client
@@ -27,11 +24,13 @@ do ->
         .setValue('input#inputPassword', 'P@ssw0rd')
         .submitForm('input#inputEmail')
 
-    @When 'I fill in the add survey form', ->
+    @When 'I fill out the add survey form', ->
       @client
-        .waitForVisible('[name="title"]')
-        .setValue('[name="title"]', 'Test Survey')
+        .waitForVisible('input[name="title"]')
+        .pause 1000
+        .setValue('input[name="title"]', 'Test Survey')
         .click('#confirm-create-survey')
+        .pause 1000
 
     @When /^I navigate to "([^"]*)"$/, (relativePath) ->
       @client
