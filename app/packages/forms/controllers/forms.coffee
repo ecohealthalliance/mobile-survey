@@ -27,3 +27,12 @@ Template.forms.helpers
     Template.instance().forms?.findOne()
   surveyId: ->
     Template.instance().data.survey.id
+
+Template.forms.events
+ 'click .delete-form': (event, instance) ->
+   form = @
+   instance.survey.getForm(@parseId)
+    .then (form) ->
+      form.delete()
+    .then ->
+      instance.forms.remove form._id

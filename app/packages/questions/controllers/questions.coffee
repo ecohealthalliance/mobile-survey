@@ -33,8 +33,10 @@ Template.questions.helpers
     Template.instance().questions?.find {}, sort: {order: 1}
 
 Template.questions.events
-  'click .delete': (event, instance) ->
+  'click .delete-question': (event, instance) ->
     query = new Parse.Query Question
-    query.get(@parseId).then (question) =>
-      question.destroy().then () =>
+    query.get(@parseId)
+      .then (question) =>
+        question.delete()
+      .then () =>
         instance.questions.remove @_id

@@ -5,18 +5,18 @@ Template.surveys.onCreated ->
   @surveys = new Meteor.Collection null
 
 Template.surveys.onRendered ->
-  self = this
-  surveyQuery = new Parse.Query Survey
-  surveyQuery.find().then (surveys) ->
-    self.fetched.set true
+  instance = @
+  query = new Parse.Query Survey
+  query.equalTo 'deleted', false
+  query.find().then (surveys) ->
+    instance.fetched.set true
     _.each surveys, (survey) ->
       surveyProps =
         parseId: survey.id
         title: survey.get 'title'
-      self.surveys.insert surveyProps
+      instance.surveys.insert surveyProps
   , (error) ->
     throw new Meteor.Error 'server', error.message
-
 
 Template.surveys.helpers
   surveys: ->

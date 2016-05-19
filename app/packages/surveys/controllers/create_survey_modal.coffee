@@ -18,6 +18,7 @@ Template.create_survey_modal.events
     surveyProps = _.object $(event.target).serializeArray().map(
       ({name, value})-> [name, value]
     )
+    surveyProps.deleted = false
     surveyProps.createdBy = Parse.User.current()
     surveyProps.active = false
     survey = new Survey()
