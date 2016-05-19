@@ -1,6 +1,9 @@
 'use strict'
 
 
+open_AM_url = Meteor.settings.private.open_AM_url
+
+
 Future = Npm.require 'fibers/future'
 
 initiateAdminAuthentication = (callback) ->
@@ -10,7 +13,7 @@ initiateAdminAuthentication = (callback) ->
 initiateAuthentication = (email, password, callback) ->
   #in order to start making requests to the OpenAM API we first need to get a base request framework and token
   Meteor.http.call "POST",
-    "http://openam.eha.io:8080/openam/json/authenticate?Content-Type=application/json",
+    "#{open_AM_url}/openam/json/authenticate?Content-Type=application/json",
     (err, result) ->
       #using the returned framework as a base - set the username/password of the user we want to login as
       result.data.callbacks[0].input[0].value = email
@@ -21,7 +24,7 @@ authenticate = (data, callback) ->
   authData = {}
   authData.data = data
   Meteor.http.call "POST",
-    "http://openam.eha.io:8080/openam/json/authenticate?Content-Type=application/json"
+    "#{open_AM_url}/openam/json/authenticate?Content-Type=application/json"
     authData,
     (err, result) ->
       requestBody = {}
@@ -29,10 +32,9 @@ authenticate = (data, callback) ->
       headers["Content-Type"] = "application/json"
       headers["iplanetDirectoryPro"] = result.data.tokenId
       console.log err if err
-      # console.log result
       requestBody.headers = headers
       callback(requestBody)
-      # console.log requestBody
+
 
 Meteor.methods
   registerNewUser: (email, password) ->
@@ -46,7 +48,7 @@ Meteor.methods
             mail: email
             #create the user in OpenAM
           Meteor.http.call "POST",
-            "http://openam.eha.io:8080/openam/json/users/?_action=create",
+            "#{open_AM_url}/openam/json/users/?_action=create",
             # headers,
             userData,
             (args...)->
@@ -68,8 +70,11 @@ Meteor.methods
         unless user
           Accounts.createUser { email: email, password: password }
           user = Accounts.findUserByEmail(email)
-        Accounts._insertLoginToken(user._id, tokenObject)
-        future.return(tokenObject.token)
+        if tokenObject.token
+          Accounts._insertLoginToken(user._id, tokenObject)
+          future.return(tokenObject.token)
+        else
+          future.return(null)
     future.wait()
 
   changeUserPassword: (currentPassword, newPassword) ->

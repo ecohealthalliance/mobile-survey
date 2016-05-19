@@ -5,6 +5,7 @@
 
 watch=""
 quit=0
+parseServerPID=-1
 
 
 if [ "$WATCH" == "true" ]; then
@@ -12,13 +13,18 @@ if [ "$WATCH" == "true" ]; then
   SECONDS=0
 fi
 
+# Initiate the testing Parse server for acceptnace tests
+# PORT=31337 parse-server --appId Acceptance --masterKey test --databaseURI mongodb://localhost:13001/meteor &
+node .scripts/parse-server-local.js &
+parseServerPID=$!
 
-# Put the data back
+# Clean-up
 function finish {
-  echo "Restoring the stashed data..."
-  mongo localhost:13001/meteor .scripts/database/drop.js
-  mongorestore -h 127.0.0.1 --port 13001 -d meteor tests/dump/meteor
-  rm -rf tests/dump/
+  echo "Cleaning-up..."
+  kill -9 $parseServerPID
+  # mongo localhost:13001/meteor .scripts/database/drop.js
+  # mongorestore -h 127.0.0.1 --port 13001 -d meteor tests/dump/meteor
+  # rm -rf tests/dump/
 }
 trap finish EXIT
 trap finish INT
@@ -30,9 +36,9 @@ trap finish SIGTERM # 15
 
 
 # Back up the current database
-rm -rf tests/dump/
-echo "Create a bson dump of our 'meteor' db..."
-mongodump -h 127.0.0.1 --port 13001 -d meteor -o tests/dump/
+# rm -rf tests/dump/
+# echo "Create a bson dump of our 'meteor' db..."
+# mongodump -h 127.0.0.1 --port 13001 -d meteor -o tests/dump/
 
 
 # Run our tests

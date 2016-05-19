@@ -7,7 +7,7 @@ tests/dump/
 
 # Settings JSON
 settings-dev.json
+settings-test.json
 
 # Parse server logs
 logs/
-
