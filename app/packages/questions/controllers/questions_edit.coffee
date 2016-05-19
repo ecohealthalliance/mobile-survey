@@ -1,8 +1,12 @@
+validator = require 'bootstrap-validator'
+
 Template.questions_edit.onCreated ->
   instance = @
   @type = new ReactiveVar 'inputText'
   @choices = new Meteor.Collection(null)
   @question = new ReactiveVar null
+  @submitting = new ReactiveVar false
+  @typeError = new ReactiveVar null
   @data.survey.getForm(@data.formId).then (form) ->
     form.getQuestion(instance.data.questionId).then (question) ->
       instance.question.set question
@@ -14,6 +18,9 @@ Template.questions_edit.onCreated ->
       console.error error
   , (error) ->
     console.error error
+
+Template.questions_edit.onRendered ->
+  @$('#question-form-edit').validator()
 
 Template.questions_edit.helpers
   types: ->
@@ -59,6 +66,12 @@ Template.questions_edit.helpers
     @name is Template.instance().type.get()
   choices: ->
     Template.instance().choices.find()
+  typeInvalid: ->
+    Template.instance().submitting.get() and not Template.instance().type.get()
+  choicesInvalid: ->
+    Template.instance().submitting.get() and Template.instance().typeError.get()
+  choiceInvalidMessage: ->
+    Template.instance().typeError.get()
 
 Template.questions_edit.events
   'keyup .choice': (event, instance) ->
@@ -70,13 +83,12 @@ Template.questions_edit.events
   'click .type': (event, instance) ->
     typeString = $(event.currentTarget).data 'type'
     instance.type.set(typeString)
-  'submit form': (event, instance) ->
+  'submit #question-form-edit': (event, instance) ->
     event.preventDefault()
-
+    instance.submitting.set true
     form = event.currentTarget
 
-    unless form.checkValidity()
-      toastr.error('Please fill out all required fields')
+    unless instance.type.get()
       return
 
     formData = _.object $(form).serializeArray().map(
@@ -84,19 +96,16 @@ Template.questions_edit.events
     )
     questionProperties = _.omit(formData, 'text', '_id')
 
-    unless instance.type.get()
-      toastr.error('Please select a type')
-      return
-
     if instance.type.get() == 'multipleChoice' or instance.type.get() == 'checkboxes'
       if instance.choices.find().count() == 0
-        toastr.error('Please add some choices')
+        instance.typeError.set 'Please add choices to the question'
         return
       else
         choiceStrings = instance.choices.find().map(({name})-> name)
         if _.any(choiceStrings, _.isEmpty)
-          toastr.error('Please fill in all the choices')
+          instance.typeError.set 'Please fill in all choices to the question'
           return
+        instance.typeError.set null
         questionProperties.choices = choiceStrings
 
     if questionProperties.min?.length
@@ -116,7 +125,11 @@ Template.questions_edit.events
       properties: questionProperties
 
     instance.question.get().save(question).then ->
-      FlowRouter.go("/admin/surveys")
+      data = instance.data
+      FlowRouter.go("/admin/surveys/#{data.id}/forms/#{data.formId}")
 
   'click .add-choice': (event, instance)->
     instance.choices.insert {}
+
+  Template.questions_edit.onDestroyed ->
+    @$('#question-form-edit').validator('destroy')

@@ -1,7 +1,11 @@
 {Survey} = require 'meteor/gq:models'
+validator = require 'bootstrap-validator'
 
 Template.create_survey_modal.onCreated ->
   @creating = new ReactiveVar false
+
+Template.create_survey_modal.onRendered ->
+  @$('#create-survey-modal').validator()
 
 Template.create_survey_modal.helpers
   creating: ->

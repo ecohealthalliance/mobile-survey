@@ -1,4 +1,5 @@
 {Survey, Form} = require 'meteor/gq:models'
+validator = require 'bootstrap-validator'
 
 _map = null # the map instance for the geofence trigger
 _minZoom = 3 # the minimum zoom level of the map
@@ -111,9 +112,10 @@ radiusToZoomLevel = () ->
 #
 # @return [Array] the user defined coordinates as geoJSON Point or null
 getCoordinates = () ->
-  latLng = _geofenceMarker.getLatLng()
-  latitude: latLng.lat
-  longitude: latLng.lng
+  if _geofenceMarker
+    latLng = _geofenceMarker.getLatLng()
+    latitude: latLng.lat
+    longitude: latLng.lng
 
 # set the UI to the L.latLng object
 #
@@ -280,11 +282,15 @@ Template.form_edit.events
       if not getRadius()
         toastr.error 'Please select a radius.'
         return
+      coordinates = getCoordinates()
+      if not coordinates
+        toastr.error 'Please select a location by entering an address or clicking on map.'
+        return
       trigger =
         type: type
         properties:
           radius: getRadius()
-        location: getCoordinates()
+        location: coordinates
     if type == 'datetime'
       if not getDatetime()
         toastr.error 'Please select a date and time.'
@@ -363,6 +369,9 @@ Template.form_edit.onRendered ->
             source: (query, callback) ->
               suggestionGenerator instance, query, callback
           ]
+        @$('.edit-form').validator
+          errors:
+            minlength: 'Title must be at least 3 characters'
 
         # update input fields if editing
         if @form and @trigger
