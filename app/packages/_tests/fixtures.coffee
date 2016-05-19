@@ -13,9 +13,9 @@ do ->
         # Create Parse User
         parseUser = new Parse.User()
         parseUserData =
-          username: 'yursky555@blurg.com'
-          password: 'P@ssw0rd'
-          email   : 'yursky555@blurg.com'
+          username: Meteor.settings.public.parseUserEmail
+          password: Meteor.settings.public.parseUserPassword
+          email   : Meteor.settings.public.parseUserEmail
           role    : 'admin'
         parseUser.signUp(parseUserData)
           .fail (err)->
