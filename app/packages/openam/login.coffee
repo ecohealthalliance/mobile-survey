@@ -1,3 +1,11 @@
+# Log out the meteor user if the parse user is not logged in.
+Meteor.startup ->
+  Accounts.onLogin ->
+    interval = window.setTimeout ->
+      if not Parse.User.current()
+        Meteor.logout()
+    , 1000
+
 Template.login.events
   'submit form': (event, instance) ->
     event.preventDefault()
