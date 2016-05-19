@@ -1,6 +1,12 @@
+all:
+	@echo "run:			meteor npm start"
+	@echo "parse-server:		meteor npm run server"
+	@echo "run-test:		meteor npm run test"
+	@echo "test-watch:		meteor npm run test-watch"
+
 # Dev server
 run:
-	npm run start
+	meteor npm start
 
 # Dev server (test mode)
 run-test:
@@ -8,12 +14,12 @@ run-test:
 
 # Local Parse server
 parse-server:
-	npm run server
+	meteor npm run server
 
 # Acceptance test
-test:
-	npm run test
+run-test:
+	meteor npm test
 
 # Acceptance test (watch)
 test-watch:
-	npm run test-watch
+	meteor npm test-watch
