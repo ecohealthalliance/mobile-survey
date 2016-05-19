@@ -1,19 +1,9 @@
 # Log out the meteor user if the parse user is not logged in.
-parse_logging_in = false
 Meteor.startup ->
   Accounts.onLogin ->
-    retries = 30
-    interval = window.setInterval ->
-      if parse_logging_in
-        retries -= 1
-        if retries == 0
-          console.error("Parse login did not complete.")
-          Meteor.logout()
-          window.clearInterval(interval)
-      else
-        if not Parse.User.current()
-          Meteor.logout()
-        window.clearInterval(interval)
+    interval = window.setTimeout ->
+      if not Parse.User.current()
+        Meteor.logout()
     , 1000
 
 Template.login.events
@@ -24,17 +14,14 @@ Template.login.events
     email = form.username.value.trim()
     passw = form.password.value.trim()
 
-    Meteor.call 'loginUser', email, passw, (err, token) ->
-      Meteor.loginWithToken token, (err)->
-        if err
-          toastr.error('Could not log into Meteor')
-          return
-        parse_logging_in = true
-        Parse.User.logIn(email, passw)
-          .then ()->
-            console.log(Parse.User.current())
-          .fail (error)->
-            toastr.error('Could not log into Parse.')
-            Meteor.logout()
-          .always ->
-            parse_logging_in = false
+    Parse.User.logIn(email, passw)
+      .then ()->
+        Meteor.call 'loginUser', email, passw, (err, token) ->
+          console.log(token)
+          Meteor.loginWithToken token, (err)->
+            if err
+              toastr.error('Could not log into Meteor')
+      .fail (error)->
+        console.error('Could not log into Parse.')
+        toastr.error('Could not log into Parse.')
+        Meteor.logout()

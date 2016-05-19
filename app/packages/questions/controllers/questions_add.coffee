@@ -1,7 +1,8 @@
 {Survey, Form, Question} = require 'meteor/gq:models'
+validator = require 'bootstrap-validator'
 
 Template.registerHelper 'match', (val, {hash:{regex}})->
-  val?.match(new RegExp(regex))
+  val?.match new RegExp regex
 
 Template.registerHelper 'isEmpty', (val)->
   if val.count
@@ -14,6 +15,11 @@ Template.questions_add.onCreated ->
   @questions = @data.questions
   @type = new ReactiveVar null
   @choices = new Meteor.Collection null
+  @submitting = new ReactiveVar false
+  @typeError = new ReactiveVar null
+
+Template.questions_add.onRendered ->
+  @$('#question-form-add').validator()
 
 Template.questions_add.helpers
   types: ->
@@ -59,6 +65,12 @@ Template.questions_add.helpers
     Template.instance().choices.find()
   questions: ->
     Template.instance().questions.find {}, sort: {order: 1}
+  typeInvalid: ->
+    Template.instance().submitting.get() and not Template.instance().type.get()
+  choicesInvalid: ->
+    Template.instance().submitting.get() and Template.instance().typeError.get()
+  choiceInvalidMessage: ->
+    Template.instance().typeError.get()
 
 Template.questions_add.events
   'keyup .choice': (event, instance) ->
@@ -71,11 +83,9 @@ Template.questions_add.events
     instance.type.set $(event.currentTarget).data 'type'
   'submit form': (event, instance) ->
     event.preventDefault()
-
+    instance.submitting.set true
     form = event.currentTarget
-
-    unless form.checkValidity()
-      toastr.error('Please fill out all required fields')
+    unless instance.type.get()
       return
 
     formData = _.object $(form).serializeArray().map(
@@ -83,19 +93,16 @@ Template.questions_add.events
     )
     questionProperties = _.omit(formData, 'text', '_id')
 
-    if not instance.type.get()
-      toastr.error('Please select a type')
-      return
-
     if instance.type.get() == 'multipleChoice' or instance.type.get() == 'checkboxes'
       if instance.choices.find().count() == 0
-        toastr.error('Please add some choices')
+        instance.typeError.set 'Please add choices to the question'
         return
       else
         choiceStrings = instance.choices.find().map(({name})-> name)
         if _.any(choiceStrings, _.isEmpty)
-          toastr.error('Please fill in all the choices')
+          instance.typeError.set 'Please fill in all choices to the question'
           return
+        instance.typeError.set null
         questionProperties.choices = choiceStrings
 
     if questionProperties.min?.length
@@ -116,6 +123,7 @@ Template.questions_add.events
 
     instance.form.addQuestion(question)
       .then (question) ->
+        instance.submitting.set false
         form.reset()
         instance.choices.find().forEach ({_id})->
           instance.choices.remove _id
@@ -130,3 +138,6 @@ Template.questions_add.events
 
   'click .add-choice': (event, instance)->
     instance.choices.insert {}
+
+  Template.questions_add.onDestroyed ->
+    @$('#question-form-add').validator('destroy')

@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "start": "meteor -p 13000 --settings settings-dev.json",
+    "start-test": "meteor -p 13000 --settings settings-test.json",
     "server": "parse-server --appId testapp --masterKey testkey --databaseURI mongodb://localhost:13001/meteor",
     "pretest": "npm install --only=dev",
     "test": ".scripts/run-tests.sh",
@@ -10,6 +11,7 @@
   },
   "dependencies": {
     "autoprefixer": "^6.3.1",
+    "bootstrap-validator": "^0.10.2",
     "bufferutil": "^1.2.1",
     "faker": "^3.0.1",
     "meteor-node-stubs": "^0.2.3",
@@ -20,6 +22,8 @@
   "devDependencies": {
     "underscore": "^1.8.3",
     "jquery": "^2.0.0",
-    "coffee-script": "^1.10.0"
+    "coffee-script": "^1.10.0",
+    "express": "*",
+    "parse-server": "*"
   }
 }
