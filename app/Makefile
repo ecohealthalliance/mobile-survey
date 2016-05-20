@@ -8,10 +8,6 @@ all:
 run:
 	meteor npm start
 
-# Dev server (test mode)
-run-test:
-	npm run start-test
-
 # Local Parse server
 parse-server:
 	meteor npm run server

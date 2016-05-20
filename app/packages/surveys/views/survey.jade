@@ -4,7 +4,14 @@ template(name="survey")
       nav.navbar.navbar-default.survey-admin--nav
         .container-fluid-padded
           .navbar-header
-            h2=survey.attributes.title
+            h2=title
+            .survey-header-actions
+              a.btn.btn-default.btn-sm.pull-right(
+                data-toggle="modal"
+                data-target="#edit-survey-modal"
+                data-id=survey.id)
+                | Edit
+
           ul.nav.navbar-nav.navbar-right
             li(class="{{isActiveRoute 'survey_details'}}")
               a.survey-admin--view-link(href="{{pathFor 'survey_details' id=survey.id}}" data-page='details') Details
@@ -15,7 +22,7 @@ template(name="survey")
 
       .container-fluid-padded
         if isActiveRoute 'survey_details'
-          +survey_details survey=survey
+          +survey_details survey=survey surveyAttrs=surveyAttrs
 
         else if isActiveRoute 'forms'
           +forms survey=survey
@@ -34,3 +41,5 @@ template(name="survey")
 
         else if isActiveRoute 'survey_user_edit'
           +survey_user_edit survey=survey
+
+    +edit_survey_modal survey=survey surveyAttrs=surveyAttrs
