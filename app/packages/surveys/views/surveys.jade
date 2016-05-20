@@ -1,18 +1,18 @@
 template(name="surveys")
   .container-fluid-padded
-    .page-header
-      h2 Surveys
-        a#add-survey.btn.btn-sm(data-toggle="modal" data-target="#edit-survey-modal")
-          i.mdi.mdi-plus-circle
-          span Add Survey
+    h2 Surveys
+      a#add-survey.btn.btn-sm(data-toggle="modal" data-target="#edit-survey-modal")
+        i.mdi.mdi-plus-circle
+        span Add Survey
 
-      if fetched
-        ul.list-group.surveys
-          each surveys
-            li.list-group-item.form-link
-              a(href="{{pathFor 'survey_details' id=parseId}}")= title
-              .actions
-                a.btn.btn-danger.action.delete(
+    if fetched
+      ul.list-group.surveys
+        each surveys
+          li.list-group-item.form-link
+            a(href="{{pathFor 'survey_details' id=parseId}}")= title
+            .actions
+              unless active
+                a.btn.btn-danger.btn-sm.action.delete(
                   data-toggle="modal"
                   data-target="#delete-survey-modal"
                   data-id=parseId)

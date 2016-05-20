@@ -20,7 +20,7 @@ Template.edit_survey_modal.helpers
   saving: ->
     Template.instance().saving.get()
   survey: ->
-    Template.instance().survey
+    Template.instance().surveyAttrs?.get()
 
 afterSurveySave = (isNewSurvey, survey, instance, event) ->
   instance.saving.set false
