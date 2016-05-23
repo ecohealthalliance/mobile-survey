@@ -12,7 +12,7 @@ initiateAdminAuthentication = (callback) ->
 
 initiateAuthentication = (email, password, callback) ->
   #in order to start making requests to the OpenAM API we first need to get a base request framework and token
-  Meteor.http.call "POST",
+  Meteor.http.call 'POST',
     "#{open_AM_url}/openam/json/authenticate?Content-Type=application/json",
     (err, result) ->
       #using the returned framework as a base - set the username/password of the user we want to login as
@@ -23,7 +23,7 @@ initiateAuthentication = (email, password, callback) ->
 authenticate = (data, callback) ->
   authData = {}
   authData.data = data
-  Meteor.http.call "POST",
+  Meteor.http.call 'POST',
     "#{open_AM_url}/openam/json/authenticate?Content-Type=application/json"
     authData,
     (err, result) ->
@@ -39,22 +39,28 @@ authenticate = (data, callback) ->
 Meteor.methods
   registerNewUser: (email, password) ->
     @unblock()
-    (Meteor.wrapAsync (callback)->
-      initiateAdminAuthentication (authData) ->
-        authenticate authData, (userData) ->
-          userData.data =
-            username: email
-            userpassword: password
-            mail: email
-            #create the user in OpenAM
-          Meteor.http.call "POST",
-            "#{open_AM_url}/openam/json/users/?_action=create",
-            # headers,
-            userData,
-            (args...)->
-              console.log args
-              callback(args)
-    )()
+    future   = new Future()
+    callback = future.resolver()
+    initiateAdminAuthentication (authData) ->
+      authenticate authData, (userData) ->
+        userData.data =
+          username: email
+          userpassword: password
+          mail: email
+        # create the user in OpenAM
+        Meteor.http.call 'POST',
+          "#{open_AM_url}/openam/json/users/?_action=create",
+          # headers,
+          userData,
+          (args...) ->
+            # Create Meteor user
+            Accounts.createUser
+              email: email
+              password: password
+            user = Accounts.findUserByEmail(email)
+            meteorId = user._id
+            callback(null, meteorId)
+    future.wait()
   loginUser: (email, password) ->
     @unblock()
     future = new Future()
@@ -81,7 +87,7 @@ Meteor.methods
     @unblock()
     # make sure that we change the password in both OpenAM and in the Meteor db
     # (even thought we don't use the local password for anything...)
-    console.log "implement this"
+    console.log 'implement this'
 
   logoutUser: () ->
     @unblock()
