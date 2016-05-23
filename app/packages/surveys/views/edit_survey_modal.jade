@@ -1,43 +1,37 @@
 template(name="edit_survey_modal")
   #edit-survey-modal.modal.fade(tabindex="-1" role="dialog")
-      form.modal-dialog
-        .modal-content
-          .modal-header
-            h4.modal-title
-              {{#if survey}} Edit Survey {{else}} Add a Survey {{/if}}
-            button(type="button" class="close" data-dismiss="modal" aria-label="Close")
-              i.mdi.mdi-close-circle
-          .modal-body
-            .form-group
-              .row
-                .col-sm-8
-                  label
-                    span Title
-                    input.form-control(
-                      type='string'
-                      name='title'
-                      value=survey.attributes.title
-                      maxlength='128'
-                      minlength='3'
-                      required)
-                    .help-block.with-errors
+    form.modal-dialog.edit-survey-form
+      .modal-content
 
-            .form-group
-              .row
-                .col-sm-8
-                  label
-                    span Description
-                    input.form-control(
-                      type='string'
-                      name='description'
-                      value=survey.attributes.description)
+        .modal-header
+          h4.modal-title {{#if survey}} Edit Survey {{else}} Add a Survey {{/if}}
+          button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+            i.mdi.mdi-close-circle
 
-          .modal-footer
-            button.btn.btn-default(data-dismiss='modal' aria-hidden='true' type='button') Cancel
-            button.btn.btn-primary#confirm-create-survey(disabled="{{#if saving}} disabled {{/if}}")
-              if creating
-                | Create Survey
-              else
-                | Save Survey
-              unless saving
-                i.mdi.mdi-spinner.mdi-animated
+        .modal-body
+          .form-group
+            label
+              span Title
+            input.form-control(
+              type='string'
+              name='title'
+              value=survey.title
+              maxlength='128'
+              minlength='3'
+              required)
+            .help-block.with-errors
+
+          .form-group
+            label
+              span Description
+            textarea.form-control(type='string' name='description') {{#if survey }}#{survey.description}{{/if}}
+
+        .modal-footer
+          button.btn.btn-default(data-dismiss='modal' aria-hidden='true' type='button') Cancel
+          button.btn.btn-primary#confirm-create-survey(disabled="{{#if saving}} disabled {{/if}}")
+            if survey
+              | Save Survey
+            else
+              | Add Survey
+            unless saving
+              i.mdi.mdi-spinner.mdi-animated

@@ -79,6 +79,8 @@ Survey = Parse.Object.extend 'Survey',
 
 
   delete: (deleted = true) ->
+    if @get 'active'
+      return new Parse.Error OPERATION_FORBIDDEN, 'Survey is active and cannot be deleted.'
     survey = @
     @deleteForms(deleted)
       .then ->
