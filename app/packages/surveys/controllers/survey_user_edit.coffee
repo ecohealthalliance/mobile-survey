@@ -28,10 +28,8 @@ Template.survey_user_edit.events
         query.first()
       .then (adminRole)->
         instance.survey.relation('invitedUsers').add(newUser)
-        acl = new Parse.ACL()
+        acl = instance.survey.getACL()
         acl.setReadAccess(newUser, true)
-        acl.setReadAccess(adminRole, true)
-        acl.setWriteAccess(adminRole, true)
         instance.survey.setACL(acl)
         instance.survey.save()
       .then ->
