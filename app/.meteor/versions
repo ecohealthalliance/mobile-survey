@@ -40,12 +40,12 @@ fastclick@1.0.11
 fortawesome:fontawesome@4.5.0
 fourq:typeahead@1.0.0
 geojson-utils@1.0.8
+gq:api@0.0.1
 gq:base-styles@0.0.1
 gq:fixtures@0.1.0
 gq:forms@0.0.1
 gq:helpers@0.0.1
 gq:layout@0.0.1
-gq:models@0.0.1
 gq:openam@0.1.0
 gq:parse@0.1.0
 gq:questions@0.0.1

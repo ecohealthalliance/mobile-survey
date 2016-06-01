@@ -1,4 +1,4 @@
-{Survey, Form, Question} = require 'meteor/gq:models'
+{Survey, Form, Question} = require 'meteor/gq:api'
 validator = require 'bootstrap-validator'
 
 Template.registerHelper 'match', (val, {hash:{regex}})->

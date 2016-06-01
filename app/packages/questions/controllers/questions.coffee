@@ -1,6 +1,6 @@
 Sort = require 'sortablejs'
 {updateSortOrder} = require 'meteor/gq:helpers'
-{Question} = require 'meteor/gq:models'
+{Question} = require 'meteor/gq:api'
 
 Template.questions.onCreated ->
   @fetched = new ReactiveVar false

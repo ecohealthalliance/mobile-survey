@@ -29,7 +29,7 @@ gq:parse
 gq:helpers
 gq:router
 gq:openam
-gq:models
+gq:api
 gq:base-styles
 gq:layout
 gq:surveys

@@ -1,4 +1,4 @@
-{ Survey }       = require 'meteor/gq:models'
+{ Survey }       = require 'meteor/gq:api'
 { transformObj } = require 'meteor/gq:helpers'
 
 Template.surveys.onCreated ->
