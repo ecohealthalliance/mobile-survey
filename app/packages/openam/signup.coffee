@@ -31,5 +31,6 @@ Template.signup.events
           adminRole.save()
         .then ->
           form.reset()
+          toastr.success("New admin user account created")
         .fail (err)->
           toastr.error("Parse Error: " + err.message)

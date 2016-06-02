@@ -9,7 +9,6 @@ Template.survey_user_edit.events
     )
     userProps.username = userProps.email
     userProps.password = "changeme"
-    console.log userProps
     currentUserSessionToken = Parse.User.current().getSessionToken()
     newUser = null
     query = new Parse.Query(Parse.User)

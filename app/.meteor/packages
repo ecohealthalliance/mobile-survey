@@ -24,6 +24,7 @@ chrismbeckett:toastr
 dapearce:material-icons
 fortawesome:fontawesome@4.5.0
 twbs:bootstrap
+momentjs:moment
 
 gq:parse
 gq:helpers

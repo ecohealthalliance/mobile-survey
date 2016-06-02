@@ -46,6 +46,13 @@ adminRoutes.route '/surveys/:id/users',
       main: 'survey'
       params: params
 
+adminRoutes.route '/surveys/:id/results',
+  name: 'survey_results'
+  action: (params) ->
+    BlazeLayout.render 'layout',
+      main: 'survey'
+      params: params
+
 adminRoutes.route '/surveys/:id/users/new',
   name: 'survey_user_edit'
   action: (params) ->

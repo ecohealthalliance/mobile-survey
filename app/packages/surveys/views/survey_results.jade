@@ -1,0 +1,62 @@
+template(name="survey_results")
+  .survey-admin--content
+    h3 Survey Results
+    unless fetched
+      p This survey has no results
+    else
+      .row
+        .col-sm-2
+          select(id="forms" multiple)
+            option(value='') Show all forms
+            each _forms
+              option(value=objectId)= title
+          select(id="users" multiple)
+            option(value='') All users
+            each _users
+              option(value=objectId)= username
+        .col-sm-10
+          each _formsFiltered
+            h4= title
+            each _questionsFiltered this
+              +question_details
+              each _usersFiltered this
+                with _answer this
+                  +survey_result
+
+template(name="question_details")
+  h5= text
+  p Type: {{_typeToStr type}}
+    if required
+      |, required
+  if _typeGroup type 'simple'
+    P Placeholder: "{{properties.placeholder}}", Maxlength: {{properties.maxlength}}
+  else if _typeGroup type 'number'
+    P Minimum: {{properties.min}}, Maximum: {{properties.max}}
+  else if _typeGroup type 'scale'
+    P Minimum: {{properties.min}} ("{{properties.minText}}"), Maximum: {{properties.max}} ("{{properties.maxText}}")
+  else if _typeGroup type 'multiple'
+    p Choices:
+      each properties.choices
+        span {{this}}, 
+  else if _typeGroup type 'choice'
+    p Choices:
+      each properties.choices
+        span {{this}}, 
+
+template(name="survey_result")
+  .answer
+    p {{../email}}
+    if _typeGroup ../../type 'simple'
+      span "{{answer}}"
+    if _typeGroup ../../type 'date'
+      span {{_formatDate answer}}
+    if _typeGroup ../../type 'number'
+      span= answer
+    if _typeGroup ../../type 'scale'
+      span= answer
+    if _typeGroup ../../type 'choice'
+      span= answer
+    if _typeGroup ../../type 'multiple'
+      span
+        each answer
+          | {{this}}, 
