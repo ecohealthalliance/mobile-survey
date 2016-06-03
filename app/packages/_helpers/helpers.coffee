@@ -56,7 +56,7 @@ buildMeteorCollection = (objs, collection) ->
   objCollection
 
 ###
-  @param [Object] Parse object to transform
+  @param [Object] obj, Parse object to transform
   @return [Object] Object containing Parse object's attrs including id as parseId
 ###
 transformObj = (obj) ->
@@ -64,7 +64,24 @@ transformObj = (obj) ->
   props.parseId = obj.id
   props
 
+###
+  Accepts Parse object and sets ACL giving users in Admin Role read/write access
+  @param [Object] obj, Parse object on which to modify ACL
+###
+setAdminACL = (obj) ->
+  acl = if obj.isNew() then new Parse.ACL() else acl = obj.getACL()
+  query = new Parse.Query Parse.Role
+  query.equalTo 'name', 'admin'
+  query.first()
+    .then (adminRole) ->
+      acl.setReadAccess adminRole, true
+      acl.setWriteAccess adminRole, true
+      obj.setACL acl
+    .fail (err) ->
+      console.log err
+
 module.exports =
   buildMeteorCollection: buildMeteorCollection
   updateSortOrder      : updateSortOrder
   transformObj         : transformObj
+  setAdminACL          : setAdminACL

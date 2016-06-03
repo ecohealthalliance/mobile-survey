@@ -20,12 +20,7 @@ Template.survey_user_edit.events
         else
           Parse.User.signUp(userProps.username, userProps.password, userProps)
       .then (user)->
-        newUser = user
-        Parse.User.become(currentUserSessionToken)
-        query = new Parse.Query(Parse.Role)
-        query.equalTo("name", "admin")
-        query.first()
-      .then (adminRole)->
+        # check for relation
         instance.survey.relation('invitedUsers').add(newUser)
         acl = instance.survey.getACL()
         acl.setReadAccess(newUser, true)

@@ -1,11 +1,16 @@
 Form = require './form'
-{ buildMeteorCollection } = require 'meteor/gq:helpers'
+{ buildMeteorCollection, setAdminACL } = require 'meteor/gq:helpers'
 
 Survey = Parse.Object.extend 'Survey',
   validate: (props) ->
     if props?.title?.length == 0
       return new Parse.Error(Parse.VALIDATION_ERROR, 'The title field cannot be empty')
     Parse.Object.prototype.validate.call(this, props)
+
+  create: (props) ->
+    setAdminACL(@)
+      .then =>
+        @save props
 
   getForms: (returnMeteorCollection, collection, limit) ->
     query = @relation('forms').query()

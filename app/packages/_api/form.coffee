@@ -1,6 +1,6 @@
 Trigger = require './trigger'
 Question = require './question'
-{ buildMeteorCollection } = require 'meteor/gq:helpers'
+{ buildMeteorCollection, setAdminACL } = require 'meteor/gq:helpers'
 
 Form = Parse.Object.extend 'Form',
   create: (props) ->
@@ -9,11 +9,15 @@ Form = Parse.Object.extend 'Form',
     # so they aren't saved to form
     triggerProps = props.trigger
     delete props.trigger
-    @save(props)
+    setAdminACL(form)
+      .then ->
+        form.save(props)
       .then ->
         form.addTrigger(triggerProps)
       .then ->
         form
+      .fail (err) ->
+        console.log err
 
   getQuestions: (returnMeteorCollection, collection, limit) ->
     query = @relation('questions').query()

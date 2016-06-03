@@ -57,7 +57,7 @@ Template.edit_survey_modal.events
       surveyProps.deleted = false
       surveyProps.active = false
       survey = new Survey()
-      survey.save(surveyProps)
+      survey.create(surveyProps)
         .then (survey) ->
           afterSurveySave(true, survey, instance, event)
         .fail (error) ->
