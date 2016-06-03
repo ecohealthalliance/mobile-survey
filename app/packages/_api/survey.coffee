@@ -1,5 +1,5 @@
 Form = require './form'
-{ buildMeteorCollection, setAdminACL } = require 'meteor/gq:helpers'
+{ buildMeteorCollection, setAdminACL, setUserACL } = require 'meteor/gq:helpers'
 
 Survey = Parse.Object.extend 'Survey',
   validate: (props) ->
@@ -103,5 +103,25 @@ Survey = Parse.Object.extend 'Survey',
         _.each forms, (form) -> form.remove()
       .then ->
         survey.destroy()
+
+  ###
+    Set read rights of a user
+    @param [Boolean] access, Rights
+  ###
+  setUserACL: (access) ->
+    survey = @
+    query = @relation('invitedUsers').query()
+    query.find()
+      .then (users) ->
+        users.forEach (user) ->
+          setUserACL survey, user, access
+          survey.save()
+            .then ->
+              survey.getForms()
+            .then (forms) ->
+              forms.forEach (form) ->
+                form.setUserACL user, access
+            .fail (err) ->
+              console.log err
 
 module.exports = Survey

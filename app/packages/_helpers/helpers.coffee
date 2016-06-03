@@ -43,8 +43,8 @@ updateSortOrder = (event, parentObj, relatedObjString) ->
 ###
   Accpets an array of Parse objects and returns a Meteor Collection
   of documents containing the Parse object's attributes and id
-  @param [Array] objs, Parse objects
-  @param [Object] collection, Meteor Collection to contain Parse objects
+  @param [Array]   objs, Parse objects
+  @param [Object]  collection, Meteor Collection to contain Parse objects
   @return [Object] Meteor collection of Parse objects
 ###
 buildMeteorCollection = (objs, collection) ->
@@ -56,7 +56,7 @@ buildMeteorCollection = (objs, collection) ->
   objCollection
 
 ###
-  @param [Object] obj, Parse object to transform
+  @param [Object]  obj, Parse object to transform
   @return [Object] Object containing Parse object's attrs including id as parseId
 ###
 transformObj = (obj) ->
@@ -84,13 +84,14 @@ setAdminACL = (obj) ->
       console.log err
 
 ###
-  Accepts Parse object and sets ACL giving users in Admin Role read/write access
-  @param [Object] obj, Parse object on which to modify ACL
-  @param [Object] user, Parse User to add to ACL
+  Sets ACL giving giving user read access to Parse obj
+  @param [Object]   obj, Parse object on which to modify ACL
+  @param [Object]   user, Parse User to add to ACL
+  @param [Boolean]  access [true], Access rights
 ###
-setUserACL = (obj, user) ->
+setUserACL = (obj, user, access=true) ->
   acl = obj.getACL()
-  acl.setReadAccess(user, true)
+  acl.setReadAccess(user, access)
   obj.setACL(acl)
 
 

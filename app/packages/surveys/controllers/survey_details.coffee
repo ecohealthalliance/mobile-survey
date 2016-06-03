@@ -49,7 +49,8 @@ Template.survey_details.events
     activeState.set not activeState.get()
     props =
       active: activeState.get()
-    instance.survey.save(props).then (survey) ->
-      state = (if activeState.get() then "activated" else "deactivated")
-      toastr.success("You have " + state + " your survey.")
-      FlowRouter.go("/admin/surveys/#{instance.survey.id}")
+    instance.survey.save(props)
+      .then (survey) ->
+        state = (if activeState.get() then "activated" else "deactivated")
+        toastr.success("You have " + state + " your survey.")
+        FlowRouter.go("/admin/surveys/#{instance.survey.id}")
