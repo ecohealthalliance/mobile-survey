@@ -203,6 +203,8 @@ Template.form_edit.helpers
     Template.instance().showingTriggers.get()
   triggerTypeState: (type) ->
     type == Template.instance().triggerType.get()
+  isEditing: ->
+    Template.instance().formId
 
 Template.form_edit.events
   'keydown .edit-form': (event, instance) ->
