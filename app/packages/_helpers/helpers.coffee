@@ -67,6 +67,7 @@ transformObj = (obj) ->
 ###
   Accepts Parse object and sets ACL giving users in Admin Role read/write access
   @param [Object] obj, Parse object on which to modify ACL
+  @return [Promise]
 ###
 setAdminACL = (obj) ->
   acl = if obj.isNew() then new Parse.ACL() else acl = obj.getACL()
@@ -74,14 +75,28 @@ setAdminACL = (obj) ->
   query.equalTo 'name', 'admin'
   query.first()
     .then (adminRole) ->
+      acl.setPublicReadAccess false
+      acl.setPublicWriteAccess false
       acl.setReadAccess adminRole, true
       acl.setWriteAccess adminRole, true
       obj.setACL acl
     .fail (err) ->
       console.log err
 
+###
+  Accepts Parse object and sets ACL giving users in Admin Role read/write access
+  @param [Object] obj, Parse object on which to modify ACL
+  @param [Object] user, Parse User to add to ACL
+###
+setUserACL = (obj, user) ->
+  acl = obj.getACL()
+  acl.setReadAccess(user, true)
+  obj.setACL(acl)
+
+
 module.exports =
   buildMeteorCollection: buildMeteorCollection
   updateSortOrder      : updateSortOrder
   transformObj         : transformObj
   setAdminACL          : setAdminACL
+  setUserACL           : setUserACL
