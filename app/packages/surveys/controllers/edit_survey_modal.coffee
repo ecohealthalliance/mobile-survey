@@ -1,4 +1,4 @@
-{Survey} = require 'meteor/gq:models'
+{Survey} = require 'meteor/gq:api'
 validator = require 'bootstrap-validator'
 {transformObj} = require 'meteor/gq:helpers'
 

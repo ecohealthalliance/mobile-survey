@@ -1,4 +1,4 @@
-{Survey, Form} = require 'meteor/gq:models'
+{Survey, Form} = require 'meteor/gq:api'
 validator = require 'bootstrap-validator'
 
 _map = null # the map instance for the geofence trigger

@@ -1,4 +1,4 @@
-{Survey} = require 'meteor/gq:models'
+{Survey} = require 'meteor/gq:api'
 
 Template.delete_survey_modal.onCreated ->
   @deleting = new ReactiveVar false
