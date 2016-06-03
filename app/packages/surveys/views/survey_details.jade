@@ -4,8 +4,11 @@ template(name="survey_details")
     .survey--details
       if fetched
         p.description= survey.description
-        button.btn.btn-primary.activate
-          span(class='{{activateButtonClass}}').mdi
+        button.btn.btn-primary.activate(disabled="{{#if activating}} true {{/if}}")
+          if activating
+            span.fa.fa-spinner.fa-pulse
+          else
+            span(class='{{activateButtonClass}}').mdi
           span
             =activateButtonText
             | Survey

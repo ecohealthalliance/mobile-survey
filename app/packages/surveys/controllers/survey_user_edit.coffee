@@ -33,7 +33,6 @@ Template.survey_user_edit.events
         Parse.User.become(currentUserSessionToken)
       .then ->
         survey.relation('invitedUsers').add(newUser)
-        setUserACL survey, newUser
         survey.save()
       .then ->
         query = new Parse.Query Parse.Role
