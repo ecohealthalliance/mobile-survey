@@ -1,3 +1,5 @@
+{ getRole } = require 'meteor/gq:helpers'
+
 Template.signup.events
   'submit form': (event, instance) ->
     event.preventDefault()
@@ -23,9 +25,7 @@ Template.signup.events
         .then ->
           Parse.User.become(currentUserSessionToken)
         .then ->
-          query = new Parse.Query(Parse.Role)
-          query.equalTo("name", "admin")
-          query.first()
+          getRole('admin')
         .then (adminRole)->
           adminRole.relation("users").add(parseUser)
           adminRole.save()

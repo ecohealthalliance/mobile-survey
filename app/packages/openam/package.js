@@ -9,6 +9,7 @@ Package.onUse(function (api) {
   api.versionsFrom('1.2.1');
 
   api.use('coffeescript');
+  api.use('ecmascript');
 
   api.use('kadira:flow-router', 'client');
   api.use('stylus', 'client');

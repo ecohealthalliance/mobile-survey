@@ -1,4 +1,4 @@
-{ setAdminACL, setUserACL } = require 'meteor/gq:helpers'
+{ setAdminACL, setUserACL, getRole } = require 'meteor/gq:helpers'
 
 Template.survey_user_edit.onRendered ->
   @survey = @data.survey
@@ -27,6 +27,7 @@ Template.survey_user_edit.events
               user.set 'username', userProps.username
               user.set 'email', userProps.username
               user.set 'password', userProps.password
+              user.set 'role', 'user'
               user.signUp()
       .then (user)->
         newUser = user
@@ -35,9 +36,7 @@ Template.survey_user_edit.events
         survey.relation('invitedUsers').add(newUser)
         survey.save()
       .then ->
-        query = new Parse.Query Parse.Role
-        query.equalTo "name", "user"
-        query.first()
+        getRole('user')
       .then (role)->
         role.relation("users").add(newUser)
         role.save()

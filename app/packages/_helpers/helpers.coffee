@@ -94,6 +94,14 @@ setUserACL = (obj, user, access=true) ->
   acl.setReadAccess(user, access)
   obj.setACL(acl)
 
+###
+  @param [String] Role for which to search
+  @return [Promise] Role
+###
+getRole = (role) ->
+  query = new Parse.Query Parse.Role
+  query.equalTo 'name', role
+  query.first()
 
 module.exports =
   buildMeteorCollection: buildMeteorCollection
@@ -101,3 +109,4 @@ module.exports =
   transformObj         : transformObj
   setAdminACL          : setAdminACL
   setUserACL           : setUserACL
+  getRole              : getRole
