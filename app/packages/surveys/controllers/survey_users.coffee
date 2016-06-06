@@ -1,5 +1,8 @@
 Template.survey_users.onCreated ->
+  @survey = @data.survey
+  @users = new Meteor.Collection(null)
   @fetched = new ReactiveVar false
+
 Template.survey_users.onRendered ->
   @survey = @data.survey
   @fetched.set false

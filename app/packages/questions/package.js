@@ -20,10 +20,12 @@ Package.onUse(function(api) {
   api.addFiles([
     'styles/main.styl',
     'views/questions_add.jade',
-    'views/questions_edit.jade',
+    'views/question_details.jade',
+    'views/question_details_edit.jade',
     'views/questions.jade',
     'controllers/questions_add.coffee',
-    'controllers/questions_edit.coffee',
+    'controllers/question_details.coffee',
+    'controllers/question_details_edit.coffee',
     'controllers/questions.coffee',
   ], 'client');
 

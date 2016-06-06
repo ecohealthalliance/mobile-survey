@@ -1,63 +1,20 @@
 validator = require 'bootstrap-validator'
+questionTypes = require '../imports/question_types'
 
-Template.questions_edit.onCreated ->
+Template.question_details_edit.onCreated ->
   instance = @
+  @survey = @data.survey
+  @question = @data.survey
   @type = new ReactiveVar 'inputText'
   @choices = new Meteor.Collection(null)
-  @question = new ReactiveVar null
   @submitting = new ReactiveVar false
   @typeError = new ReactiveVar null
-  @data.survey.getForm(@data.formId).then (form) ->
-    form.getQuestion(instance.data.questionId).then (question) ->
-      instance.question.set question
-      instance.type.set question.get('type')
-      if question.get('properties').choices
-        question.get('properties').choices.forEach (choice) ->
-          instance.choices.insert(name: choice)
-    , (error) ->
-      console.error error
-  , (error) ->
-    console.error error
 
-Template.questions_edit.onRendered ->
+Template.question_details_edit.onRendered ->
   @$('#question-form-edit').validator()
 
-Template.questions_edit.helpers
-  types: ->
-    [
-      {
-        text: 'Multiple Choice'
-        name: 'multipleChoice'
-      }
-      {
-        text: 'Checkboxes'
-        name: 'checkboxes'
-      }
-      {
-        text: 'Short Answer'
-        name: 'shortAnswer'
-      }
-      {
-        text: 'Long Answer'
-        name: 'longAnswer'
-      }
-      {
-        text: 'Number'
-        name: 'number'
-      }
-      {
-        text: 'Date'
-        name: 'date'
-      }
-      {
-        text: 'Datetime'
-        name: 'datetime'
-      }
-      {
-        text: 'Scale'
-        name: 'scale'
-      }
-    ]
+Template.question_details_edit.helpers
+  types: -> questionTypes
   type: ->
     Template.instance().type.get()
   question: (key) ->
@@ -73,7 +30,7 @@ Template.questions_edit.helpers
   choiceInvalidMessage: ->
     Template.instance().typeError.get()
 
-Template.questions_edit.events
+Template.question_details_edit.events
   'keyup .choice': (event, instance) ->
     instance.choices.update($(event.currentTarget).data('id'),
       name: $(event.currentTarget).val()
@@ -131,5 +88,5 @@ Template.questions_edit.events
   'click .add-choice': (event, instance)->
     instance.choices.insert {}
 
-  Template.questions_edit.onDestroyed ->
+  Template.question_details_edit.onDestroyed ->
     @$('#question-form-edit').validator('destroy')

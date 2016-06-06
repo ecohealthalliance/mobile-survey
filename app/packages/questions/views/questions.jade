@@ -9,10 +9,11 @@ template(name="questions")
             li.list-group-item.question-link(data-id=objectId)
               span.sortable-handle
                 i.mdi.mdi-drag
-              a(href="{{pathFor 'questions_edit' id=surveyId formId=formId questionId=objectId}}")= text
+              a(href="{{pathFor 'question_details' id=surveyId formId=formId questionId=objectId}}")= text
               .actions
-                .action.delete-question.warning(data-id=objectId)
-                  i.mdi.mdi-delete
+                unless surveyActive
+                  .action.delete-question.warning(data-id=objectId)
+                    i.mdi.mdi-delete
       else
         .panel-body
           p No questions specified

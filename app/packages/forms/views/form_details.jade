@@ -6,11 +6,15 @@ template(name="form_details")
           a.btn-back(href="{{pathFor 'forms' id=survey.id }}")
             i.mdi.mdi-arrow-left-bold-circle-outline
           h4=form.attributes.title
-          a.btn.btn-default(href="#{formId}/edit") Edit
-          a.btn.btn-danger.delete.delete-form Delete
+          button.btn.btn-default(
+            disabled="{{#if surveyActive}} disabled {{/if}}"
+            href="#{formId}/edit") Edit
+          button.btn.btn-danger.delete.delete-form(
+            disabled="{{#if surveyActive}} disabled {{/if}}") Delete
         .form--details
           .row
-            .col-md-4
-              +questions_add form=form questions=questionsCollection
+            unless surveyActive
+              .col-md-4
+                +questions_add form=form questions=questionsCollection
             .col-md-8
               +questions form=form survey=survey questions=questionsCollection

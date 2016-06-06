@@ -12,7 +12,7 @@ template(name="surveys")
             a(href="{{pathFor 'survey_details' id=objectId}}")= title
             .actions
               unless active
-                a.btn.btn-danger.btn-sm.action.delete(
+                button.btn.btn-danger.btn-sm.action.delete(
                   data-toggle="modal"
                   data-target="#delete-survey-modal"
                   data-id=objectId)

@@ -6,10 +6,11 @@ template(name="survey")
           .navbar-header
             h2=title
             .survey-header-actions
-              a.btn.btn-default.btn-sm.pull-right(
+              button.btn.btn-default.btn-sm.pull-right(
                 data-toggle="modal"
                 data-target="#edit-survey-modal"
-                data-id=survey.id)
+                data-id=survey.id
+                disabled="{{#if surveyActive}} disabled {{/if}}")
                 | Edit
 
           ul.nav.navbar-nav.navbar-right
@@ -35,8 +36,8 @@ template(name="survey")
         else if isActiveRoute 'form_details'
           +form_details data
 
-        else if isActiveRoute 'questions_edit'
-          +questions_edit data
+        else if isActiveRoute 'question_details'
+            +question_details data
 
         else if isActiveRoute 'survey_users'
           +survey_users survey=survey
