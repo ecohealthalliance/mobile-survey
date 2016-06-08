@@ -6,12 +6,12 @@ template(name="questions")
       if hasQuestions
         ul.list-group#questionList
           each questions
-            li.list-group-item.question-link(data-id=parseId)
+            li.list-group-item.question-link(data-id=objectId)
               span.sortable-handle
                 i.mdi.mdi-drag
-              a(href="{{pathFor 'questions_edit' id=surveyId formId=formId questionId=parseId}}")= text
+              a(href="{{pathFor 'questions_edit' id=surveyId formId=formId questionId=objectId}}")= text
               .actions
-                .action.delete-question.warning(data-id=parseId)
+                .action.delete-question.warning(data-id=objectId)
                   i.mdi.mdi-delete
       else
         .panel-body

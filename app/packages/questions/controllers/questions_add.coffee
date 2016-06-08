@@ -129,7 +129,7 @@ Template.questions_add.events
           instance.choices.remove _id
         lastItemOrder = instance.questions.findOne({}, sort: {order: -1})?.order
         instance.questions.insert
-          parseId: question.id
+          objectId: question.id
           order: ++lastItemOrder or 1
           text: question.get 'text'
         toastr.success 'Question added'

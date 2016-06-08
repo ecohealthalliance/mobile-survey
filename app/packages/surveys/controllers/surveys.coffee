@@ -1,5 +1,4 @@
 { Survey }       = require 'meteor/gq:api'
-{ transformObj } = require 'meteor/gq:helpers'
 
 Template.surveys.onCreated ->
   @fetched = new ReactiveVar false
@@ -12,8 +11,7 @@ Template.surveys.onRendered ->
   query.find().then (surveys) ->
     instance.fetched.set true
     _.each surveys, (survey) ->
-      surveyProps = transformObj survey
-      instance.surveys.insert surveyProps
+      instance.surveys.insert survey.toJSON()
   , (error) ->
     throw new Meteor.Error 'server', error.message
 

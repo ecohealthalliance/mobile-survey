@@ -35,7 +35,7 @@ Template.questions.helpers
 Template.questions.events
   'click .delete-question': (event, instance) ->
     query = new Parse.Query Question
-    query.get(@parseId)
+    query.get(@objectId)
       .then (question) =>
         question.delete()
       .then () =>

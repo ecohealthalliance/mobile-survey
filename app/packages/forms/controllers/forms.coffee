@@ -31,7 +31,7 @@ Template.forms.helpers
 Template.forms.events
  'click .delete-form': (event, instance) ->
    form = @
-   instance.survey.getForm(@parseId)
+   instance.survey.getForm(@objectId)
     .then (form) ->
       form.delete()
     .then ->
