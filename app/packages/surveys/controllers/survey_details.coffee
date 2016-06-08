@@ -62,4 +62,4 @@ Template.survey_details.events
         instance.activating.set false
         state = (if activeState.get() then "activated" else "deactivated")
         toastr.success("You have " + state + " your survey.")
-        FlowRouter.go("/admin/surveys/#{instance.survey.id}")
+        FlowRouter.go("/surveys/#{instance.survey.id}")

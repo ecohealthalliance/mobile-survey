@@ -222,7 +222,7 @@ Template.form_edit.events
 
   'click #cancelForm': (event, instance) ->
     # upon canceling, go to the list
-    FlowRouter.go("/admin/surveys/#{instance.survey.id}/forms")
+    FlowRouter.go("/surveys/#{instance.survey.id}/forms")
 
   'keyup #searchAddress': (event, instance) ->
     q = getAddress()
@@ -309,13 +309,13 @@ Template.form_edit.events
     if form
       form.update(props)
         .then ->
-          FlowRouter.go "/admin/surveys/#{instance.survey.id}/forms"
+          FlowRouter.go "/surveys/#{instance.survey.id}/forms"
         .fail (error) ->
           toastr.error error.message
     else
       instance.survey.addForm(props)
         .then (form) ->
-          FlowRouter.go "/admin/surveys/#{instance.survey.id}/forms/#{form.id}"
+          FlowRouter.go "/surveys/#{instance.survey.id}/forms/#{form.id}"
         .fail (error) ->
           toastr.error error.message
 
@@ -325,7 +325,7 @@ Template.form_edit.events
       .then (form) ->
         form.delete()
       .then ->
-        FlowRouter.go "/admin/surveys/#{survey.id}"
+        FlowRouter.go "/surveys/#{survey.id}"
 
 Template.form_edit.onRendered ->
   # the map is recreated each time the page is rendered, so clear any old

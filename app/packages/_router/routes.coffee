@@ -5,12 +5,11 @@ if Meteor.isClient
 FlowRouter.route '/',
   action: ->
     if Meteor.user()
-      FlowRouter.go '/admin/surveys'
+      FlowRouter.go '/surveys'
     else
       FlowRouter.go 'login'
 
 adminRoutes = FlowRouter.group
-  prefix: '/admin'
   name: 'admin'
   triggersEnter: [ ->
     unless Meteor.loggingIn() or Meteor.userId()

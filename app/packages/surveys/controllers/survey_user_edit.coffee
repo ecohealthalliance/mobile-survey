@@ -42,10 +42,10 @@ Template.survey_user_edit.events
         role.save()
       .then ->
         toastr.success("User added")
-        FlowRouter.go("/admin/surveys/#{survey.id}/users")
+        FlowRouter.go("/surveys/#{survey.id}/users")
       .fail (err)->
         console.error(err)
         toastr.error(err.message)
 
   'click #cancel': (event, instance) ->
-    FlowRouter.go("/admin/surveys/#{instance.survey.id}/users")
+    FlowRouter.go("/surveys/#{instance.survey.id}/users")
