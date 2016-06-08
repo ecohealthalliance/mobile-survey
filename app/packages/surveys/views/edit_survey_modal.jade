@@ -29,9 +29,9 @@ template(name="edit_survey_modal")
         .modal-footer
           button.btn.btn-default(data-dismiss='modal' aria-hidden='true' type='button') Cancel
           button.btn.btn-primary#confirm-create-survey(disabled="{{#if saving}} disabled {{/if}}")
+            if saving
+              +loading inline=true
             if survey
               | Save Survey
             else
               | Add Survey
-            if saving
-              +loading inButton=true

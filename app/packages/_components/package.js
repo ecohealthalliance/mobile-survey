@@ -8,14 +8,16 @@ Package.onUse(function(api) {
   api.versionsFrom('1.3.2.2');
 
   api.use([
+    'coffeescript',
     'mquandalle:jade',
     'stylus',
     'blaze-html-templates'
   ], 'client');
 
   api.addFiles([
+    'loading/loading.styl',
     'loading/loading.jade',
-    'loading/loading.styl'
+    'loading/loading.coffee'
   ], 'client');
 
 });

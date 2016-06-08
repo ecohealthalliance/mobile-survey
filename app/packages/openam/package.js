@@ -28,8 +28,8 @@ Package.onUse(function (api) {
     'styles/signin.styl',
     'views/login.jade',
     'views/signup.jade',
-    'login.coffee',
-    'signup.coffee',
+    'controllers/login.coffee',
+    'controllers/signup.coffee',
     'routes.coffee'
   ], 'client');
 
