@@ -9,9 +9,13 @@ Package.onUse(function(api) {
 
   api.use([
     'mquandalle:jade',
+    'stylus',
     'blaze-html-templates'
   ], 'client');
 
-  api.addFiles(['loading/loading.jade'], 'client');
+  api.addFiles([
+    'loading/loading.jade',
+    'loading/loading.styl'
+  ], 'client');
 
 });
