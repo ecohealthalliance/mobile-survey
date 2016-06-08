@@ -16,3 +16,5 @@ template(name="form_details")
                 +questions_add form=form questions=questionsCollection
             .col-md-8
               +questions form=form survey=survey questions=questionsCollection
+      else
+       +loading
