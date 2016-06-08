@@ -39,10 +39,7 @@ template(name="form_edit")
                       .tokenized.main
                         i#searchIcon.fa.fa-search
                         input#searchBar.input-sm(name='searchBar', placeholder='Search for an address or click on the map')
-                        if isAddressSearching
-                          i.fa.fa-spinner.fa-spin.address-searching-spinner.visible
-                        else
-                          i.fa.fa-spinner.fa-spin.address-searching-spinner.invisible
+                        +loading classes=loadingClasses
                   .col-sm-12.clearfix
                     input#radiusTrigger.form-control.input-sm.inline-30(
                       type='number'

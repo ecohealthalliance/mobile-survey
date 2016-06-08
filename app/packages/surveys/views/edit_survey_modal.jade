@@ -33,5 +33,5 @@ template(name="edit_survey_modal")
               | Save Survey
             else
               | Add Survey
-            unless saving
-              i.mdi.mdi-spinner.mdi-animated
+            if saving
+              +loading inButton=true
