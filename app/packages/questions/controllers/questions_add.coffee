@@ -40,6 +40,8 @@ Template.questions_add.events
   'click .type': (event, instance) ->
     instance.type.set $(event.currentTarget).data 'type'
   'submit form': (event, instance) ->
+    if event.isDefaultPrevented() # If form is invalid
+      return
     event.preventDefault()
     instance.submitting.set true
     form = event.currentTarget
@@ -90,12 +92,10 @@ Template.questions_add.events
           objectId: question.id
           order: ++lastItemOrder or 1
           text: question.get 'text'
+        instance.$('#question-form-add').validator('destroy')
         toastr.success 'Question added'
       .fail (error) ->
         toastr.error error.message
 
   'click .add-choice': (event, instance)->
     instance.choices.insert {}
-
-  Template.questions_add.onDestroyed ->
-    @$('#question-form-add').validator('destroy')

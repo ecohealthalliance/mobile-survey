@@ -275,6 +275,8 @@ Template.form_edit.events
     addMarker(latLng, true)
 
   'submit form': (event, instance)->
+    if event.isDefaultPrevented() # If form is invalid
+      return
     event.preventDefault()
     form = event.currentTarget
     trigger = null
@@ -305,6 +307,7 @@ Template.form_edit.events
       title: form.name.value
       trigger: trigger
 
+    instance.$('.edit-form').validator('destroy')
     form = instance.form
     if form
       form.update(props)
@@ -330,6 +333,7 @@ Template.form_edit.events
 Template.form_edit.onRendered ->
   # the map is recreated each time the page is rendered, so clear any old
   # marker/shape
+
   _geofenceMarker = null
   _geofenceShape = null
 
