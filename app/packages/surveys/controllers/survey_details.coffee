@@ -32,6 +32,7 @@ Template.survey_details.onCreated ->
 Template.survey_details.helpers
   survey: ->
     Template.instance().surveyAttrs.get()
+
   forms: ->
     Template.instance().forms?.find {}, sort: {order: 1}
 

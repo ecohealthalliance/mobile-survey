@@ -18,15 +18,15 @@ template(name="survey_details")
               li.form
                 h4
                   span.trigger(class=trigger.type)
-                  span=title
                   a(href="{{pathFor 'form_details' id=../survey.id formId=parseId}}")
-                    i.fa.fa-link
+                    span=title
                 if questions
                   ul.questions.list-unstyled
                     each questions
                       li.question
-                        span.question-type(class=questionType)
-                        span=text
+                        span.question-type(class=type)
+                        a(href="{{pathFor 'questions_edit' id=../../survey.id formId=../parseId questionId=parseId}}")
+                          span=text
         else
           p This survey currently has no forms.
       else
