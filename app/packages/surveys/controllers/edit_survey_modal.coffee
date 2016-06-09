@@ -29,7 +29,7 @@ afterSurveySave = (isNewSurvey, survey, instance, event) ->
     window.setTimeout(->
       # Wait for modal to hide so the backdrop won't get stuck open.
       toastr.success 'Success'
-      FlowRouter.go '/admin/surveys/' + survey.id
+      FlowRouter.go '/surveys/' + survey.id
     , 300)
   else
     # Update the existing details

@@ -126,7 +126,7 @@ Template.questions_edit.events
 
     instance.question.get().save(question).then ->
       data = instance.data
-      FlowRouter.go("/admin/surveys/#{data.id}/forms/#{data.formId}")
+      FlowRouter.go("/surveys/#{data.id}/forms/#{data.formId}")
 
   'click .add-choice': (event, instance)->
     instance.choices.insert {}

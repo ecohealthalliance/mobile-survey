@@ -23,4 +23,4 @@ Template.form_details.events
     .then (form) ->
       form.delete()
     .then ->
-      FlowRouter.go "/admin/surveys/#{survey.id}"
+      FlowRouter.go "/surveys/#{survey.id}"

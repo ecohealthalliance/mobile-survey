@@ -3,7 +3,7 @@ Meteor.startup ->
     if Meteor.userId()
       curentPath = FlowRouter.current().path
       if curentPath == '/login'
-        FlowRouter.go '/admin/surveys'
+        FlowRouter.go '/surveys'
       else
         FlowRouter.go curentPath
     else
@@ -13,7 +13,6 @@ Meteor.startup ->
 exposed = FlowRouter.group {}
 
 adminRoutes = FlowRouter.group
-  prefix: '/admin'
   name: 'admin'
   triggersEnter: [ ->
     unless Meteor.loggingIn() or Meteor.userId()
