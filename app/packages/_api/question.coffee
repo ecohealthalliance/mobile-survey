@@ -1,9 +1,13 @@
+{ setAdminACL } = require 'meteor/gq:helpers'
+
 Question = Parse.Object.extend 'Question',
   create: (props, lastQuestionOrder, form) ->
     question = @
     props.order = ++lastQuestionOrder or 1
     props.createdBy = Parse.User.current()
-    question.save(props)
+    setAdminACL(question)
+      .then ->
+        question.save(props)
       .then ->
         question.addToForm(form)
       .then ->

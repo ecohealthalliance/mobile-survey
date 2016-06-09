@@ -6,6 +6,7 @@ Template.survey_details.onCreated ->
   @forms = new Meteor.Collection null
   @fetched = new ReactiveVar false
   @active = new ReactiveVar @survey.get 'active'
+  @activating = new ReactiveVar false
   instance = @
   @survey.getForms()
     .then (forms) ->
@@ -43,13 +44,21 @@ Template.survey_details.helpers
   activateButtonClass: ->
     if Template.instance().active.get() then "mdi-arrow-down-bold-circle-outline" else "mdi-arrow-up-bold-circle-outline"
 
+  activating: ->
+    Template.instance().activating.get()
+
 Template.survey_details.events
   'click .activate': (event, instance)->
     activeState = instance.active
     activeState.set not activeState.get()
     props =
       active: activeState.get()
-    instance.survey.save(props).then (survey) ->
-      state = (if activeState.get() then "activated" else "deactivated")
-      toastr.success("You have " + state + " your survey.")
-      FlowRouter.go("/admin/surveys/#{instance.survey.id}")
+    instance.survey.save(props)
+      .then (survey) ->
+        instance.activating.set true
+        survey.setUserACL(activeState.get())
+      .then ->
+        instance.activating.set false
+        state = (if activeState.get() then "activated" else "deactivated")
+        toastr.success("You have " + state + " your survey.")
+        FlowRouter.go("/admin/surveys/#{instance.survey.id}")

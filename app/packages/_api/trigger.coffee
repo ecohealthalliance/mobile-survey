@@ -1,8 +1,12 @@
+{ setAdminACL } = require 'meteor/gq:helpers'
+
 Trigger = Parse.Object.extend 'Trigger',
   create: (props, form) ->
     trigger = @
-    @setProperties props
-    @save()
+    trigger.setProperties props
+    setAdminACL(trigger)
+      .then ->
+        trigger.save()
       .then ->
         trigger.addToForm(form)
       .then ->

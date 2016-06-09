@@ -1,6 +1,6 @@
 Trigger = require './trigger'
 Question = require './question'
-{ buildMeteorCollection } = require 'meteor/gq:helpers'
+{ buildMeteorCollection, setAdminACL, setUserACL } = require 'meteor/gq:helpers'
 
 Form = Parse.Object.extend 'Form',
   create: (props) ->
@@ -9,11 +9,15 @@ Form = Parse.Object.extend 'Form',
     # so they aren't saved to form
     triggerProps = props.trigger
     delete props.trigger
-    @save(props)
+    setAdminACL(form)
+      .then ->
+        form.save(props)
       .then ->
         form.addTrigger(triggerProps)
       .then ->
         form
+      .fail (err) ->
+        console.log err
 
   getQuestions: (returnMeteorCollection, collection, limit) ->
     query = @relation('questions').query()
@@ -100,7 +104,7 @@ Form = Parse.Object.extend 'Form',
       .then (trigger) ->
         form.getQuestions()
       .then (questions) ->
-        _.each questions, (question) ->
+        questions.forEach (question) ->
           question.delete(deleted)
       .then ->
         form.set 'deleted', deleted
@@ -120,5 +124,23 @@ Form = Parse.Object.extend 'Form',
         _.each questions, (question) -> question.destroy()
       .then ->
         form.destroy()
+
+  setUserACL: (user, access) ->
+    form = @
+    setUserACL form, user, access
+    form.save()
+      .then ->
+        form.getTrigger()
+      .then (trigger) ->
+        setUserACL trigger, user, access
+        trigger.save()
+      .then ->
+        form.getQuestions()
+      .then (questions) ->
+        questions.forEach (question) ->
+          setUserACL question, user, access
+          question.save()
+      .fail (err) ->
+        console.log err
 
 module.exports = Form

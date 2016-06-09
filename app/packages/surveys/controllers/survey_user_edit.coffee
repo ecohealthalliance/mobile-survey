@@ -1,3 +1,5 @@
+{ setAdminACL, setUserACL, getRole } = require 'meteor/gq:helpers'
+
 Template.survey_user_edit.onRendered ->
   @survey = @data.survey
 
@@ -11,6 +13,7 @@ Template.survey_user_edit.events
     userProps.password = "changeme"
     currentUserSessionToken = Parse.User.current().getSessionToken()
     newUser = null
+    survey = instance.survey
     query = new Parse.Query(Parse.User)
     query.equalTo("email", userProps.email)
     query.first()
@@ -18,29 +21,28 @@ Template.survey_user_edit.events
         if user
           user
         else
-          Parse.User.signUp(userProps.username, userProps.password, userProps)
+          user = new Parse.User()
+          setAdminACL(user)
+            .then ->
+              user.set 'username', userProps.username
+              user.set 'email', userProps.username
+              user.set 'password', userProps.password
+              user.set 'role', 'user'
+              user.signUp()
       .then (user)->
         newUser = user
         Parse.User.become(currentUserSessionToken)
-        query = new Parse.Query(Parse.Role)
-        query.equalTo("name", "admin")
-        query.first()
-      .then (adminRole)->
-        instance.survey.relation('invitedUsers').add(newUser)
-        acl = instance.survey.getACL()
-        acl.setReadAccess(newUser, true)
-        instance.survey.setACL(acl)
-        instance.survey.save()
       .then ->
-        query = new Parse.Query(Parse.Role)
-        query.equalTo("name", "user")
-        query.first()
+        survey.relation('invitedUsers').add(newUser)
+        survey.save()
+      .then ->
+        getRole('user')
       .then (role)->
         role.relation("users").add(newUser)
         role.save()
       .then ->
         toastr.success("User added")
-        FlowRouter.go("/admin/surveys/#{instance.survey.id}/users")
+        FlowRouter.go("/admin/surveys/#{survey.id}/users")
       .fail (err)->
         console.error(err)
         toastr.error(err.message)

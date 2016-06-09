@@ -1,11 +1,16 @@
 Form = require './form'
-{ buildMeteorCollection } = require 'meteor/gq:helpers'
+{ buildMeteorCollection, setAdminACL, setUserACL } = require 'meteor/gq:helpers'
 
 Survey = Parse.Object.extend 'Survey',
   validate: (props) ->
     if props?.title?.length == 0
       return new Parse.Error(Parse.VALIDATION_ERROR, 'The title field cannot be empty')
     Parse.Object.prototype.validate.call(this, props)
+
+  create: (props) ->
+    setAdminACL(@)
+      .then =>
+        @save props
 
   getForms: (returnMeteorCollection, collection, limit) ->
     query = @relation('forms').query()
@@ -98,5 +103,25 @@ Survey = Parse.Object.extend 'Survey',
         _.each forms, (form) -> form.remove()
       .then ->
         survey.destroy()
+
+  ###
+    Set read rights of a user
+    @param [Boolean] access, Rights
+  ###
+  setUserACL: (access) ->
+    survey = @
+    query = @relation('invitedUsers').query()
+    query.find()
+      .then (users) ->
+        users.forEach (user) ->
+          setUserACL survey, user, access
+          survey.save()
+            .then ->
+              survey.getForms()
+            .then (forms) ->
+              forms.forEach (form) ->
+                form.setUserACL user, access
+            .fail (err) ->
+              console.log err
 
 module.exports = Survey
