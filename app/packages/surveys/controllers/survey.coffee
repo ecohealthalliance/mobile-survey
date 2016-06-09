@@ -1,5 +1,4 @@
 {Survey} = require 'meteor/gq:api'
-{transformObj} = require 'meteor/gq:helpers'
 
 Template.survey.onCreated ->
   @fetched = new ReactiveVar false
@@ -8,9 +7,7 @@ Template.survey.onCreated ->
   query = new Parse.Query Survey
   query.get(surveyId)
     .then (survey) ->
-      instance.survey = survey
-      attributes = transformObj survey
-      instance.surveyAttrs = new ReactiveVar attributes
+      instance.surveyAttrs = new ReactiveVar instance.survey.toJSON()
       instance.fetched.set true
     .fail (error) ->
       toastr error.message

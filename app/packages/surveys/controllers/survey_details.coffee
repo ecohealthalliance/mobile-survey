@@ -1,5 +1,3 @@
-{transformObj} = require 'meteor/gq:helpers'
-
 Template.survey_details.onCreated ->
   @survey = @data.survey
   @surveyAttrs = @data.surveyAttrs
@@ -12,7 +10,7 @@ Template.survey_details.onCreated ->
     .then (forms) ->
       if forms.length
         _.each forms, (form) ->
-          formProps = transformObj form
+          formProps = form.toJSON()
           form.getTrigger()
             .then (trigger) ->
               formProps.trigger = trigger.attributes
@@ -20,7 +18,7 @@ Template.survey_details.onCreated ->
             .then (questions) ->
               formQuestions = []
               _.each questions, (question) ->
-                questionProps = transformObj question
+                questionProps = question.toJSON()
                 formQuestions.push questionProps
               formProps.questions = formQuestions
               instance.forms.insert formProps

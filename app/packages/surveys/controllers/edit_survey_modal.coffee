@@ -1,20 +1,19 @@
 {Survey} = require 'meteor/gq:api'
 validator = require 'bootstrap-validator'
-{transformObj} = require 'meteor/gq:helpers'
 
 Template.edit_survey_modal.onCreated ->
   @surveys = @data.surveys
   @saving = new ReactiveVar false
   @survey = @data.survey
   @surveyAttrs = @data.surveyAttrs
-  @surveyParseId = new ReactiveVar @survey?.id
+  @surveyObjectId = new ReactiveVar @survey?.id
   @fetched = new ReactiveVar false
 
 Template.edit_survey_modal.onRendered ->
   @$('#edit-survey-modal').validator()
   $('#edit-survey-modal').on 'show.bs.modal', (event) =>
     @fetched.set false
-    @surveyParseId.set $(event.relatedTarget).data 'id'
+    @surveyObjectId.set $(event.relatedTarget).data 'id'
 
 Template.edit_survey_modal.helpers
   saving: ->
@@ -33,8 +32,7 @@ afterSurveySave = (isNewSurvey, survey, instance, event) ->
     , 300)
   else
     # Update the existing details
-    attributes = transformObj survey
-    instance.surveyAttrs.set attributes
+    instance.surveyAttrs.set survey.toJSON()
 
 Template.edit_survey_modal.events
   'submit form': (event, instance) ->

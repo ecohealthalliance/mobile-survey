@@ -6,14 +6,14 @@
   @param [String] relatedObjString, property of parenObj containing relation
 ###
 updateSortOrder = (event, parentObj, relatedObjString) ->
-  objId    = $(event.item).data 'id'
+  objectId = $(event.item).data 'id'
   oldOrder = ++event.oldIndex
   newOrder = ++event.newIndex
   relation = parentObj.relation relatedObjString
   query    = relation.query()
 
   # Get the moved object from Parse server
-  query.get(objId).then (obj) ->
+  query.get(objectId).then (obj) ->
     movingUp = obj.get('order') > newOrder
     # Build query to get effected objects in list
     query = relation.query()
@@ -50,19 +50,8 @@ updateSortOrder = (event, parentObj, relatedObjString) ->
 buildMeteorCollection = (objs, collection) ->
   objCollection = collection or new Meteor.Collection null
   _.each objs, (obj) ->
-    props = _.extend {}, obj.attributes
-    props.parseId = obj.id
-    objCollection.insert props
+    objCollection.insert obj.toJSON()
   objCollection
-
-###
-  @param [Object]  obj, Parse object to transform
-  @return [Object] Object containing Parse object's attrs including id as parseId
-###
-transformObj = (obj) ->
-  props = _.extend {}, obj.attributes
-  props.parseId = obj.id
-  props
 
 ###
   Accepts Parse object and sets ACL giving users in Admin Role read/write access
@@ -106,7 +95,6 @@ getRole = (role) ->
 module.exports =
   buildMeteorCollection: buildMeteorCollection
   updateSortOrder      : updateSortOrder
-  transformObj         : transformObj
   setAdminACL          : setAdminACL
   setUserACL           : setUserACL
   getRole              : getRole

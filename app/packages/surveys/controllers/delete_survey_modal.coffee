@@ -14,7 +14,7 @@ Template.delete_survey_modal.helpers
 Template.delete_survey_modal.events
   'submit form': (event, instance) ->
     event.preventDefault()
-    instance.data.surveys.remove parseId: instance.surveyId
+    instance.data.surveys.remove objectId: instance.surveyId
     query = new Parse.Query Survey
     query.get(instance.surveyId)
       .then (survey) ->
