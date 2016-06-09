@@ -17,8 +17,12 @@ Template.question_details_edit.helpers
   types: -> questionTypes
   type: ->
     Template.instance().type.get()
-  question: (key) ->
-    Template.instance().question.get()?.attributes
+  question: ->
+    instance = Template.instance()
+    if instance.question.get()
+      Meteor.defer ->
+        instance.$('#question-form-edit').validator()
+      instance.question.get()?.attributes
   selected: ->
     @name is Template.instance().type.get()
   choices: ->
