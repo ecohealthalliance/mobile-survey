@@ -20,6 +20,6 @@ Package.onUse(function(api) {
     'trigger.coffee'
   ], 'client');
 
-  api.mainModule('api.coffee', 'client');
+  api.mainModule('index.coffee', 'client');
 
 });
