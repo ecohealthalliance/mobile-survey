@@ -20,6 +20,7 @@ Package.onUse(function(api) {
     'styles/main.styl',
     'views/survey.jade',
     'views/survey_users.jade',
+    'views/survey_results.jade',
     'controllers/survey_users.coffee',
     'views/survey_user_edit.jade',
     'controllers/survey_user_edit.coffee',
@@ -32,6 +33,7 @@ Package.onUse(function(api) {
     'controllers/edit_survey_modal.coffee',
     'controllers/delete_survey_modal.coffee',
     'controllers/surveys.coffee',
+    'controllers/survey_results.coffee',
   ], 'client');
 
 });

@@ -3,17 +3,16 @@ Template.survey_users.onCreated ->
   @fetched = new ReactiveVar false
 Template.survey_users.onRendered ->
   @survey = @data.survey
-  @users.find().map (user)=>
-    @users.remove user
-  @fetched.set(false)
+  @fetched.set false
+  @users.remove {}
   @survey.relation('invitedUsers').query().find()
     .then (result) =>
-      result.forEach (item)=>
+      result.forEach (item) =>
         @users.insert item.toJSON()
-    .fail (err)->
+    .fail (err) ->
       toastr.error err.message
     .always =>
-      @fetched.set(true)
+      @fetched.set true
 
 Template.survey_users.helpers
   users: ->
