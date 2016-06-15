@@ -104,14 +104,20 @@ Survey = Parse.Object.extend 'Survey',
       .then ->
         survey.destroy()
 
+  getInvitedUsers: ->
+    relation = @relation 'invitedUsers'
+    query = relation.query()
+    query.find()
+      .then (users) ->
+        users
+
   ###
     Set read rights of a user
     @param [Boolean] access, Rights
   ###
   setUserACL: (access) ->
     survey = @
-    query = @relation('invitedUsers').query()
-    query.find()
+    @getInvitedUsers()
       .then (users) ->
         users.forEach (user) ->
           setUserACL survey, user, access

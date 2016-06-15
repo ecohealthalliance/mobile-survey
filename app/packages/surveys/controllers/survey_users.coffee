@@ -5,9 +5,9 @@ Template.survey_users.onRendered ->
   @fetched.set false
   if @survey.has 'invitedUsers'
     @users = new Meteor.Collection(null)
-    @survey.relation('invitedUsers').query().find()
-      .then (result) =>
-        result.forEach (item)=>
+    @survey.getInvitedUsers()
+      .then (users) =>
+        users.forEach (item)=>
           @users.insert item.toJSON()
       .fail (err)->
         toastr.error err.message
