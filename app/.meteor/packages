@@ -25,6 +25,7 @@ dapearce:material-icons
 fortawesome:fontawesome@4.5.0
 twbs:bootstrap
 momentjs:moment
+jparker:crypto-md5
 
 gq:parse
 gq:helpers
@@ -36,6 +37,7 @@ gq:layout
 gq:surveys
 gq:forms
 gq:questions
+gq:notifications
 
 # testing
 gq:fixtures
