@@ -1,7 +1,13 @@
 { setAdminACL, setUserACL, getRole } = require 'meteor/gq:helpers'
 
-Template.survey_user_edit.onRendered ->
+Template.survey_user_edit.onCreated ->
   @survey = @data.survey
+  @users = new Meteor.Collection null
+  instance = @
+  @survey.getInvitedUsers()
+    .then (users) ->
+      _.each users, (user) ->
+        instance.users.insert user.toJSON()
 
 Template.survey_user_edit.events
   'submit form': (event, instance)->
@@ -19,7 +25,7 @@ Template.survey_user_edit.events
     query.first()
       .then (user)->
         if user
-          user
+          newUser = user
         else
           user = new Parse.User()
           setAdminACL(user)
@@ -30,21 +36,24 @@ Template.survey_user_edit.events
               user.set 'role', 'user'
               user.signUp()
       .then (user)->
-        newUser = user
-        Parse.User.become(currentUserSessionToken)
+        if user then newUser = user
+        Parse.User.become currentUserSessionToken
       .then ->
-        survey.relation('invitedUsers').add(newUser)
+        survey.relation('invitedUsers').add newUser
         survey.save()
       .then ->
         getRole('user')
-      .then (role)->
-        role.relation("users").add(newUser)
+      .then (role) ->
+        role.relation("users").add newUser
         role.save()
       .then ->
-        toastr.success("User added")
-        FlowRouter.go("/surveys/#{survey.id}/users")
+        if instance.users.findOne('objectId': newUser.id)
+          email = newUser.get 'email'
+          toastr.warning "#{email} has already been added to the survey"
+        else
+          toastr.success "User added"
+        FlowRouter.go "/surveys/#{survey.id}/users"
       .fail (err)->
-        console.error(err)
         toastr.error(err.message)
 
   'click #cancel': (event, instance) ->
