@@ -1,14 +1,6 @@
 {Survey, Form, Question} = require 'meteor/gq:api'
 validator = require 'bootstrap-validator'
-
-Template.registerHelper 'match', (val, {hash:{regex}})->
-  val?.match new RegExp regex
-
-Template.registerHelper 'isEmpty', (val)->
-  if val.count
-    val.count() == 0
-  else
-    _.isEmpty val
+questionTypes = require '../imports/question_types'
 
 Template.questions_add.onCreated ->
   @form = @data.form
@@ -22,41 +14,7 @@ Template.questions_add.onRendered ->
   @$('#question-form-add').validator()
 
 Template.questions_add.helpers
-  types: ->
-    [
-      {
-        text: 'Multiple Choice'
-        name: 'multipleChoice'
-      }
-      {
-        text: 'Checkboxes'
-        name: 'checkboxes'
-      }
-      {
-        text: 'Short Answer'
-        name: 'shortAnswer'
-      }
-      {
-        text: 'Long Answer'
-        name: 'longAnswer'
-      }
-      {
-        text: 'Number'
-        name: 'number'
-      }
-      {
-        text: 'Date'
-        name: 'date'
-      }
-      {
-        text: 'Datetime'
-        name: 'datetime'
-      }
-      {
-        text: 'Scale'
-        name: 'scale'
-      }
-    ]
+  types: -> questionTypes
   type: ->
     Template.instance().type.get()
   selected: ->

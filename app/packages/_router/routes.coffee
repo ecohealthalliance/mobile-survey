@@ -82,7 +82,7 @@ adminRoutes.route '/surveys/:id/forms/:formId',
 
 # Edit Question
 adminRoutes.route '/surveys/:id/forms/:formId/questions/:questionId/edit',
-  name: 'questions_edit'
+  name: 'question_details'
   action: (params) ->
     BlazeLayout.render 'layout',
       main: 'survey'

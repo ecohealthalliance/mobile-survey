@@ -18,6 +18,8 @@ Template.survey.helpers
     Template.instance().survey
   title: ->
     Template.instance().surveyAttrs.get().title
+  active: ->
+    Template.instance().surveyAttrs.get().active
   surveyAttrs: ->
     Template.instance().surveyAttrs
   data: ->

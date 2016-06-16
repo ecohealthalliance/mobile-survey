@@ -1,0 +1,9 @@
+template(name="question_details")
+  with question
+
+    if surveyIsActive
+      h4=text
+    else
+      +question_details_edit survey=survey question=question
+  else
+    | Loading…
