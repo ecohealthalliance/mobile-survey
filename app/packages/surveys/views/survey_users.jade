@@ -11,5 +11,7 @@ template(name="survey_users")
           each users
             li.list-group-item.form-link
               span= email
+              .actions
+                button.btn.btn-danger.btn-sm.remove-user Remove from Survey
       else
         p This survey has no users
