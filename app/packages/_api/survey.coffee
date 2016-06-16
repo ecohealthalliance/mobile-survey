@@ -105,13 +105,36 @@ Survey = Parse.Object.extend 'Survey',
         survey.destroy()
 
   ###
+    Get users invited to a survey
+    @return [Promise] Array of user Parse objects
+  ###
+  getInvitedUsers: ->
+    relation = @relation 'invitedUsers'
+    query = relation.query()
+    query.find()
+      .then (users) ->
+        users
+
+  ###
+    Remove users from a survey
+    @param [Object] user, Parse object of user to remove
+  ###
+  removeInvitedUser: (userId) ->
+    query = new Parse.Query Parse.User
+    query.equalTo 'objectId', userId
+    query.first()
+      .then (user) =>
+        relation = @relation 'invitedUsers'
+        relation.remove user
+        @save()
+
+  ###
     Set read rights of a user
     @param [Boolean] access, Rights
   ###
   setUserACL: (access) ->
     survey = @
-    query = @relation('invitedUsers').query()
-    query.find()
+    @getInvitedUsers()
       .then (users) ->
         users.forEach (user) ->
           setUserACL survey, user, access
