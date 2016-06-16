@@ -8,24 +8,33 @@ Package.onUse(function (api) {
 
   api.versionsFrom('1.2.1');
 
-  api.use('coffeescript');
-  api.use('ecmascript');
+  api.use([
+    'coffeescript',
+    'ecmascript'
+  ]);
 
-  api.use('kadira:flow-router', 'client');
-  api.use('stylus', 'client');
-  api.use('templating', 'client');
-  api.use('mquandalle:jade', 'client');
+  api.use([
+    'kadira:flow-router',
+    'stylus',
+    'templating',
+    'mquandalle:jade'
+  ], 'client');
 
-  api.use('http', 'server');
-  api.addFiles('styles/signin.styl', 'client');
+  api.use([
+    'http'
+  ], 'server');
 
-  api.addFiles('views/login.jade', 'client');
-  api.addFiles('views/signup.jade', 'client');
+  api.addFiles([
+    'styles/signin.styl',
+    'views/login.jade',
+    'views/signup.jade',
+    'login.coffee',
+    'signup.coffee',
+    'routes.coffee'
+  ], 'client');
 
-  api.addFiles('login.coffee', 'client');
-  api.addFiles('signup.coffee', 'client');
+  api.addFiles([
+    'openam.coffee'
+  ], 'server');
 
-  api.addFiles('routes.coffee', 'client');
-
-  api.addFiles('openam.coffee', 'server');
 });
