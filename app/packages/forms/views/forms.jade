@@ -1,11 +1,11 @@
 template(name="forms")
   .survey-admin--content
     h3 Forms
-      button#add-form.btn.btn-sm(
-        href="{{pathFor 'form_edit' id=survey.id}}"
-        disabled="{{#if surveyActive}} disabled {{/if}}")
-        i.mdi.mdi-plus-circle
-        | Add Form
+      unless surveyIsActive
+        a#add-form.btn.btn-sm(
+          href="{{pathFor 'form_edit' id=survey.id}}")
+          i.mdi.mdi-plus-circle
+          | Add Form
 
     if fetched
       if hasForms
@@ -16,12 +16,10 @@ template(name="forms")
                 i.mdi.mdi-drag
               a(href="{{pathFor 'form_details' id=surveyId formId=objectId}}")=title
               .actions
-                button.btn.btn-default.action.edit(
-                  disabled="{{#if surveyActive}} disabled {{/if}}"
-                  href="forms/#{objectId}/edit")
-                  | Edit
-                button.btn.btn-danger.action.delete.delete-form(
-                  disabled="{{#if surveyActive}} disabled {{/if}}")
-                  | Delete
+                unless surveyIsActive
+                  button.btn.btn-default.action.edit(href="forms/#{objectId}/edit")
+                    | Edit
+                  button.btn.btn-danger.action.delete.delete-form
+                    | Delete
       else
         p This survey has no forms

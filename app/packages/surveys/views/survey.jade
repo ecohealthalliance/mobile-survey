@@ -6,12 +6,12 @@ template(name="survey")
           .navbar-header
             h2=title
             .survey-header-actions
-              button.btn.btn-default.btn-sm.pull-right(
-                data-toggle="modal"
-                data-target="#edit-survey-modal"
-                data-id=survey.id
-                disabled="{{#if surveyActive}} disabled {{/if}}")
-                | Edit
+              unless surveyIsActive
+                button.btn.btn-default.btn-sm.pull-right(
+                  data-toggle="modal"
+                  data-target="#edit-survey-modal"
+                  data-id=survey.id)
+                  | Edit
 
           ul.nav.navbar-nav.navbar-right
             li(class="{{isActiveRoute 'survey_details'}}")
@@ -20,8 +20,9 @@ template(name="survey")
               a.survey-admin--view-link(href="{{pathFor 'forms' id=survey.id}}" data-page='forms') Forms
             li(class="{{isActiveRoute 'survey_users'}}")
               a.survey-admin--view-link(href="{{pathFor 'survey_users' id=survey.id}}" data-page='users') Users
-            li(class="{{isActiveRoute 'survey_results'}}")
-              a.survey-admin--view-link(href="{{pathFor 'survey_results' id=survey.id}}" data-page='results') Results
+            if surveyIsActive
+              li(class="{{isActiveRoute 'survey_results'}}")
+                a.survey-admin--view-link(href="{{pathFor 'survey_results' id=survey.id}}" data-page='results') Results
 
       .container-fluid-padded
         if isActiveRoute 'survey_details'

@@ -1,9 +1,8 @@
 template(name="survey_users")
   .survey-admin--content
     h3 Users
-      button#add-user.btn.btn-sm(
-        href="{{pathFor 'survey_user_edit' id=survey.id}}"
-        disabled="{{#if surveyActive}} disabled {{/if}}")
+      a#add-user.btn.btn-sm(
+        href="{{pathFor 'survey_user_edit' id=survey.id}}")
         i.mdi.mdi-plus-circle
         | Add User
 

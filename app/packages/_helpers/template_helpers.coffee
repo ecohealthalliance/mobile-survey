@@ -1,7 +1,7 @@
 Template.registerHelper 'fetched', ->
   Template.instance().fetched.get()
 
-Template.registerHelper 'surveyActive', ->
+Template.registerHelper 'surveyIsActive', ->
   Template.instance().survey.get 'active'
 
 Template.registerHelper 'match', (val, {hash:{regex}})->

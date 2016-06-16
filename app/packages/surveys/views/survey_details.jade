@@ -25,8 +25,11 @@ template(name="survey_details")
                     each questions
                       li.question
                         span.question-type(class=type)
-                        a(href="{{pathFor 'questions_edit' id=../../survey.id formId=../parseId questionId=parseId}}")
+                        if surveyIsActive
                           span=text
+                        else
+                          a(href="{{pathFor 'question_details' id=../../survey.id formId=../parseId questionId=parseId}}")
+                            span=text
         else
           p This survey currently has no forms.
       else
