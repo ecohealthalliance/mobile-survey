@@ -113,7 +113,7 @@ Template.survey_results.events
         selectedValues.push this.value
     instance.selectedForms.set selectedValues
 
-Template.question_details.helpers
+Template.survey_results_question_details.helpers
   _typeToStr: (type) ->
     switch type
       when 'shortAnswer' then 'Short Answer'
@@ -140,7 +140,7 @@ typeGroup = (type, group) ->
   if type in ['date', 'datetime']
     return group is 'date'
 
-Template.question_details.helpers
+Template.survey_results_question_details.helpers
   _typeGroup: typeGroup
 
 Template.survey_result.helpers

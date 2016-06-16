@@ -18,12 +18,12 @@ template(name="survey_results")
           each _formsFiltered
             h4= title
             each _questionsFiltered this
-              +question_details
+              +survey_results_question_details
               each _usersFiltered this
                 with _answer this
                   +survey_result
 
-template(name="question_details")
+template(name="survey_results_question_details")
   h5= text
   p Type: {{_typeToStr type}}
     if required
@@ -37,11 +37,11 @@ template(name="question_details")
   else if _typeGroup type 'multiple'
     p Choices:
       each properties.choices
-        span {{this}}, 
+        span {{this}},
   else if _typeGroup type 'choice'
     p Choices:
       each properties.choices
-        span {{this}}, 
+        span {{this}},
 
 template(name="survey_result")
   .answer
@@ -59,4 +59,4 @@ template(name="survey_result")
     if _typeGroup ../../type 'multiple'
       span
         each answer
-          | {{this}}, 
+          | {{this}},
