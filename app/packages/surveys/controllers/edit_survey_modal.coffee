@@ -36,6 +36,8 @@ afterSurveySave = (isNewSurvey, survey, instance, event) ->
 
 Template.edit_survey_modal.events
   'submit form': (event, instance) ->
+    if event.isDefaultPrevented() # If form is invalid
+      return
     event.preventDefault()
     instance.saving.set true
     surveyProps = _.object $(event.target).serializeArray().map(
@@ -57,6 +59,7 @@ Template.edit_survey_modal.events
       survey = new Survey()
       survey.create(surveyProps)
         .then (survey) ->
+          instance.$('#edit-survey-modal').validator('destroy')
           afterSurveySave(true, survey, instance, event)
         .fail (error) ->
           toastr.error(error.message)

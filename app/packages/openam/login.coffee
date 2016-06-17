@@ -1,3 +1,5 @@
+validator = require 'bootstrap-validator'
+
 # Log out the meteor user if the parse user is not logged in.
 Meteor.startup ->
   Accounts.onLogin ->
@@ -6,10 +8,14 @@ Meteor.startup ->
         Meteor.logout()
     , 1000
 
+Template.login.onRendered ->
+  @$('#form-signin').validator()
+
 Template.login.events
   'submit form': (event, instance) ->
+    if event.isDefaultPrevented() # If form is invalid
+      return
     event.preventDefault()
-
     form = event.currentTarget
     email = form.username.value.trim()
     passw = form.password.value.trim()

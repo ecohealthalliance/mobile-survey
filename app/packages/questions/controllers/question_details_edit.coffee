@@ -17,8 +17,12 @@ Template.question_details_edit.helpers
   types: -> questionTypes
   type: ->
     Template.instance().type.get()
-  question: (key) ->
-    Template.instance().question.get()?.attributes
+  question: ->
+    instance = Template.instance()
+    if instance.question.get()
+      Meteor.defer ->
+        instance.$('#question-form-edit').validator()
+      instance.question.get()?.attributes
   selected: ->
     @name is Template.instance().type.get()
   choices: ->
@@ -35,12 +39,17 @@ Template.question_details_edit.events
     instance.choices.update($(event.currentTarget).data('id'),
       name: $(event.currentTarget).val()
     )
+
   'click .delete-choice': (event, instance)->
     instance.choices.remove($(event.currentTarget).data('id'))
+
   'click .type': (event, instance) ->
     typeString = $(event.currentTarget).data 'type'
     instance.type.set(typeString)
+
   'submit #question-form-edit': (event, instance) ->
+    if event.isDefaultPrevented() # If form is invalid
+      return
     event.preventDefault()
     instance.submitting.set true
     form = event.currentTarget
@@ -84,9 +93,7 @@ Template.question_details_edit.events
     instance.question.get().save(question).then ->
       data = instance.data
       FlowRouter.go("/surveys/#{data.id}/forms/#{data.formId}")
+      instance.$('#question-form-edit').validator('destroy')
 
   'click .add-choice': (event, instance)->
     instance.choices.insert {}
-
-  Template.question_details_edit.onDestroyed ->
-    @$('#question-form-edit').validator('destroy')
