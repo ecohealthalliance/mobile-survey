@@ -10,9 +10,10 @@ Package.onUse(function(api) {
   api.use('stylus');
 
   api.addFiles([
-    'globals.styl',
-    'mixins.styl',
     'variables.styl',
+    'globals.styl',
+    'lists.styl',
+    'index.styl',
   ], 'client', {isImport: true});
 
 });

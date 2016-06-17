@@ -18,7 +18,7 @@ Package.onUse(function(api) {
   ], 'client');
 
   api.addFiles([
-    'styles/main.styl',
+    'styles/index.styl',
     'views/questions_add.jade',
     'views/question_details.jade',
     'views/question_details_edit.jade',

@@ -18,7 +18,9 @@ Package.onUse(function(api) {
   ], 'client');
 
   api.addFiles([
-    'styles/main.styl',
+    'styles/globals.import.styl',
+    'styles/header.import.styl',
+    'styles/index.styl',
     'views/header.jade',
     'views/layout.jade',
     'controllers/header.coffee',
