@@ -29,6 +29,7 @@ jparker:crypto-md5
 
 gq:parse
 gq:helpers
+gq:components
 gq:router
 gq:openam
 gq:api

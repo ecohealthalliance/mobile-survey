@@ -1,6 +1,5 @@
 template(name="questions_edit")
   with question
-
     .panel.panel-default
       .panel-heading
         h4 Edit question
@@ -63,4 +62,4 @@ template(name="questions_edit")
               span.mdi.mdi-library-check
               | Update Question
   else
-    | Loading…
+    +loading

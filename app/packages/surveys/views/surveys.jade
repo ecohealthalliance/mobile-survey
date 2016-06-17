@@ -17,6 +17,8 @@ template(name="surveys")
                   data-target="#delete-survey-modal"
                   data-id=objectId)
                   | Delete
+    else
+      +loading
 
     +edit_survey_modal surveys=surveyCollection
     +delete_survey_modal surveys=surveyCollection

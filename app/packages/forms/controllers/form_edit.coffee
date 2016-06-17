@@ -198,13 +198,18 @@ Template.form_edit.helpers
   trigger: ->
     Template.instance().trigger
   isAddressSearching: ->
-    Template.instance().isAddressSearching.get()
+
   showingTriggers: ->
     Template.instance().showingTriggers.get()
   triggerTypeState: (type) ->
     type == Template.instance().triggerType.get()
   isEditing: ->
     Template.instance().formId
+  loadingClasses: ->
+    classes = 'address-searching-spinner'
+    if Template.instance().isAddressSearching.get()
+      classes += ' visible'
+    classes
 
 Template.form_edit.events
   'keydown .edit-form': (event, instance) ->

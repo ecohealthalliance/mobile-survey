@@ -42,6 +42,7 @@ fourq:typeahead@1.0.0
 geojson-utils@1.0.8
 gq:api@0.0.1
 gq:base-styles@0.0.1
+gq:components@0.0.1
 gq:fixtures@0.1.0
 gq:forms@0.0.1
 gq:helpers@0.0.1

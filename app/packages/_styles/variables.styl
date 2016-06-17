@@ -1,0 +1,61 @@
+// COLORS
+$primary              = rgba(32, 42, 68, 1)
+$primary-dark         = darken($primary, 20%)
+$primary-light        = rgba(154, 209, 220, 1)
+$primary-trans        = rgba($primary, 0.9)
+$primary-strong       = rgba(55, 54, 44, 1)
+$primary-strong-light = rgba(248, 237, 230, 1)
+$primary-trans-strong = rgba($primary-strong, 0.9)
+$primary-subtle       = lighten($primary, 90%)
+$secondary            = rgba(162, 214, 134, 1)
+$secondary-subtle     = lighten($secondary, 90%)
+$secondary-dark       = rgba(135, 180, 110, 1)
+$secondary-light      = lighten($secondary, 20%)
+$secondary-trans      = rgba($secondary, 0.9)
+
+$background-primary   = lighten(desaturate($primary,40%), 90%)
+$background-secondary = lighten(desaturate($secondary,40%), 90%)
+
+$dd-gray              = #333
+$d-gray               = #999
+$ll-gray              = #f9f9f9
+$l-gray               = #e7e7e7
+$m-gray               = #CCC
+$white-trans          = rgba(255,255,255,.7)
+
+$border-gray          = #DDD
+$border-primary       = lighten($primary-light, 70%)
+$border-primary-l     = lighten($border-primary, 20%)
+$border-primary-d     = darken($border-primary, 20%)
+$highlight-color      = lighten($primary-light, 70%)
+
+$body-text            = $dd-gray
+
+$btn-default          = $secondary
+$confirm              = rgba(103, 169, 104, 1) // Green
+$deny                 = rgba(219, 82, 75, 1) // Red
+$delete               = $deny
+$warning              = rgba(242, 173, 64, 1)
+$connection-warning   = alpha(lighten($warning, 10%), 80%)
+
+$header-BG            = white
+$footer-BG            = white
+$footer-value         = 'dark'
+$header-link-selected = $primary
+$header-link-hover    = $secondary
+$header-link-text     = $primary
+$sub-header-BG        = lighten(alpha($background-primary, 90%),20%)
+
+// Z-index layers
+$cosmos-layer = 3000
+$modal-layer = 2000
+$top-layer = 1000
+$mid-layer = 100
+$bottom-layer = 10
+$page-layer = 0
+
+//Fonts
+$open-sans = 'Open Sans', sans-serif
+
+$header-font = $open-sans
+$body-font = $open-sans
