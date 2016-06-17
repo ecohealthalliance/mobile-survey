@@ -1,7 +1,7 @@
 template(name="survey")
   if fetched
     .survey-admin
-      nav.navbar.navbar-default.survey-admin--nav
+      .header-secondary.clearfix
         .container-fluid-padded
           .navbar-header
             h2=title
@@ -13,16 +13,17 @@ template(name="survey")
                   data-id=survey.id)
                   | Edit
 
-          ul.nav.navbar-nav.navbar-right
-            li(class="{{isActiveRoute 'survey_details'}}")
-              a.survey-admin--view-link(href="{{pathFor 'survey_details' id=survey.id}}" data-page='details') Details
-            li(class="{{isActiveRoute regex='forms|forms_new|form_details'}}")
-              a.survey-admin--view-link(href="{{pathFor 'forms' id=survey.id}}" data-page='forms') Forms
-            li(class="{{isActiveRoute 'survey_users'}}")
-              a.survey-admin--view-link(href="{{pathFor 'survey_users' id=survey.id}}" data-page='users') Users
-            if surveyIsActive
-              li(class="{{isActiveRoute 'survey_results'}}")
-                a.survey-admin--view-link(href="{{pathFor 'survey_results' id=survey.id}}" data-page='results') Results
+          nav
+            ul.nav.navbar-nav.navbar-right.navbar-secondary
+              li(class="{{isActiveRoute 'survey_details'}}")
+                a.survey-admin--view-link(href="{{pathFor 'survey_details' id=survey.id}}" data-page='details') Details
+              li(class="{{isActiveRoute regex='forms|forms_new|form_details'}}")
+                a.survey-admin--view-link(href="{{pathFor 'forms' id=survey.id}}" data-page='forms') Forms
+              li(class="{{isActiveRoute 'survey_users'}}")
+                a.survey-admin--view-link(href="{{pathFor 'survey_users' id=survey.id}}" data-page='users') Users
+              if surveyIsActive
+                li(class="{{isActiveRoute 'survey_results'}}")
+                  a.survey-admin--view-link(href="{{pathFor 'survey_results' id=survey.id}}" data-page='results') Results
 
       .container-fluid-padded
         if isActiveRoute 'survey_details'

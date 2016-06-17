@@ -1,10 +1,36 @@
+.header-primary
+  background $primary-light
+
 .navbar
-  margin-bottom 0
+  margin 0
   padding 0
+  border 0
   border-radius 0
 
-.navbar-default
-  margin 0
+.navbar-primary
+  padding 0
+
+.navbar-nav > li > a
+  color $primary
+  &:hover
+    background $primary-light
+    color white
+
+.navbar-secondary
+  > li
+    margin-left 1px
+    > a
+      padding-top 10px
+      padding-bottom 10px
+      border-top 4px solid transparent
+      &:hover
+        background $border-primary-l
+        color $primary
+    &.active
+      > a
+        background-color $border-primary-l
+        border-color $primary-light
+        transition .3s
 
 .navbar-brand
   padding-left 0
@@ -21,12 +47,13 @@
   .btn
     margin-top 10px
 
-.survey-admin--nav
+.header-secondary
   background white
   border-bottom 3px solid $border-primary-l
   h2
+    margin 0
+    padding-top .5em
     display inline-block
     vertical-align middle
+    font-weight 600
     font-size 1.5em
-    margin 0
-    padding-top .7em
