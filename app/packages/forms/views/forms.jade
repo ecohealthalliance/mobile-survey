@@ -1,17 +1,16 @@
 template(name="forms")
-  .survey-admin--content
-    h3 Forms
+  .header-page
+    .container-fluid-padded
+      h3 Forms
       unless surveyIsActive
-        a#add-form.btn.btn-sm(
-          href="{{pathFor 'form_edit' id=survey.id}}")
-          i.mdi.mdi-plus-circle
-          | Add Form
+        +buttonAdd path='form_edit' id=survey.id object='Form'
 
+  .main-content
     if fetched
       if hasForms
         ul.list-group#formList
           each forms
-            li.list-group-item.form-link(data-id=objectId)
+            li.list-group-item.with-handle(data-id=objectId)
               span.sortable-handle
                 i.mdi.mdi-drag
               a(href="{{pathFor 'form_details' id=surveyId formId=objectId}}")=title

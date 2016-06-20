@@ -6,7 +6,7 @@ template(name="questions")
       if hasQuestions
         ul.list-group#questionList
           each questions
-            li.list-group-item.question-link(data-id=objectId)
+            li.list-group-item.question-link.with-handle(data-id=objectId)
               span.sortable-handle
                 i.mdi.mdi-drag
               if surveyIsActive

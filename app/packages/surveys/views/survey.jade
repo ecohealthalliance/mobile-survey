@@ -3,9 +3,10 @@ template(name="survey")
     .survey-admin
       .header-secondary.clearfix
         .container-fluid-padded
-          .navbar-header
+          .navbar-header.navbar-header-secondary
+            +buttonBack path='surveys'
             h2=title
-            .survey-header-actions
+            .header--actions
               unless surveyIsActive
                 button.btn.btn-default.btn-sm.pull-right(
                   data-toggle="modal"
@@ -17,7 +18,7 @@ template(name="survey")
             ul.nav.navbar-nav.navbar-right.navbar-secondary
               li(class="{{isActiveRoute 'survey_details'}}")
                 a.survey-admin--view-link(href="{{pathFor 'survey_details' id=survey.id}}" data-page='details') Details
-              li(class="{{isActiveRoute regex='forms|forms_new|form_details'}}")
+              li(class="{{isActiveRoute regex='forms|forms_new|form_details|form_edit'}}")
                 a.survey-admin--view-link(href="{{pathFor 'forms' id=survey.id}}" data-page='forms') Forms
               li(class="{{isActiveRoute 'survey_users'}}")
                 a.survey-admin--view-link(href="{{pathFor 'survey_users' id=survey.id}}" data-page='users') Users
@@ -25,30 +26,29 @@ template(name="survey")
                 li(class="{{isActiveRoute 'survey_results'}}")
                   a.survey-admin--view-link(href="{{pathFor 'survey_results' id=survey.id}}" data-page='results') Results
 
-      .container-fluid-padded
-        if isActiveRoute 'survey_details'
-          +survey_details survey=survey surveyAttrs=surveyAttrs
+      if isActiveRoute 'survey_details'
+        +survey_details survey=survey surveyAttrs=surveyAttrs
 
-        else if isActiveRoute 'forms'
-          +forms survey=survey
+      else if isActiveRoute 'forms'
+        +forms survey=survey
 
-        else if isActiveRoute 'form_edit'
-          +form_edit data
+      else if isActiveRoute 'form_edit'
+        +form_edit data
 
-        else if isActiveRoute 'form_details'
-          +form_details data
+      else if isActiveRoute 'form_details'
+        +form_details data
 
-        else if isActiveRoute 'question_details'
-            +question_details data
+      else if isActiveRoute 'question_details'
+          +question_details data
 
-        else if isActiveRoute 'survey_users'
-          +survey_users survey=survey
+      else if isActiveRoute 'survey_users'
+        +survey_users survey=survey
 
-        else if isActiveRoute 'survey_results'
-          +survey_results survey=survey
+      else if isActiveRoute 'survey_results'
+        +survey_results survey=survey
 
-        else if isActiveRoute 'survey_user_edit'
-          +survey_user_edit survey=survey
+      else if isActiveRoute 'survey_user_edit'
+        +survey_user_edit survey=survey
 
     +edit_survey_modal survey=survey surveyAttrs=surveyAttrs
   else

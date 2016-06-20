@@ -8,8 +8,6 @@ verticallyCenter($position=true)
 
 .survey-admin
   overflow hidden
-  h3
-    font-size 1.2em
   .forms
     margin-top 35px
 
@@ -33,27 +31,6 @@ verticallyCenter($position=true)
 
 .form--details
   margin 20px 0
-
-.form-link
-  padding 0
-  overflow hidden
-  .sortable-handle
-    position absolute
-    height 100%
-    width 40px
-    margin 0
-    i
-      position absolute
-      width 100%
-      top 50%
-      transform translate(0,-50%)
-      text-align center
-  a
-    padding 15px 15px 15px 45px
-    display block
-    &:hover
-      background $ll-gray
-      text-decoration none
 
 #toggleTrigger
   position relative
@@ -230,6 +207,7 @@ $question-types = {
 }
 
 .survey--details
+  margin-top 20px
   .form
     margin-bottom 30px
   .description
@@ -257,21 +235,12 @@ $question-types = {
         &::before
           content unicode
 
-.users
-  li
-    padding 10px
-
 .controls
   width 80px
 
 #tableFilter
   width 300px
   float right
-
-.surveys
-  .form-link
-    > a
-      padding-left 15px
 
 .modal-header
   .close

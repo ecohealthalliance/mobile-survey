@@ -1,15 +1,22 @@
 template(name="header")
-  header.header-primary
-    nav
-      .container-fluid-padded
-        .navbar-header
-          a.navbar-brand.pull-left(href="/")
-            h1.logo Good Question
-        #navbar.navbar-collapse.collapse.navbar-primary
-          ul.nav.navbar-nav.navbar-right
-            li
-              a(href="/") Surveys
-            li
-              a(href="/signup") Admins
-            li
-              a#logout(href="/logout") Sign Out
+  nav.navbar.header-primary
+    .container-fluid-padded
+      .navbar-header
+        button.navbar-toggle.collapsed(
+          type='button'
+          data-toggle='collapse'
+          data-target='#menu'
+          aria-expanded='false')
+          span.sr-only Toggle navigation
+          i.fa.fa-bars
+        a.logo(href="/")
+          h1 Good Question
+      .collapse.navbar-collapse#menu
+        ul.nav.navbar-nav.navbar-right.navbar-primary
+          li(class="{{isActiveRoute 'surveys'}}")
+            a(href="{{pathFor 'surveys'}}") Surveys
+          li(class="{{isActiveRoute 'signup'}}")
+            a(href="{{pathFor 'signup'}}") Admins
+          li
+            a#logout(href="/logout")
+              i.fa.fa-sign-out

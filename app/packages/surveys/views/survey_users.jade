@@ -1,16 +1,11 @@
 template(name="survey_users")
-  .survey-admin--content
-    h3 Users
-      a#add-user.btn.btn-sm(
-        href="{{pathFor 'survey_user_edit' id=survey.id}}")
-        i.mdi.mdi-plus-circle
-        | Add User
-
+  +survey_users_header path='survey_user_edit' id=survey.id object='User' buttonAdd=true
+  .main-content
     if fetched
       if users
         ul.list-group.users
           each users
-            li.list-group-item.form-link
+            li.list-group-item
               span= email
               .actions
                 button.btn.btn-danger.btn-sm.remove-user Remove from Survey
@@ -18,3 +13,10 @@ template(name="survey_users")
         p This survey has no users
     else
      +loading
+
+template(name="survey_users_header")
+  .header-page
+    .container-fluid-padded
+      h3 Users
+      if buttonAdd
+        +buttonAdd path=path id=id object=object

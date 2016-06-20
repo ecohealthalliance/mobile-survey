@@ -1,20 +1,31 @@
 template(name="form_details")
-  .survey-admin--content
-    .form
-      if fetched
-        .form--header
-          a.btn-back(href="{{pathFor 'forms' id=survey.id }}")
-            i.mdi.mdi-arrow-left-bold-circle-outline
-          h4=form.attributes.title
-          unless surveyIsActive
-            button.btn.btn-default(href="#{formId}/edit") Edit
-            button.btn.btn-danger.delete.delete-form Delete
-        .form--details
-          .row
-            unless surveyIsActive
-              .col-md-4
-                +questions_add form=form questions=questionsCollection
-            .col-md-8
-              +questions form=form survey=survey questions=questionsCollection
-      else
-       +loading
+  .form
+    if fetched
+      +formHeader(
+        path='forms'
+        id=survey.id
+        classNames='small'
+        form=form
+        showEdit=true)
+      .main-content
+        .container-fluid-padded
+          .form--details
+            .row
+              unless surveyIsActive
+                .col-md-4
+                  +questions_add form=form questions=questionsCollection
+              .col-md-8
+                +questions form=form survey=survey questions=questionsCollection
+    else
+     +loading
+
+template(name="formHeader")
+  .header-page
+    .container-fluid-padded
+      +buttonBack path=path id=id fromId=form.id classNames=classNames
+      h3=form.attributes.title
+      .header--actions
+        unless surveyIsActive
+          if showEdit
+            a.btn.btn-default.btn-sm(href="#{form.id}/edit") Edit
+          button.btn.btn-danger.btn-sm.delete.delete-form Delete

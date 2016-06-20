@@ -1,20 +1,53 @@
-.header-primary
-  background $primary-light
-
 .navbar
   margin 0
   padding 0
   border 0
   border-radius 0
 
-.navbar-primary
+.header-primary
+  position relative
+  min-height 50px
+  background $primary-light
+  border-top 3px solid darken($primary-light, 15%)
+  border-bottom 1px solid darken($primary-light, 15%)
+  .logo
+    position absolute
+    left 50%
+    top 7px
+    transform translate(-50%, 0)
+  h1
+    margin 0
+    width 150px
+    min-height 40px
+    background url(../images/logo.svg) no-repeat
+    background-position center center
+    text-indent -9999px
+
+.navbar-toggle
+  font-size 1.5em
   padding 0
 
-.navbar-nav > li > a
-  color $primary
-  &:hover
-    background $primary-light
-    color white
+.navbar-collapse
+  padding 0
+
+.navbar-primary
+  padding 0
+  margin-top -3px
+
+.navbar-nav > li
+  &.active
+    > a
+      border-color $primary
+   > a
+    color $primary
+    border-top 3px solid transparent
+    &:hover
+    &:focus
+      background $primary-light
+      border-color $primary
+    &:focus
+      outline 0
+      box-shadow none
 
 .navbar-secondary
   > li
@@ -22,38 +55,54 @@
     > a
       padding-top 10px
       padding-bottom 10px
-      border-top 4px solid transparent
+      border-top 0
+      border-bottom 2px solid transparent
       &:hover
         background $border-primary-l
         color $primary
     &.active
       > a
         background-color $border-primary-l
-        border-color $primary-light
         transition .3s
-
-.navbar-brand
-  padding-left 0
-  .logo
-    width 150px
-    background url(../images/logo.svg) no-repeat
-    text-indent -9999px
-    margin 0
-
-.survey-header-actions
-  display inline-block
-  vertical-align middle
-  margin-left 10px
-  .btn
-    margin-top 10px
+        color $primary
+        background $primary-light
+        border-color $primary
 
 .header-secondary
-  background white
-  border-bottom 3px solid $border-primary-l
+  background $border-primary-l
   h2
     margin 0
-    padding-top .5em
     display inline-block
     vertical-align middle
     font-weight 600
     font-size 1.5em
+
+.header--actions
+  display inline-block
+  vertical-align middle
+  margin-left 10px
+  .btn
+    padding-top 2px
+    padding-bottom 2px
+    margin-right 5px
+    vertical-align middle
+  .btn
+  .btn-add
+    display inline-block
+    vertical-align middle
+
+.navbar-header-secondary
+  padding-top .3em
+
+.header-page
+  margin-top -3px
+  padding 10px 0
+  border-bottom 3px solid $border-primary-l
+  h2
+  h3
+    display inline-block
+    vertical-align middle
+    margin 0
+    font-weight 600
+  h3
+    font-size 1.25em
