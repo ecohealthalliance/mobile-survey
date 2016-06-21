@@ -52,6 +52,7 @@ sendNotification = (notificationId, formId, message, user) ->
     data:
       alert: message
       formId: formId
+      badge: "Increment"
   Parse.Push.send(push, opts).then(
       Meteor.bindEnvironment (s) ->
         Notifications.update(notificationId, {$set: {sent:  true, updated_at: new Date()}});
