@@ -7,13 +7,13 @@ Package.describe({
 Package.onUse(function(api) {
   api.versionsFrom('1.3.2.2');
 
-  api.use('stylus');
+  api.use(['stylus'], 'client');
 
   api.addFiles([
     'variables.styl',
     'globals.styl',
     'lists.styl',
-    'index.styl',
+    'index.styl'
   ], 'client', {isImport: true});
 
 });
