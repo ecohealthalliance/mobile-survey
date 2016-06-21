@@ -31,33 +31,34 @@ template(name="form_edit")
                   li(class="{{#if triggerTypeState 'datetime'}} active {{/if}}")
                     a(href='#datetime' data-toggle='tab' data-type='datetime') Date/Time
 
-              .tab-content.trigger-tabs
-                #location.tab-pane(class="{{#if triggerTypeState 'location'}} active {{/if}}")
-                  .tab-content-floating-row
-                    .col-sm-12.clearfix
-                      .searchBar
-                        .tokenized.main
-                          i#searchIcon.fa.fa-search
-                          input#searchBar.input-sm(name='searchBar', placeholder='Search for an address or click on the map')
-                          +loading classes=loadingClasses
-                    .col-sm-12.clearfix
-                      input#radiusTrigger.form-control.input-sm.inline-30(
-                        type='number'
-                        min='0'
-                        step='.1'
-                        name='radiusTrigger'
-                        value='#{trigger.attributes.properties.radius}'
-                        placeholder='Enter radius in miles'
-                        required)
-                      input#coordinateBox.form-control.input-sm.inline-70(
-                        type='text'
-                        name='coordinateBox',
-                        value='#{trigger.attributes.properties.coordinates}'
-                        placeholder='GPS Coordinates'
-                        readonly)
-                      .help-block.with-errors
-                  .map-floating-row
-                    #map
+            .tab-content.trigger-tabs
+              #location.tab-pane(class="{{#if triggerTypeState 'location'}} active {{/if}}")
+                .tab-content-floating-row
+                  .col-sm-12.clearfix
+                    .search-bar
+                      .tokenized.main
+                        i#searchIcon.fa.fa-search
+                        input#searchBar.input-sm(name='searchBar', placeholder='Search for an address or click on the map')
+                        if isAddressSearching
+                          +loading classes=loadingClasses inline=true
+                  .col-sm-12.clearfix
+                    input#radiusTrigger.form-control.input-sm.inline-30(
+                      type='number'
+                      min='0'
+                      step='.1'
+                      name='radiusTrigger'
+                      value='#{trigger.attributes.properties.radius}'
+                      placeholder='Enter radius in miles'
+                      required)
+                    input#coordinateBox.form-control.input-sm.inline-70(
+                      type='text'
+                      name='coordinateBox',
+                      value='#{trigger.attributes.properties.coordinates}'
+                      placeholder='GPS Coordinates'
+                      readonly)
+                    .help-block.with-errors
+                .map-floating-row
+                  #map
 
                 #datetime.tab-pane(class="{{#if triggerTypeState 'datetime'}} active {{/if}}")
                   #datetimeTrigger.input-group.date

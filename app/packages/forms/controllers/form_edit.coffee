@@ -198,7 +198,7 @@ Template.form_edit.helpers
   trigger: ->
     Template.instance().trigger
   isAddressSearching: ->
-
+    Template.instance().isAddressSearching.get()
   showingTriggers: ->
     Template.instance().showingTriggers.get()
   triggerTypeState: (type) ->

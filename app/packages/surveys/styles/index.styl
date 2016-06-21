@@ -101,15 +101,12 @@ verticallyCenter($position=true)
   border-bottom none
 
 .address-searching-spinner
-  position relative
-  top -22px
-  float right
-  margin-right 20px
+  position absolute
+  top 30%
+  right 10px
+  transform translate(0, -50%)
   font-weight bold
-  color $primary
-  visibility hidden
-  &.visible
-    visibility visible
+  color $blue
 
 input.inline-30
   width 29.5%
@@ -120,9 +117,10 @@ input.inline-70
   display inline
   float right
 
-.searchBar
+.search-bar
   position relative
   width 100%
+  margin-bottom 20px
   border-left 0
   border-right 0
   font-size 1em
