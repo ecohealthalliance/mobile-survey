@@ -3,6 +3,11 @@ template(name="question_details")
     if surveyIsActive
       h4=text
     else
-      +question_details_edit survey=survey question=question
+      +question_details_edit(
+        surveyId=../survey.id
+        formId=../formId
+        question=question
+        choices=choices
+        type=type)
   else
     +loading
