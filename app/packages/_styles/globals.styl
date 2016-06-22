@@ -26,15 +26,3 @@ body
   border-color $delete
   &:hover
     background @border-color
-
-
-$sides = {
-  top: top
-  bottom: btm
-  left: left
-  right: right
-}
-for $num in -2 -1 0 1 2 3
-  for prop, className in $sides
-    .space-{className}-{$num}
-      margin-{prop} $num*10px

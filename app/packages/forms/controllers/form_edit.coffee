@@ -290,9 +290,6 @@ Template.form_edit.events
     # what trigger is active
     type = instance.triggerType.get()
     if type == 'location'
-      if not getRadius()
-        toastr.error 'Please select a radius.'
-        return
       coordinates = getCoordinates()
       if not coordinates
         toastr.error 'Please select a location by entering an address or clicking on map.'
