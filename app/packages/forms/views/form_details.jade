@@ -1,12 +1,13 @@
 template(name="form_details")
   .form
     if fetched
-      +formHeader(
-        path='forms'
-        id=survey.id
-        classNames='small'
-        form=form
-        showEdit=true)
+      if form
+        +form_header(
+          path='forms'
+          id=survey.id
+          classNames='small'
+          form=form
+          showEdit=true)
       .main-content
         .container-fluid-padded
           .form--details
@@ -19,13 +20,16 @@ template(name="form_details")
     else
      +loading
 
-template(name="formHeader")
+template(name="form_header")
   .header-page
     .container-fluid-padded
       +buttonBack path=path id=id fromId=form.id classNames=classNames
-      h3=form.attributes.title
-      .header--actions
-        unless surveyIsActive
-          if showEdit
-            a.btn.btn-default.btn-sm(href="#{form.id}/edit") Edit
-          button.btn.btn-danger.btn-sm.delete.delete-form Delete
+      if form
+        h3=form.attributes.title
+        .header--actions
+          unless surveyIsActive
+            if showEdit
+              a.btn.btn-default.btn-sm(href="#{form.id}/edit") Edit
+            button.btn.btn-danger.btn-sm.delete.delete-form Delete
+      else
+        h3 New Form
