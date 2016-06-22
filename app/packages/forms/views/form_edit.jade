@@ -32,6 +32,7 @@ template(name="form_edit")
                     a(href='#datetime' data-toggle='tab' data-type='datetime') Date/Time
 
             .tab-content.trigger-tabs
+
               #location.tab-pane(class="{{#if triggerTypeState 'location'}} active {{/if}}")
                 .tab-content-floating-row
                   .col-sm-12.clearfix
@@ -49,7 +50,7 @@ template(name="form_edit")
                       name='radiusTrigger'
                       value='#{trigger.attributes.properties.radius}'
                       placeholder='Enter radius in miles'
-                      required)
+                      required=isRequiredLocation)
                     input#coordinateBox.form-control.input-sm.inline-70(
                       type='text'
                       name='coordinateBox',
@@ -60,8 +61,8 @@ template(name="form_edit")
                 .map-floating-row
                   #map
 
-                #datetime.tab-pane(class="{{#if triggerTypeState 'datetime'}} active {{/if}}")
-                  #datetimeTrigger.input-group.date
+              #datetime.tab-pane(class="{{#if triggerTypeState 'datetime'}} active {{/if}}")
+                #datetimeTrigger.input-group.date
 
             .buttons-floating-row
               button.btn.btn-primary#save-form

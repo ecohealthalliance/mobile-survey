@@ -210,6 +210,8 @@ Template.form_edit.helpers
     if Template.instance().isAddressSearching.get()
       classes += ' visible'
     classes
+  isRequiredLocation: ->
+    Template.instance().triggerType.get() is 'location'
 
 Template.form_edit.events
   'keydown .edit-form': (event, instance) ->
