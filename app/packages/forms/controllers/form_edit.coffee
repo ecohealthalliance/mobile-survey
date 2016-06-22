@@ -390,6 +390,7 @@ Template.form_edit.onRendered ->
             source: (query, callback) ->
               suggestionGenerator instance, query, callback
           ]
+
         @$('.edit-form').validator
           errors:
             minlength: 'Title must be at least 3 characters'

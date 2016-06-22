@@ -43,21 +43,24 @@ template(name="form_edit")
                         if isAddressSearching
                           +loading classes=loadingClasses inline=true
                   .col-sm-12.clearfix
-                    input#radiusTrigger.form-control.input-sm.inline-30(
-                      type='number'
-                      min='0'
-                      step='.1'
-                      name='radiusTrigger'
-                      value='#{trigger.attributes.properties.radius}'
-                      placeholder='Enter radius in miles'
-                      required=isRequiredLocation)
-                    input#coordinateBox.form-control.input-sm.inline-70(
-                      type='text'
-                      name='coordinateBox',
-                      value='#{trigger.attributes.properties.coordinates}'
-                      placeholder='GPS Coordinates'
-                      readonly)
-                    .help-block.with-errors
+                    .row
+                      .col-xs-12.col-sm-4
+                        input#radiusTrigger.form-control.input-sm(
+                          type='number'
+                          min='0'
+                          step='.1'
+                          name='radiusTrigger'
+                          value='#{trigger.attributes.properties.radius}'
+                          placeholder='Enter radius (miles)'
+                          required=isRequiredLocation)
+                        .help-block.with-errors
+                      .col-xs-12.col-sm-8.form-group
+                        input#coordinateBox.form-control.input-sm(
+                          type='text'
+                          name='coordinateBox'
+                          value='#{trigger.attributes.properties.coordinates}'
+                          placeholder='GPS Coordinates'
+                          readonly)
                 .map-floating-row
                   #map
 
