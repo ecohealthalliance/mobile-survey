@@ -3,16 +3,9 @@
 body
   font-family $body-font
 
-.form-link
-  .delete
-  .edit
-    padding 5px 10px
-  .edit
-    color #666
-
 .actions
   position absolute
-  right 15px
+  right 5%
   top 50%
   transform translate(0, -50%)
   .action
@@ -28,5 +21,20 @@ body
       color white
 
 .btn-danger
-  color #333
+  color $body-text
   background none
+  border-color $delete
+  &:hover
+    background @border-color
+
+
+$sides = {
+  top: top
+  bottom: btm
+  left: left
+  right: right
+}
+for $num in -2 -1 0 1 2 3
+  for prop, className in $sides
+    .space-{className}-{$num}
+      margin-{prop} $num*10px

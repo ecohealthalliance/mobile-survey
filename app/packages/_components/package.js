@@ -15,6 +15,10 @@ Package.onUse(function(api) {
   ], 'client');
 
   api.addFiles([
+    'button_add/button_add.jade',
+    'button_add/button_add.styl',
+    'button_back/button_back.styl',
+    'button_back/button_back.jade',
     'loading/loading.styl',
     'loading/loading.jade',
     'loading/loading.coffee'

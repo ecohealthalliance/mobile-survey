@@ -1,3 +1,5 @@
+@import '{gq:base-styles}/variables'
+
 .choice-container
   display block
   position relative
@@ -7,7 +9,8 @@
     position absolute
     right 10px
     top 5px
-    color gray
+    color $l-gray
+
 .btn-grid
   border 1px solid transparent
   border-radius 3px
@@ -18,10 +21,9 @@
     margin 5px
     white-space normal
 
-
 .has-error
   .btn-grid
-    border-color #a94442
+    border-color $deny
 
 label
   display block

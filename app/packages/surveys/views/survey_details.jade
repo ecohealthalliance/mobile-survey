@@ -1,36 +1,39 @@
 template(name="survey_details")
-  .survey-admin--content
-    h3.inline Details
-    .survey--details
-      if fetched
-        p.description= survey.description
-        button.btn.btn-primary.activate(disabled="{{#if activating}} true {{/if}}")
-          if activating
-            span.fa.fa-spinner.fa-pulse
-          else
-            span(class='{{activateButtonClass}}').mdi
-          span
-            =activateButtonText
-            | Survey
-        if forms
-          ul.forms.list-unstyled
-            each forms
-              li.form
-                h4
-                  span.trigger(class=trigger.type)
-                  a(href="{{pathFor 'form_details' id=../survey.id formId=parseId}}")
-                    span=title
-                if questions
-                  ul.questions.list-unstyled
-                    each questions
-                      li.question
-                        span.question-type(class=type)
-                        if surveyIsActive
-                          span=text
-                        else
-                          a(href="{{pathFor 'question_details' id=../../survey.id formId=../parseId questionId=parseId}}")
+  .header-page
+    .container-fluid-padded
+      h3.inline Details
+  .main-content
+    .container-fluid-padded
+      .survey--details
+        if fetched
+          p.description= survey.description
+          button.btn.btn-primary.activate(disabled="{{#if activating}} true {{/if}}")
+            if activating
+              span.fa.fa-spinner.fa-pulse
+            else
+              span(class='{{activateButtonClass}}').mdi
+            span
+              =activateButtonText
+              | Survey
+          if forms
+            ul.forms.list-unstyled
+              each forms
+                li.form
+                  h4
+                    span.trigger(class=trigger.type)
+                    a(href="{{pathFor 'form_details' id=../survey.id formId=parseId}}")
+                      span=title
+                  if questions
+                    ul.questions.list-unstyled
+                      each questions
+                        li.question
+                          span.question-type(class=type)
+                          if surveyIsActive
                             span=text
+                          else
+                            a(href="{{pathFor 'question_details' id=../../survey.id formId=../parseId questionId=parseId}}")
+                              span=text
+          else
+            p This survey currently has no forms.
         else
-          p This survey currently has no forms.
-      else
-        +loading
+          +loading

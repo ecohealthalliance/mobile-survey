@@ -1,4 +1,4 @@
-@import '{gq:base-styles}/globals'
+@import '{gq:base-styles}/variables'
 
 verticallyCenter($position=true)
   if $position
@@ -6,31 +6,11 @@ verticallyCenter($position=true)
   top 50%
   transform translate(0,-50%)
 
-$blue = #337AB7
-
 .survey-admin
   overflow hidden
-  h3
-    font-size 1.2em
   .forms
     margin-top 35px
 
-.survey-header-actions
-  display inline-block
-  vertical-align middle
-  margin-left 10px
-  .btn
-    margin-top 10px
-
-.survey-admin--nav
-  background white
-  border-bottom 3px solid $border-primary-l
-  h2
-    display inline-block
-    vertical-align middle
-    font-size 1.5em
-    margin 0
-    padding-top .7em
 
 .survey-admin--content
   margin-top 15px
@@ -51,27 +31,6 @@ $blue = #337AB7
 
 .form--details
   margin 20px 0
-
-.form-link
-  padding 0
-  overflow hidden
-  .sortable-handle
-    position absolute
-    height 100%
-    width 40px
-    margin 0
-    i
-      position absolute
-      width 100%
-      top 50%
-      transform translate(0,-50%)
-      text-align center
-  a
-    padding 15px 15px 15px 45px
-    display block
-    &:hover
-      background #f9f9f9
-      text-decoration none
 
 #toggleTrigger
   position relative
@@ -133,8 +92,8 @@ $blue = #337AB7
   border none
 
 .trigger-nav-small > li
-  background-color #eee
-  border thin solid #333
+  background-color $ll-gray
+  border thin solid $dd-gray
   margin-right 1px
 
 .trigger-nav-small
@@ -147,7 +106,7 @@ $blue = #337AB7
   float right
   margin-right 20px
   font-weight bold
-  color $blue
+  color $primary
   visibility hidden
   &.visible
     visibility visible
@@ -171,7 +130,7 @@ input.inline-70
 #searchIcon
   verticallyCenter()
   left 10px
-  color $blue
+  color $primary
 
 .token
   max-width 95% !important
@@ -195,21 +154,21 @@ input.inline-70
   font-size 115%
   font-weight bold
   font-weight 800
-  color #666
+  color $d-gray
 
 .typeahead-info
-  color #666
+  color $d-gray
   font-size 95%
   .typeahead-additional-info
     display block
     font-size 85%
-    color #999
+    color $d-gray
     font-style italic
   > span
     text-transform capitalize
 
 .typeahead-footer
-  color #666
+  color $d-gray
   font-size 95%
   margin 2px 0 2px 15px
 
@@ -229,7 +188,7 @@ input.inline-70
 #datetime
   margin -15px -10% 0 -10%
   padding 60px 12%
-  background #f9f9f9
+  background $ll-gray
 
 $trigger-types = {
   location: '\f041'
@@ -248,6 +207,7 @@ $question-types = {
 }
 
 .survey--details
+  margin-top 20px
   .form
     margin-bottom 30px
   .description
@@ -262,7 +222,7 @@ $question-types = {
     &::before
       font-family 'FontAwesome'
       font-size 1em
-      color #555
+      color $d-gray
   .trigger
     content '\f0e7'
     for type, unicode in $trigger-types
@@ -275,21 +235,12 @@ $question-types = {
         &::before
           content unicode
 
-.users
-  li
-    padding 10px
-
 .controls
   width 80px
 
 #tableFilter
   width 300px
   float right
-
-.surveys
-  .form-link
-    > a
-      padding-left 15px
 
 .modal-header
   .close

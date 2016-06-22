@@ -1,0 +1,120 @@
+.navbar
+  margin 0
+  padding 0
+  border 0
+  border-radius 0
+
+.header-primary
+  position relative
+  min-height 50px
+  background $primary-light
+  border-top 3px solid darken($primary-light, 15%)
+  border-bottom 1px solid darken($primary-light, 15%)
+  .logo
+    position absolute
+    left 50%
+    top 7px
+    transform translate(-50%, 0)
+  h1
+    margin 0
+    width 150px
+    min-height 40px
+    background url(../images/logo.svg) no-repeat
+    background-position center center
+    text-indent -9999px
+
+.navbar-toggle
+  font-size 1.5em
+  padding 0
+
+.navbar-collapse
+  padding 0
+
+
+  padding 0
+  margin-top -3px
+
+.navbar-primary
+  > li
+    &.active
+      > a
+        border-color $primary
+    > a
+      color $primary
+      border-top 3px solid transparent
+      text-transform uppercase
+      font-weight 600
+      &:hover
+      &:focus
+        background $primary-light
+        border-color $primary
+      &:focus
+        outline 0
+        box-shadow none
+
+.navbar-secondary
+  > li
+    margin-left 1px
+    > a
+      padding-top 10px
+      padding-bottom 10px
+      border-top 0
+      border-bottom 2px solid transparent
+      color $primary
+      letter-spacing .03em
+
+      &:hover
+        background $border-primary-l
+        color $primary
+    &.active
+      > a
+        background-color $border-primary-l
+        transition .3s
+        color $primary
+        background $primary-light
+        border-color $primary
+
+.header-secondary
+  background $border-primary-l
+  h2
+    margin 0
+    display inline-block
+    vertical-align middle
+    font-weight 600
+    font-size 1.5em
+
+.header--actions
+  display inline-block
+  vertical-align middle
+  margin-left 10px
+  .btn
+    padding-top 2px
+    padding-bottom 2px
+    margin-right 5px
+    vertical-align middle
+  .btn
+  .btn-add
+    display inline-block
+    vertical-align middle
+
+.navbar-header-secondary
+  padding-top .3em
+  margin-left -30px
+
+.header-page
+  margin-top -3px
+  padding 10px 0
+  border-bottom 3px solid $border-primary-l
+  h2
+  h3
+    display inline-block
+    vertical-align middle
+    margin 0
+    letter-spacing .05em
+    color $primary
+  h2
+    font-weight 300
+    text-transform uppercase
+  h3
+    font-weight 600
+    font-size 1.25em

@@ -1,27 +1,28 @@
 template(name="surveys")
-  .container-fluid-padded
-    h2 Surveys
+  .header-page
+    .container-fluid-padded
+      h2 Surveys
       a#add-survey.btn.btn-sm(data-toggle="modal" data-target="#edit-survey-modal")
         i.mdi.mdi-plus-circle
         span Add Survey
 
-    if fetched
-      ul.list-group.surveys
-        each surveys
-          li.list-group-item.form-link
-            a(href="{{pathFor 'survey_details' id=objectId}}")= title
-            .actions
-              unless active
-                button.btn.btn-danger.btn-sm.action.delete(
-                  data-toggle="modal"
-                  data-target="#delete-survey-modal"
-                  data-id=objectId)
-                  | Delete
-    else
-      +loading
+  if fetched
+    ul.list-group.surveys
+      each surveys
+        li.list-group-item
+          a(href="{{pathFor 'survey_details' id=objectId}}")= title
+          .actions
+            unless active
+              button.btn.btn-danger.btn-sm.action.delete(
+                data-toggle="modal"
+                data-target="#delete-survey-modal"
+                data-id=objectId)
+                | Delete
+  else
+    +loading
 
-    +edit_survey_modal surveys=surveyCollection
-    +delete_survey_modal surveys=surveyCollection
+  +edit_survey_modal surveys=surveyCollection
+  +delete_survey_modal surveys=surveyCollection
 
 template(name="no_surveys")
   p No surveys were found

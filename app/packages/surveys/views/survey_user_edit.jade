@@ -1,19 +1,20 @@
 template(name="survey_user_edit")
-  .survey-admin--content
-    form.edit-user
-      .form-group
-        .row
-          .col-sm-6
-            label
-              span Email Address
-            input.form-control(
-              type='email'
-              name='email')
-
-        .buttons-floating-row
-          button.btn.btn-primary#save
-            i.mdi.mdi-plus-circle
-            span Create User
-          button.btn.btn-default#cancel(type="button")
-            i.mdi.mdi-close-circle-outline
-            span Cancel
+  +survey_users_header buttonAdd=false
+  .main-content.space-top-2
+    .container-fluid-padded
+      form.edit-user
+        .form-group
+          .row
+            .col-sm-6
+              label
+                span Email Address
+              input.form-control(
+                type='email'
+                name='email')
+          .buttons-floating-row
+            button.btn.btn-primary#save
+              i.mdi.mdi-plus-circle
+              span Create User
+            button.btn.btn-default#cancel(type="button")
+              i.mdi.mdi-close-circle-outline
+              span Cancel
