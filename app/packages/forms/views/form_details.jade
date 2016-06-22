@@ -1,13 +1,12 @@
 template(name="form_details")
   .form
     if fetched
-      if form
-        +form_header(
-          path='forms'
-          id=survey.id
-          classNames='small'
-          form=form
-          showEdit=true)
+      +form_header(
+        path='forms'
+        id=survey.id
+        classNames='small'
+        form=form
+        showEdit=true)
       .main-content
         .container-fluid-padded
           .form--details
@@ -29,7 +28,7 @@ template(name="form_header")
         .header--actions
           unless surveyIsActive
             if showEdit
-              a.btn.btn-default.btn-sm(href="#{form.id}/edit") Edit
+              a.btn.btn-default.btn-sm(href="{{pathFor 'form_edit' id=id formId=form.id}}") Edit
             button.btn.btn-danger.btn-sm.delete.delete-form Delete
       else
         h3 New Form
