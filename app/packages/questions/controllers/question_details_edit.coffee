@@ -2,11 +2,11 @@ validator = require 'bootstrap-validator'
 questionTypes = require '../imports/question_types'
 
 Template.question_details_edit.onCreated ->
-  instance = @
-  @survey = @data.survey
-  @question = @data.survey
-  @type = new ReactiveVar 'inputText'
-  @choices = new Meteor.Collection(null)
+  @surveyId = @data.surveyId
+  @formId= @data.formId
+  @question = @data.question
+  @choices = @data.choices
+  @type = @data.type
   @submitting = new ReactiveVar false
   @typeError = new ReactiveVar null
 
@@ -18,11 +18,7 @@ Template.question_details_edit.helpers
   type: ->
     Template.instance().type.get()
   question: ->
-    instance = Template.instance()
-    if instance.question.get()
-      Meteor.defer ->
-        instance.$('#question-form-edit').validator()
-      instance.question.get()?.attributes
+    Template.instance().question.toJSON()
   selected: ->
     @name is Template.instance().type.get()
   choices: ->
@@ -84,16 +80,17 @@ Template.question_details_edit.events
     else
       delete questionProperties.max
 
-    question =
+    props =
       text: formData.text
       type: instance.type.get()
       required: questionProperties.required is 'on'
       properties: questionProperties
 
-    instance.question.get().save(question).then ->
-      data = instance.data
-      FlowRouter.go("/surveys/#{data.id}/forms/#{data.formId}")
-      instance.$('#question-form-edit').validator('destroy')
+    instance.question.save(props)
+      .then ->
+        FlowRouter.go("/surveys/#{instance.surveyId}/forms/#{instance.formId}")
+      .fail (err) ->
+        toastr.error err.message
 
   'click .add-choice': (event, instance)->
     instance.choices.insert {}

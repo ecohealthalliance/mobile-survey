@@ -21,7 +21,7 @@ template(name="survey_details")
                 li.form
                   h4
                     span.trigger(class=trigger.type)
-                    a(href="{{pathFor 'form_details' id=../survey.id formId=parseId}}")
+                    a(href="{{pathFor 'form_details' id=../survey.id formId=objectId}}")
                       span=title
                   if questions
                     ul.questions.list-unstyled
@@ -31,7 +31,7 @@ template(name="survey_details")
                           if surveyIsActive
                             span=text
                           else
-                            a(href="{{pathFor 'question_details' id=../../survey.id formId=../parseId questionId=parseId}}")
+                            a(href="{{pathFor 'question_details' id=../../survey.id formId=../objectId questionId=objectId}}")
                               span=text
           else
             p This survey currently has no forms.
