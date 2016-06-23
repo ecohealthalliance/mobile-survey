@@ -108,8 +108,11 @@ Template.survey_results.helpers
   submissionsPerForm: (formId) ->
     count = Template.instance().submissions.find(formId: formId).count()
     userCount = Template.instance().users.find().count()
-    percentage = count / userCount * 100
-    "(#{count}/#{userCount} - #{percentage}%)"
+    if userCount
+      percentage = count / userCount * 100
+      "(#{count}/#{userCount} - #{percentage}%)"
+    else
+      "(#{count}/#{userCount})"
 
 
 Template.survey_results.events
