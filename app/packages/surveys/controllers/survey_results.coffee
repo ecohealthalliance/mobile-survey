@@ -1,10 +1,11 @@
 {moment} = require 'meteor/momentjs:moment'
 
 Template.survey_results.onCreated ->
+  @forms = new Meteor.Collection null
+  @submissions = new Meteor.Collection null
   @questions = new Meteor.Collection null
   @answers = new Meteor.Collection null
   @users = new Meteor.Collection null
-  @forms = new Meteor.Collection null
   @fetched = new ReactiveVar false
   @selectedForms = new ReactiveVar []
   @selectedUsers = new ReactiveVar []
@@ -14,6 +15,7 @@ Template.survey_results.onRendered ->
   @fetched.set false
   # submissions
   @forms.remove {}
+  @submissions.remove {}
   @questions.remove {}
   @answers.remove {}
   @survey.getForms()
@@ -21,13 +23,18 @@ Template.survey_results.onRendered ->
       forms.forEach (form) =>
         _form = form.toJSON()
         # populate the @forms minimongo collection
-        @forms.upsert _form.objectId, _form
+        form.getTrigger()
+          .then (trigger) =>
+            _form.trigger = trigger.toJSON()
+            delete _form.triggers
+            @forms.upsert _form.objectId, _form
         # get results
         query = new Parse.Query('Submission')
         query.equalTo('formId', _form.objectId)
         query.find().then (submissions) =>
           submissions.forEach (submission) =>
             _submission = submission.toJSON()
+            @submissions.upsert _submission.objectId, _submission
             for questionId, answer of _submission.answers
               @answers.insert
                 formId: _submission.formId
@@ -96,6 +103,17 @@ Template.survey_results.helpers
     filters = { questionId: user.questionId }
     if user.objectId then filters.userId = user.objectId
     Template.instance().answers.findOne(filters)
+  count: (cursor) ->
+    cursor?.count() or 0
+  submissionsPerForm: (formId) ->
+    count = Template.instance().submissions.find(formId: formId).count()
+    userCount = Template.instance().users.find().count()
+    if userCount
+      percentage = count / userCount * 100
+      "(#{count}/#{userCount} - #{percentage}%)"
+    else
+      "(#{count}/#{userCount})"
+
 
 Template.survey_results.events
   'change #users': (event, instance) ->
@@ -147,3 +165,11 @@ Template.survey_result.helpers
   _typeGroup: typeGroup
   _formatDate: (timestamp) ->
     moment(timestamp).format('MMMM Do YYYY, h:mm:ss a')
+
+Template.form_info.helpers
+  _triggerInfo: (type, properties) ->
+    if type is 'datetime'
+      time = moment(properties.datetime).format('MMMM Do YYYY \\a\\t h:mm:ss a')
+      "Date/Time, #{time}"
+  _formatDate: (timestamp) ->
+    moment(timestamp).format('MMMM Do YYYY \\a\\t h:mm a')
