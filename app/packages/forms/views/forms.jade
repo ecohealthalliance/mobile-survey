@@ -16,8 +16,7 @@ template(name="forms")
               a(href="{{pathFor 'form_details' id=surveyId formId=objectId}}")=title
               .actions
                 unless surveyIsActive
-                  button.btn.btn-default.action.edit(href="forms/#{objectId}/edit")
-                    | Edit
+                  a.btn.btn-default.action.edit-form(href="forms/#{objectId}/edit") Edit
                   button.btn.btn-danger.action.delete.delete-form
                     | Delete
       else
