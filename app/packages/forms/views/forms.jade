@@ -3,7 +3,7 @@ template(name="forms")
     .container-fluid-padded
       h3 Forms
       unless surveyIsActive
-        +buttonAdd path='form_edit' id=survey.id object='Form'
+        +buttonAdd path='form_new' id=survey.id object='Form'
 
   .main-content
     if fetched

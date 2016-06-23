@@ -67,7 +67,8 @@ adminRoutes.route '/surveys/:id/forms/:formId/edit',
       params: params
 
 adminRoutes.route '/surveys/:id/forms/new',
-  name: 'form_edit'
+  name: 'form_new'
+  template: 'form_edit'
   action: (params) ->
     BlazeLayout.render 'layout',
       main: 'survey'

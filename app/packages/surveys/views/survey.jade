@@ -32,7 +32,7 @@ template(name="survey")
       else if isActiveRoute 'forms'
         +forms survey=survey
 
-      else if isActiveRoute 'form_edit'
+      else if isActiveRoute regex='form_edit|form_new'
         +form_edit data
 
       else if isActiveRoute 'form_details'

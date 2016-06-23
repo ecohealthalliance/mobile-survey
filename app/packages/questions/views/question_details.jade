@@ -1,13 +1,22 @@
 template(name="question_details")
-  with question
-    if surveyIsActive
-      h4=text
-    else
-      +question_details_edit(
-        surveyId=../survey.id
-        formId=../formId
-        question=question
-        choices=choices
-        type=type)
-  else
-    +loading
+  if fetched
+    +form_header(
+      path='forms'
+      id=survey.id
+      classNames='small'
+      form=form
+      showEdit=true)
+  .main-content.space-top-2
+    .container-fluid-padded
+      if fetched
+        if surveyIsActive
+          h4=text
+        else
+          +question_details_edit(
+            surveyId=../survey.id
+            formId=../formId
+            question=question
+            choices=choices
+            type=type)
+      else
+        +loading

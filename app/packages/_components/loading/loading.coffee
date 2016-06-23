@@ -5,6 +5,7 @@ Template.loading.onCreated ->
 Template.loading.helpers
   classes: ->
     instance = Template.instance()
-    classes = instance.classes or ''
-    if instance.inline
-      "#{classes} inline-icon"
+    classes = instance.data.classes or ''
+    if instance.data.inline
+      classes = "#{classes} inline-icon"
+    classes

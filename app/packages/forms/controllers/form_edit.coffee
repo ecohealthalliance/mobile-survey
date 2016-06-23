@@ -198,7 +198,7 @@ Template.form_edit.helpers
   trigger: ->
     Template.instance().trigger
   isAddressSearching: ->
-
+    Template.instance().isAddressSearching.get()
   showingTriggers: ->
     Template.instance().showingTriggers.get()
   triggerTypeState: (type) ->
@@ -210,6 +210,8 @@ Template.form_edit.helpers
     if Template.instance().isAddressSearching.get()
       classes += ' visible'
     classes
+  isRequiredLocation: ->
+    Template.instance().triggerType.get() is 'location'
 
 Template.form_edit.events
   'keydown .edit-form': (event, instance) ->
@@ -288,9 +290,6 @@ Template.form_edit.events
     # what trigger is active
     type = instance.triggerType.get()
     if type == 'location'
-      if not getRadius()
-        toastr.error 'Please select a radius.'
-        return
       coordinates = getCoordinates()
       if not coordinates
         toastr.error 'Please select a location by entering an address or clicking on map.'
@@ -388,6 +387,7 @@ Template.form_edit.onRendered ->
             source: (query, callback) ->
               suggestionGenerator instance, query, callback
           ]
+
         @$('.edit-form').validator
           errors:
             minlength: 'Title must be at least 3 characters'

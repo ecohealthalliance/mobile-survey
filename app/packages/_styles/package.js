@@ -12,6 +12,8 @@ Package.onUse(function(api) {
   api.addFiles([
     'variables.styl',
     'globals.styl',
+    'utilities.styl',
+    'validator.styl',
     'lists.styl',
     'index.styl'
   ], 'client', {isImport: true});
