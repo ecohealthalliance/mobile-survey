@@ -13,6 +13,8 @@ Template.form_details.onCreated ->
 Template.form_details.helpers
   form: ->
     Template.instance().form
+  active: ->
+    Template.instance().survey.get('active')
   questionsCollection: ->
     Template.instance().questionCollection
 
