@@ -2,7 +2,9 @@ Template.registerHelper 'fetched', ->
   Template.instance().fetched.get()
 
 Template.registerHelper 'surveyIsActive', ->
-  Template.instance().survey?.get 'active'
+  instance = Template.instance()
+  survey = instance.survey or instance.data.survey
+  survey?.get 'active'
 
 Template.registerHelper 'match', (val, {hash:{regex}})->
   val?.match new RegExp regex
