@@ -51,6 +51,7 @@ gq:notifications@0.0.1
 gq:openam@0.1.0
 gq:parse@0.1.0
 gq:questions@0.0.1
+gq:results@0.0.1
 gq:router@0.0.1
 gq:surveys@0.0.1
 hot-code-push@1.0.4

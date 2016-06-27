@@ -1,4 +1,4 @@
-{moment} = require 'meteor/momentjs:moment'
+moment = require 'moment'
 
 Template.survey_results.onCreated ->
   @forms = new Meteor.Collection null

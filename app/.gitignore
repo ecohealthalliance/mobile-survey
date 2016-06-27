@@ -8,6 +8,8 @@ tests/dump/
 # Settings JSON
 settings-dev.json
 settings-test.json
+settings-prod.json
+
 
 # Parse server logs
 logs/
