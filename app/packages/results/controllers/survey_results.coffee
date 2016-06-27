@@ -10,6 +10,7 @@ Template.survey_results.onCreated ->
   @selectedForms = new ReactiveVar []
   @selectedUsers = new ReactiveVar []
   @selectedQuestions = new ReactiveVar []
+
 Template.survey_results.onRendered ->
   @survey = @data.survey
   @fetched.set false
@@ -55,18 +56,21 @@ Template.survey_results.onRendered ->
               _question.questionId = _question.objectId
               # populate the @questions minimongo collection
               @questions.upsert _question.objectId, _question
+      # users
+      @users.remove {}
+      query = new Parse.Query Parse.User
+      query.find()
+        .then (users) =>
+          users.forEach (user) =>
+            user = user.toJSON()
+            userSubmissions = @submissions.find('userId.objectId': user.objectId).fetch()
+            user.submittedForms = _.map userSubmissions, (sumbission) ->
+              sumbission.formId
+            @users.insert user
     .fail (err) ->
       toastr.error err.message
     .always =>
       @fetched.set true
-  # users
-  @users.remove {}
-  @survey.relation('invitedUsers').query().find()
-    .then (result) =>
-      result.forEach (item) =>
-        @users.insert item.toJSON()
-    .fail (err) ->
-      toastr.error err.message
 
 Template.survey_results.helpers
   _forms: ->
@@ -87,18 +91,25 @@ Template.survey_results.helpers
     filters = { questionId: $in: parentForm.questions }
     questions = Template.instance().questions.find(filters)
     if questions.count()
-      questions
+      questions.map (question) ->
+        console.log parentForm
+        question.formId = parentForm.objectId
+        question
     else
       false
+
   _usersFiltered: (question) ->
-    selectedUsers = Template.instance().selectedUsers.get()
-    filters = {}
-    if selectedUsers.length then filters.objectId = { $in: selectedUsers }
-    users = Template.instance().users.find(filters)
+    users = Template.instance().users
+    users = users.find(submittedForms: question.formId).fetch()
     users.map (user) ->
       user.questionId = question.objectId
       user.questionType = question.type
       user
+
+  usersWhoHaveSubmitted: (form) ->
+    users = Template.instance().users
+    users.find(submittedForms: form.objectId).fetch()
+
   _answer: (user) ->
     filters = { questionId: user.questionId }
     if user.objectId then filters.userId = user.objectId

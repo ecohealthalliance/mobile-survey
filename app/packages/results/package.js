@@ -18,6 +18,7 @@ Package.onUse(function(api) {
   ], ['client']);
 
   api.addFiles([
+    'styles/index.styl',
     'views/survey_results.jade',
     'controllers/survey_results.coffee'
   ], 'client');

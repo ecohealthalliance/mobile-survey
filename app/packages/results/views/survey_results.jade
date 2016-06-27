@@ -1,30 +1,42 @@
 template(name="survey_results")
-  .survey-admin--content
-    h3 Survey Results
-    unless fetched
-      p Loading...
-    else
-      .row
-        .col-sm-3
-          select(id="forms" multiple)
-            option(value='') Show all forms
-            each _forms
-              option(value=objectId) {{title}}  {{submissionsPerForm this.objectId}}
-          select(id="users" multiple)
-            option(value='') All users
-            each _users
-              option(value=objectId)= username
-          p Amount of forms: {{count _forms}}
-          p Participants: {{count _users}}
-        .col-sm-7
-          each _formsFiltered
-            h4= title
-            +form_info this
-            each _questionsFiltered this
-              +survey_results_question_details
-              each _usersFiltered this
-                with _answer this
-                  +survey_result
+  .main-content
+    .container-fluid-padded
+      h3 Survey Results
+      unless fetched
+        +loading
+      else
+        .row
+          .col-sm-3
+            select(id="forms" multiple)
+              option(value='') Show all forms
+              each _forms
+                option(value=objectId) {{title}}  {{submissionsPerForm this.objectId}}
+            //- select(id="users" multiple)
+            //-   option(value='') All users
+            //-   each _users
+            //-     option(value=objectId)= username
+            p Amount of forms: {{count _forms}}
+            p Participants: {{count _users}}
+
+        each _formsFiltered
+          h2= title
+          +form_info this
+          table.table
+            thead
+              tr
+                each usersWhoHaveSubmitted this
+                  th=objectId
+            tbody
+              each _questionsFiltered this
+                tr
+                  td(colspan='9000')
+                    span=text
+                tr
+                  each _usersFiltered this
+                    td
+                      with _answer this
+                        +survey_result
+
 
 template(name="survey_results_question_details")
   h5= text
@@ -62,7 +74,7 @@ template(name="survey_result")
     if _typeGroup ../../type 'multiple'
       span
         each answer
-          | {{this}}, 
+          | {{this}},
 
 template(name="form_info")
   p Form created: {{_formatDate createdAt}}
