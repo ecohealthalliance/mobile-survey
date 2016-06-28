@@ -1,6 +1,6 @@
 template(name="form_edit")
   if fetched
-    +form_header path='forms' form=form id=survey.id classNames='small'
+    +form_header path='forms' form=form survey=survey classNames='small'
     .main-content.space-top-2
       .container-fluid-padded
         form.edit-form

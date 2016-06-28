@@ -6,6 +6,7 @@ template(name="form_details")
         id=survey.id
         classNames='small'
         form=form
+        survey=survey
         showEdit=true)
       .main-content
         .container-fluid-padded
@@ -28,7 +29,7 @@ template(name="form_header")
         .header--actions
           unless surveyIsActive
             if showEdit
-              a.btn.btn-default.btn-sm(href="{{pathFor 'form_edit' id=id formId=form.id}}") Edit
+              a.btn.btn-default.btn-sm(href="{{pathFor 'form_edit' id=survey.id formId=form.id}}") Edit
             button.btn.btn-danger.btn-sm.delete.delete-form Delete
       else
         h3 New Form
