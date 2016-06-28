@@ -26,10 +26,10 @@ template(name="form_edit")
             .trigger-container
               .nav-floating-row
                 ul#tabs.nav.nav-tabs.trigger-nav-small(data-tabs='tabs')
-                  li(class="{{#if triggerTypeState 'location'}} active {{/if}}")
-                    a(href='#location' data-toggle='tab' data-type='location') Location
                   li(class="{{#if triggerTypeState 'datetime'}} active {{/if}}")
                     a(href='#datetime' data-toggle='tab' data-type='datetime') Date/Time
+                  li(class="{{#if triggerTypeState 'location'}} active {{/if}}")
+                    a(href='#location' data-toggle='tab' data-type='location') Location
 
             .tab-content.trigger-tabs
 

@@ -170,7 +170,7 @@ onMapClick = (event) ->
 
 Template.form_edit.onCreated ->
   @fetched = new ReactiveVar false
-  @triggerType = new ReactiveVar 'location'
+  @triggerType = new ReactiveVar 'datetime'
   @isAddressSearching = new ReactiveVar false
   @survey = @data.survey
   @formId = @data.formId
