@@ -1,11 +1,10 @@
 Template.loading.onCreated ->
-  @classes = @data?.classes
+  @classes = @data?.classes or ''
   @inline = @data?.inline
 
 Template.loading.helpers
   classes: ->
     instance = Template.instance()
-    classes = instance.data.classes or ''
-    if instance.data.inline
-      classes = "#{classes} inline-icon"
+    if instance.inline
+      classes = "#{instance.classes} inline-icon"
     classes
