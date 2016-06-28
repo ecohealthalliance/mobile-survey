@@ -10,9 +10,9 @@ template(name="survey_results")
     if fetched
       .container-fluid-padded.form-selector--wrapper
         .form-selector--container.clearfix
+          +form_link title='All Forms' id='all' selected=allFormsSelected
           each _forms
-            +form_link form=this
-
+            +form_link title=title id=objectId selected=formSelected
 
       each _formsFiltered
         .form-results
@@ -45,7 +45,9 @@ template(name="survey_results")
 
 template(name="form_link")
   .form-selector--form
-    h2.form-selector-link(data-id=form.objectId)=form.title
+    h2.form-selector-link(
+      class="{{#if selected}} selected {{/if}}"
+      data-id=id)=title
 
 template(name="survey_results_question_details")
   h5= text

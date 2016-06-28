@@ -7,16 +7,16 @@ Template.survey_results.onCreated ->
   @questions = new Meteor.Collection null
   @answers = new Meteor.Collection null
   @users = new Meteor.Collection null
-  @fetched = new ReactiveVar false
-  @selectedForms = new ReactiveVar []
+  @selectedForms = new Meteor.Collection null
   @selectedUsers = new ReactiveVar []
   @selectedQuestions = new ReactiveVar []
+  @fetched = new ReactiveVar false
 
 Template.survey_results.onRendered ->
   instance = @
   @autorun ->
-    fetched = instance.fetched.get()
-    selectedForms = instance.selectedForms.get()
+    instance.fetched.get()
+    instance.selectedForms.find().fetch()
     Meteor.defer ->
       instance.$('.table').floatThead
         position: 'fixed'
@@ -83,16 +83,22 @@ Template.survey_results.onRendered ->
 Template.survey_results.helpers
   _forms: ->
     Template.instance().forms.find()
+
   _questions: ->
     Template.instance().questions.find()
+
   _users: ->
     Template.instance().users.find()
+
   _formsFiltered: ->
-    selectedForm = Template.instance().selectedForms.get()
-    if selectedForm.length
-      Template.instance().forms.find({ objectId: $in: selectedForm })
+    selectedForms = Template.instance().selectedForms.find().fetch()
+    selectedForms = _.map selectedForms, (form) ->
+      form.formId
+    if selectedForms.length
+      Template.instance().forms.find({ objectId: $in: selectedForms })
     else
       Template.instance().forms.find()
+
   _questionsFiltered: (parentForm) ->
     return false unless _.isArray(parentForm.questions)
     selectedQuestions = Template.instance().selectedQuestions.get()
@@ -121,8 +127,10 @@ Template.survey_results.helpers
     filters = { questionId: user.questionId }
     if user.objectId then filters.userId = user.objectId
     Template.instance().answers.findOne(filters)
+
   count: (cursor) ->
     cursor?.count() or 0
+
   submissionsPerForm: (formId) ->
     count = Template.instance().submissions.find(formId: formId).count()
     userCount = Template.instance().users.find().count()
@@ -131,6 +139,12 @@ Template.survey_results.helpers
       "(#{count}/#{userCount} - #{percentage}%)"
     else
       "(#{count}/#{userCount})"
+
+  allFormsSelected: ->
+    not Template.instance().selectedForms.find().count()
+
+  formSelected: ->
+    Template.instance().selectedForms.findOne(formId: @objectId)
 
 
 Template.survey_results.events
@@ -141,11 +155,18 @@ Template.survey_results.events
       if this.value
         selectedValues.push this.value
     instance.selectedUsers.set selectedValues
+
   'click .form-selector-link': (event, instance) ->
     id = instance.$(event.target).data 'id'
-    selectedValues = []
-    selectedValues.push id
-    instance.selectedForms.set selectedValues
+    selectedForms = instance.selectedForms
+    query = formId: id
+    if id is 'all'
+      selectedForms.remove {}
+      return
+    if selectedForms.findOne(query)
+      selectedForms.remove query
+    else
+      selectedForms.insert query
 
 Template.survey_results_question_details.helpers
   _typeToStr: (type) ->
@@ -187,6 +208,10 @@ Template.form_info.helpers
       "#{time}"
   _formatDate: (timestamp) ->
     moment(timestamp).format('MMMM Do YYYY \\a\\t h:mm a')
+
+Template.form_link.helpers
+
+
 
 Template.answer.helpers
   answered: ->
