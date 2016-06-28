@@ -37,6 +37,7 @@ gq:base-styles
 gq:layout
 gq:surveys
 gq:forms
+gq:results
 gq:questions
 gq:notifications
 

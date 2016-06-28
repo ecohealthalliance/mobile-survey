@@ -1,0 +1,47 @@
+@import '{gq:base-styles}/variables'
+
+@import 'tables.import'
+@import 'form_selector.import'
+@import 'float_thead.import'
+
+.form-selector
+  margin-bottom 30px
+
+.form-results
+  margin-bottom 65px
+
+.form-results--header
+  background white
+  padding 10px 5%
+  right 0
+  h2
+    font-size 1.75em
+    color $primary
+    font-weight 800
+    margin 0
+  h2
+  .trigger-details
+    display inline-block
+    vertical-align middle
+
+  .trigger-details
+    margin-left 10px
+    i
+      font-size 1.5em
+      margin-right 5px
+    i
+    span
+      vertical-align middle
+    span
+      font-weight 600
+
+.no-answer
+  color $m-gray
+
+.no-submissions
+  padding 8px
+  line-height 1.42857143
+  background lighten($warning, 50%)
+  h4
+    font-weight 600
+    font-size 1.2em

@@ -1,0 +1,55 @@
+
+.table
+  overflow scroll
+  padding-left 5%
+  padding-right 5%
+  border-bottom 1px solid $border-primary-l
+
+  thead
+    background lighten($l-gray, 20%)
+    border-bottom 1px solid $primary-light
+
+  > tbody > tr > td
+  > thead > tr > td
+  > thead > tr > th
+    border-bottom 0
+    border-top 0
+
+  tr
+    td
+    th
+      &:first-child
+        padding-left 5%
+      &:last-child
+        padding-right 5%
+
+  > tr
+    padding-left 5%
+    padding-right 5%
+    &:first-of-type
+      border-top 2px solid $border-primary-l
+
+  th
+    border-bottom 0
+
+  td
+    width 200px
+
+  .question
+    background $ll-gray
+
+  .question--text
+    font-weight 600
+
+  .cell-icon
+    color $primary-light
+
+  th
+  .answer
+    padding-left 20px
+    border-right 1px solid $primary-light
+
+  .answer
+    padding-top 20px
+    padding-bottom 20px
+    border-color $border-primary-l

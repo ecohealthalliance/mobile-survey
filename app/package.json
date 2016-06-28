@@ -14,7 +14,9 @@
     "bootstrap-validator": "^0.10.2",
     "bufferutil": "^1.2.1",
     "faker": "^3.0.1",
+    "floatthead": "^1.4.0",
     "meteor-node-stubs": "^0.2.3",
+    "moment": "^2.13.0",
     "parse": "^1.8.3",
     "sortablejs": "^1.4.2",
     "utf-8-validate": "^1.2.1"

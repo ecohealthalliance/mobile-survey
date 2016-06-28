@@ -1,0 +1,111 @@
+template(name="survey_results")
+  .main-content
+    .header-page
+      .container-fluid-padded
+        h3 Survey Results
+        .details
+          span Forms: {{count _forms}}
+          span |
+          span Participants: {{count _users}}
+    if fetched
+      .container-fluid-padded.form-selector--wrapper
+        .form-selector--container.clearfix
+          +form_link title='All Forms' id='all' selected=allFormsSelected
+          each _forms
+            +form_link title=title id=objectId selected=formSelected
+
+      each _formsFiltered
+        .form-results
+          .form-results--header.container-fluid-padded
+            h2.inline= title
+            +form_info this
+          if usersWhoHaveSubmitted this
+            .table-wrapper
+              table.table
+                thead
+                  tr
+                    each usersWhoHaveSubmitted this
+                      th=objectId
+                tbody
+                  each _questionsFiltered this
+                    tr.question
+                      td.question--text(colspan='9000')
+                        span=text
+                    tr
+                      each _usersFiltered this
+                        td.answer
+                          with _answer this
+                            +survey_result
+          else
+            .no-submissions
+              .container-fluid-padded
+                h4 No sumbissions
+    else
+     +loading
+
+template(name="form_link")
+  .form-selector--form
+    h2.form-selector-link(
+      class="{{#if selected}} selected {{/if}}"
+      data-id=id)=title
+
+template(name="survey_results_question_details")
+  h5= text
+  p Type: {{_typeToStr type}}
+    if required
+      |, required
+  if _typeGroup type 'simple'
+    P Placeholder: "{{properties.placeholder}}", Maxlength: {{properties.maxlength}}
+  else if _typeGroup type 'number'
+    P Minimum: {{properties.min}}, Maximum: {{properties.max}}
+  else if _typeGroup type 'scale'
+    P Minimum: {{properties.min}} ("{{properties.minText}}"), Maximum: {{properties.max}} ("{{properties.maxText}}")
+  else if _typeGroup type 'multiple'
+    p Choices:
+      each properties.choices
+        span {{this}},
+  else if _typeGroup type 'choice'
+    p Choices:
+      each properties.choices
+        span {{this}},
+
+template(name="survey_result")
+  if _typeGroup ../../type 'simple'
+    +answer answer=answer type='string'
+
+  else if _typeGroup ../../type 'date'
+    +answer answer=answer type='date'
+
+  else if _typeGroup ../../type 'number'
+    +answer answer=answer type='string'
+
+  else if _typeGroup ../../type 'scale'
+    +answer answer=answer type='string'
+
+  else if _typeGroup ../../type 'choice'
+    +answer answer=answer type='string'
+
+  else if _typeGroup ../../type 'multiple'
+    +answer answer=answer type='multiple'
+
+template(name="answer")
+  if answered
+    if answerType 'string'
+        span= answer
+
+    else if answerType 'date'
+        span {{_formatDate answer}}
+
+    else if answerType 'multiple'
+      span
+        each answer
+          | {{this}},
+
+  else
+    span.no-answer NULL
+
+
+template(name="form_info")
+  .trigger-details
+    i.fa.fa-clock-o
+    span {{_triggerInfo trigger.type trigger.properties}}
