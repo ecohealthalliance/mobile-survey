@@ -1,42 +1,51 @@
 template(name="survey_results")
   .main-content
-    .container-fluid-padded
-      h3 Survey Results
-      unless fetched
-        +loading
-      else
-        .row
-          .col-sm-3
-            select(id="forms" multiple)
-              option(value='') Show all forms
-              each _forms
-                option(value=objectId) {{title}}  {{submissionsPerForm this.objectId}}
-            //- select(id="users" multiple)
-            //-   option(value='') All users
-            //-   each _users
-            //-     option(value=objectId)= username
-            p Amount of forms: {{count _forms}}
-            p Participants: {{count _users}}
+    .header-page
+      .container-fluid-padded
+        h3 Survey Results
+        .details
+          span Forms: {{count _forms}}
+          span |
+          span Participants: {{count _users}}
+    if fetched
+      .container-fluid-padded.form-selector--wrapper
+        .form-selector--container.clearfix
+          each _forms
+            +form_link form=this
 
-        each _formsFiltered
-          h2= title
-          +form_info this
-          table.table
-            thead
-              tr
-                each usersWhoHaveSubmitted this
-                  th=objectId
-            tbody
-              each _questionsFiltered this
-                tr
-                  td(colspan='9000')
-                    span=text
-                tr
-                  each _usersFiltered this
-                    td
-                      with _answer this
-                        +survey_result
 
+      each _formsFiltered
+        .form-results
+          .form-results--header.container-fluid-padded
+            h2.inline= title
+            +form_info this
+          if usersWhoHaveSubmitted this
+            .table-wrapper
+              table.table
+                thead
+                  tr
+                    each usersWhoHaveSubmitted this
+                      th=objectId
+                tbody
+                  each _questionsFiltered this
+                    tr.question
+                      td.question--text(colspan='9000')
+                        span=text
+                    tr
+                      each _usersFiltered this
+                        td.answer
+                          with _answer this
+                            +survey_result
+          else
+            .no-submissions
+              .container-fluid-padded
+                h4 No sumbissions
+    else
+     +loading
+
+template(name="form_link")
+  .form-selector--form
+    h2.form-selector-link(data-id=form.objectId)=form.title
 
 template(name="survey_results_question_details")
   h5= text
@@ -59,23 +68,42 @@ template(name="survey_results_question_details")
         span {{this}},
 
 template(name="survey_result")
-  .answer
-    p {{../email}}
-    if _typeGroup ../../type 'simple'
-      span "{{answer}}"
-    if _typeGroup ../../type 'date'
-      span {{_formatDate answer}}
-    if _typeGroup ../../type 'number'
-      span= answer
-    if _typeGroup ../../type 'scale'
-      span= answer
-    if _typeGroup ../../type 'choice'
-      span= answer
-    if _typeGroup ../../type 'multiple'
+  if _typeGroup ../../type 'simple'
+    +answer answer=answer type='string'
+
+  else if _typeGroup ../../type 'date'
+    +answer answer=answer type='date'
+
+  else if _typeGroup ../../type 'number'
+    +answer answer=answer type='string'
+
+  else if _typeGroup ../../type 'scale'
+    +answer answer=answer type='string'
+
+  else if _typeGroup ../../type 'choice'
+    +answer answer=answer type='string'
+
+  else if _typeGroup ../../type 'multiple'
+    +answer answer=answer type='multiple'
+
+template(name="answer")
+  if answered
+    if answerType 'string'
+        span= answer
+
+    else if answerType 'date'
+        span {{_formatDate answer}}
+
+    else if answerType 'multiple'
       span
         each answer
           | {{this}},
 
+  else
+    span.no-answer NULL
+
+
 template(name="form_info")
-  p Form created: {{_formatDate createdAt}}
-  p Form trigger: {{_triggerInfo trigger.type trigger.properties}}
+  .trigger-details
+    i.fa.fa-clock-o
+    span {{_triggerInfo trigger.type trigger.properties}}

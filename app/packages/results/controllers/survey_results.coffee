@@ -13,7 +13,6 @@ Template.survey_results.onCreated ->
 
 Template.survey_results.onRendered ->
   @survey = @data.survey
-  @fetched.set false
   # submissions
   @forms.remove {}
   @submissions.remove {}
@@ -92,7 +91,6 @@ Template.survey_results.helpers
     questions = Template.instance().questions.find(filters)
     if questions.count()
       questions.map (question) ->
-        console.log parentForm
         question.formId = parentForm.objectId
         question
     else
@@ -134,12 +132,10 @@ Template.survey_results.events
       if this.value
         selectedValues.push this.value
     instance.selectedUsers.set selectedValues
-  'change #forms': (event, instance) ->
+  'click .form-selector-link': (event, instance) ->
+    id = instance.$(event.target).data 'id'
     selectedValues = []
-    $this = instance.$(event.currentTarget)
-    $this.find(':selected').each ->
-      if this.value
-        selectedValues.push this.value
+    selectedValues.push id
     instance.selectedForms.set selectedValues
 
 Template.survey_results_question_details.helpers
@@ -158,15 +154,15 @@ Template.survey_results_question_details.helpers
 typeGroup = (type, group) ->
   if type in ['shortAnswer', 'longAnswer']
     return group is 'simple'
-  if type is 'multipleChoice'
+  else if type is 'multipleChoice'
     return group is 'choice'
-  if type is 'checkboxes'
+  else if type is 'checkboxes'
     return group is 'multiple'
-  if type is 'scale'
+  else if type is 'scale'
     return group is 'scale'
-  if type is 'number'
+  else if type is 'number'
     return group is 'number'
-  if type in ['date', 'datetime']
+  else if type in ['date', 'datetime']
     return group is 'date'
 
 Template.survey_results_question_details.helpers
@@ -174,13 +170,21 @@ Template.survey_results_question_details.helpers
 
 Template.survey_result.helpers
   _typeGroup: typeGroup
-  _formatDate: (timestamp) ->
-    moment(timestamp).format('MMMM Do YYYY, h:mm:ss a')
 
 Template.form_info.helpers
   _triggerInfo: (type, properties) ->
     if type is 'datetime'
-      time = moment(properties.datetime).format('MMMM Do YYYY \\a\\t h:mm:ss a')
-      "Date/Time, #{time}"
+      time = moment(properties.datetime).format('MMMM Do YYYY \\a\\t h:mm a')
+      "#{time}"
   _formatDate: (timestamp) ->
     moment(timestamp).format('MMMM Do YYYY \\a\\t h:mm a')
+
+Template.answer.helpers
+  answered: ->
+    @answer or not _.isEmpty @answer
+
+  answerType: (type) ->
+    type is @type
+
+  _formatDate: (timestamp) ->
+    moment(timestamp).format('MMMM Do YYYY, h:mm:ss a')
