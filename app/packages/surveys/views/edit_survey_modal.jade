@@ -15,7 +15,7 @@ template(name="edit_survey_modal")
             input.form-control(
               type='string'
               name='title'
-              value=survey.title
+              value=surveyDetails.title
               maxlength='128'
               minlength='3'
               required)
@@ -24,7 +24,7 @@ template(name="edit_survey_modal")
           .form-group
             label
               span Description
-            textarea.form-control(type='string' name='description') {{#if survey }}#{survey.description}{{/if}}
+            textarea.form-control(type='string' name='description')=surveyDetails.description
 
         .modal-footer
           button.btn.btn-default(data-dismiss='modal' aria-hidden='true' type='button') Cancel

@@ -27,10 +27,13 @@ template(name="survey")
                   a.survey-admin--view-link(href="{{pathFor 'survey_results' id=survey.id}}" data-page='results') Results
 
       if isActiveRoute 'survey_details'
-        +survey_details survey=survey surveyAttrs=surveyAttrs
+        +survey_details(
+          survey=survey
+          surveyDetails=surveyDetails
+          surveyState=surveyState)
 
       else if isActiveRoute 'forms'
-        +forms survey=survey
+        +forms survey=survey surveyState=surveyState
 
       else if isActiveRoute regex='form_edit|form_new'
         +form_edit data
@@ -39,17 +42,20 @@ template(name="survey")
         +form_details data
 
       else if isActiveRoute 'question_details'
-          +question_details data
+        +question_details data
 
       else if isActiveRoute 'survey_users'
-        +survey_users survey=survey
+        +survey_users survey=survey surveyState=surveyState
 
       else if isActiveRoute 'survey_results'
-        +survey_results survey=survey
+        +survey_results survey=survey surveyState=surveyState
 
       else if isActiveRoute 'survey_user_edit'
-        +survey_user_edit survey=survey
+        +survey_user_edit survey=survey surveyState=surveyState
 
-    +edit_survey_modal survey=survey surveyAttrs=surveyAttrs
+    +edit_survey_modal(
+      survey=survey
+      surveyDetails=surveyDetails
+      surveyState=surveyState)
   else
     +loading

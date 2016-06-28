@@ -3,6 +3,7 @@ template(name="question_details")
     +form_header(
       path='forms'
       survey=survey
+      surveyState=surveyState
       classNames='small'
       form=form
       showEdit=true)
@@ -17,6 +18,7 @@ template(name="question_details")
             formId=../formId
             question=question
             choices=choices
+            surveyState=surveyState
             type=type)
       else
         +loading

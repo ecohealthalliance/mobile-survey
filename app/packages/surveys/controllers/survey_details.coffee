@@ -1,6 +1,7 @@
 Template.survey_details.onCreated ->
   @survey = @data.survey
-  @surveyAttrs = @data.surveyAttrs
+  @surveyDetails = @data.surveyDetails
+  @surveyState = @data.surveyState
   @forms = new Meteor.Collection null
   @fetched = new ReactiveVar false
   @active = new ReactiveVar @survey.get 'active'
@@ -29,7 +30,10 @@ Template.survey_details.onCreated ->
 
 Template.survey_details.helpers
   survey: ->
-    Template.instance().surveyAttrs.get()
+    Template.instance().survey
+
+  description: ->
+    Template.instance().surveyDetails.get().description
 
   forms: ->
     Template.instance().forms?.find {}, sort: {order: 1}
@@ -58,6 +62,6 @@ Template.survey_details.events
         survey.setUserACL(activeState.get())
       .then ->
         instance.activating.set false
+        instance.surveyState.set activeState.get()
         state = (if activeState.get() then "activated" else "deactivated")
         toastr.success("You have " + state + " your survey.")
-        FlowRouter.go("/surveys/#{instance.survey.id}")
