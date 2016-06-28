@@ -16,6 +16,7 @@ Template.login.helpers
 Template.login.events
   'submit form': (event, instance) ->
     event.preventDefault()
+
     loggingIn = instance.loggingIn
     loggingIn.set true
 
@@ -24,13 +25,24 @@ Template.login.events
     passw = form.password.value.trim()
 
     Parse.User.logIn(email, passw)
-      .then ()->
-        Meteor.call 'loginUser', email, passw, (err, token) ->
-          Meteor.loginWithToken token, (err)->
-            if err
-              toastr.error('Could not log into Meteor')
-            loggingIn.set false
+      .then (user)->
+        query = new Parse.Query Parse.Role
+        query.equalTo 'name', 'admin'
+        query.equalTo 'users', Parse.User.current()
+        query.first()
+          .then (adminRole) ->
+            if adminRole
+              Meteor.call 'loginUser', email, passw, (err, token) ->
+                Meteor.loginWithToken token, (err)->
+                  if err
+                    toastr.error 'Could not log into Meteor'
+                  loggingIn.set false
+            else
+              toastr.error 'User Not Authorized'
+              Parse.User.logOut()
+              loggingIn.set false
+
       .fail (error)->
-        toastr.error('Could not log into Parse.')
+        toastr.error 'Could not log into Parse.'
         Meteor.logout()
         loggingIn.set false
