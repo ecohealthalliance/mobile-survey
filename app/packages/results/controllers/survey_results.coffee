@@ -1,4 +1,5 @@
 moment = require 'moment'
+floatThead = require 'floatthead'
 
 Template.survey_results.onCreated ->
   @forms = new Meteor.Collection null
@@ -12,6 +13,14 @@ Template.survey_results.onCreated ->
   @selectedQuestions = new ReactiveVar []
 
 Template.survey_results.onRendered ->
+  instance = @
+  @autorun ->
+    fetched = instance.fetched.get()
+    selectedForms = instance.selectedForms.get()
+    Meteor.defer ->
+      instance.$('.table').floatThead
+        position: 'fixed'
+
   @survey = @data.survey
   # submissions
   @forms.remove {}

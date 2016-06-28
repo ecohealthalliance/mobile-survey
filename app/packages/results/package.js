@@ -14,7 +14,7 @@ Package.onUse(function(api) {
     'blaze-html-templates',
     'templating',
     'mquandalle:jade',
-    'stylus',
+    'stylus'
   ], ['client']);
 
   api.addFiles([
