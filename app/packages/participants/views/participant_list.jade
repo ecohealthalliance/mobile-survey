@@ -1,0 +1,11 @@
+template(name="participant_list")
+  if participants.count
+    ul.list-group.users
+      each participants
+        li.list-group-item
+          span= email
+          .actions
+            button.btn.btn-danger.btn-sm.remove-user Remove from Survey
+  else
+    .container-fluid-padded.space-top-2
+      p This survey currently has no participants.

@@ -1,6 +1,6 @@
 Template.participants.onCreated ->
   @survey = @data.survey
-  @users = new Meteor.Collection(null)
+  @participants= new Meteor.Collection null
   @fetched = new ReactiveVar false
 
 Template.participants.onRendered ->
@@ -10,9 +10,9 @@ Template.participants.onRendered ->
     @users = new Meteor.Collection null
     instance = @
     @survey.getInvitedUsers()
-      .then (users) ->
-        users.forEach (item) ->
-          instance.users.insert item.toJSON()
+      .then (participants) ->
+        participants.forEach (participant) ->
+          instance.participants.insert participant.toJSON()
       .fail (err) ->
         toastr.error err.message
       .always ->
@@ -21,12 +21,5 @@ Template.participants.onRendered ->
     @fetched.set true
 
 Template.participants.helpers
-  users: ->
-    Template.instance().users?.find()
-
-Template.participants.events
-  'click .remove-user': (event, instance) ->
-    user = @
-    instance.survey.removeInvitedUser(@objectId)
-      .then ->
-        instance.users.remove 'objectId': user.objectId
+  participants: ->
+    Template.instance().participants

@@ -38,15 +38,15 @@ adminRoutes.route '/surveys/:id/forms',
       main: 'survey'
       params: params
 
-adminRoutes.route '/surveys/:id/participants',
-  name: 'participants'
+adminRoutes.route '/surveys/:id/results',
+  name: 'survey_results'
   action: (params) ->
     BlazeLayout.render 'layout',
       main: 'survey'
       params: params
 
-adminRoutes.route '/surveys/:id/results',
-  name: 'survey_results'
+adminRoutes.route '/surveys/:id/participants',
+  name: 'participants'
   action: (params) ->
     BlazeLayout.render 'layout',
       main: 'survey'

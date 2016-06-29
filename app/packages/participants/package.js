@@ -17,9 +17,13 @@ Package.onUse(function(api) {
   ], ['client']);
 
   api.addFiles([
+    'views/participants_header.jade',
+    'views/participant_list.jade',
     'views/participants.jade',
     'views/participants_edit.jade',
+    'views/participant_results.jade',
     'controllers/participants.coffee',
+    'controllers/participant_list.coffee',
     'controllers/participants_edit.coffee'
   ], 'client');
 });
