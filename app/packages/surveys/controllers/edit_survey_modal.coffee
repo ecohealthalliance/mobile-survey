@@ -2,10 +2,9 @@
 validator = require 'bootstrap-validator'
 
 Template.edit_survey_modal.onCreated ->
-  @surveys = @data.surveys
   @saving = new ReactiveVar false
   @survey = @data.survey
-  @surveyAttrs = @data.surveyAttrs
+  @surveyDetails = @data.surveyDetails
   @surveyObjectId = new ReactiveVar @survey?.id
   @fetched = new ReactiveVar false
 
@@ -18,8 +17,8 @@ Template.edit_survey_modal.onRendered ->
 Template.edit_survey_modal.helpers
   saving: ->
     Template.instance().saving.get()
-  survey: ->
-    Template.instance().surveyAttrs?.get()
+  surveyDetails: ->
+    Template.instance().surveyDetails?.get()
 
 afterSurveySave = (isNewSurvey, survey, instance, event) ->
   instance.saving.set false
@@ -32,7 +31,9 @@ afterSurveySave = (isNewSurvey, survey, instance, event) ->
     , 300)
   else
     # Update the existing details
-    instance.surveyAttrs.set survey.toJSON()
+    instance.surveyDetails.set
+      title: survey.get 'title'
+      description: survey.get 'description'
 
 Template.edit_survey_modal.events
   'submit form': (event, instance) ->

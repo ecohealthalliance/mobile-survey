@@ -4,6 +4,7 @@ template(name="form_details")
       +form_header(
         path='forms'
         id=survey.id
+        surveyState=surveyState
         classNames='small'
         form=form
         survey=survey
@@ -16,7 +17,11 @@ template(name="form_details")
                 .col-md-4
                   +questions_add form=form questions=questionsCollection
               .col-md-8
-                +questions form=form survey=survey questions=questionsCollection
+                +questions(
+                  form=form
+                  survey=survey
+                  surveyState=surveyState
+                  questions=questionsCollection)
     else
      +loading
 

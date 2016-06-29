@@ -6,7 +6,7 @@ template(name="survey_details")
     .container-fluid-padded
       .survey--details
         if fetched
-          p.description= survey.description
+          p.description=description
           button.btn.btn-primary.activate(disabled="{{#if activating}} true {{/if}}")
             if activating
               span.fa.fa-spinner.fa-pulse
