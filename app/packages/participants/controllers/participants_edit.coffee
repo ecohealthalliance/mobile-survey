@@ -1,6 +1,6 @@
 { setAdminACL, setUserACL, getRole } = require 'meteor/gq:helpers'
 
-Template.survey_user_edit.onCreated ->
+Template.participants_edit.onCreated ->
   @survey = @data.survey
   @users = new Meteor.Collection null
   instance = @
@@ -9,7 +9,7 @@ Template.survey_user_edit.onCreated ->
       _.each users, (user) ->
         instance.users.insert user.toJSON()
 
-Template.survey_user_edit.events
+Template.participants_edit.events
   'submit form': (event, instance)->
     event.preventDefault()
     userProps = _.object $(event.target).serializeArray().map(
@@ -52,9 +52,9 @@ Template.survey_user_edit.events
           toastr.warning "#{email} has already been added to the survey"
         else
           toastr.success "User added"
-        FlowRouter.go "/surveys/#{survey.id}/users"
+        FlowRouter.go "/surveys/#{survey.id}/participants"
       .fail (err)->
         toastr.error(err.message)
 
   'click #cancel': (event, instance) ->
-    FlowRouter.go("/surveys/#{instance.survey.id}/users")
+    FlowRouter.go("/surveys/#{instance.survey.id}/participants")

@@ -36,6 +36,7 @@ gq:api
 gq:base-styles
 gq:layout
 gq:surveys
+gq:participants
 gq:forms
 gq:results
 gq:questions

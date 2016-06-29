@@ -19,10 +19,6 @@ Package.onUse(function(api) {
   api.addFiles([
     'styles/index.styl',
     'views/survey.jade',
-    'views/survey_users.jade',
-    'controllers/survey_users.coffee',
-    'views/survey_user_edit.jade',
-    'controllers/survey_user_edit.coffee',
     'views/survey_details.jade',
     'views/edit_survey_modal.jade',
     'views/delete_survey_modal.jade',

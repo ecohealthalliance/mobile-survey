@@ -1,8 +1,8 @@
-template(name="survey_users")
-  +survey_users_header path='survey_user_edit' id=survey.id object='User' buttonAdd=true
+template(name="participants")
+  +participants_header path='participants_edit' id=survey.id object='Participant' buttonAdd=true
   .main-content
     if fetched
-      if users
+      if users.count
         ul.list-group.users
           each users
             li.list-group-item
@@ -10,13 +10,14 @@ template(name="survey_users")
               .actions
                 button.btn.btn-danger.btn-sm.remove-user Remove from Survey
       else
-        p This survey has no users
+        .container-fluid-padded.space-top-2
+          p This survey currently has no participants.
     else
      +loading
 
-template(name="survey_users_header")
+template(name="participants_header")
   .header-page
     .container-fluid-padded
-      h3 Users
+      h3 Participants
       if buttonAdd
         +buttonAdd path=path id=id object=object

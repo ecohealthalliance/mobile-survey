@@ -20,8 +20,8 @@ template(name="survey")
                 a.survey-admin--view-link(href="{{pathFor 'survey_details' id=survey.id}}" data-page='details') Details
               li(class="{{isActiveRoute regex='forms|forms_new|form_details|form_edit'}}")
                 a.survey-admin--view-link(href="{{pathFor 'forms' id=survey.id}}" data-page='forms') Forms
-              li(class="{{isActiveRoute 'survey_users'}}")
-                a.survey-admin--view-link(href="{{pathFor 'survey_users' id=survey.id}}" data-page='users') Users
+              li(class="{{isActiveRoute 'participants'}}")
+                a.survey-admin--view-link(href="{{pathFor 'participants' id=survey.id}}" data-page='users') Participants
               if surveyIsActive
                 li(class="{{isActiveRoute 'survey_results'}}")
                   a.survey-admin--view-link(href="{{pathFor 'survey_results' id=survey.id}}" data-page='results') Results
@@ -44,14 +44,14 @@ template(name="survey")
       else if isActiveRoute 'question_details'
         +question_details data
 
-      else if isActiveRoute 'survey_users'
-        +survey_users survey=survey surveyState=surveyState
+      else if isActiveRoute 'participants'
+        +participants survey=survey surveyState=surveyState
 
       else if isActiveRoute 'survey_results'
         +survey_results survey=survey surveyState=surveyState
 
-      else if isActiveRoute 'survey_user_edit'
-        +survey_user_edit survey=survey surveyState=surveyState
+      else if isActiveRoute regex='participants|participants_edit'
+        +participants_edit survey=survey surveyState=surveyState
 
     +edit_survey_modal(
       survey=survey

@@ -1,9 +1,9 @@
-Template.survey_users.onCreated ->
+Template.participants.onCreated ->
   @survey = @data.survey
   @users = new Meteor.Collection(null)
   @fetched = new ReactiveVar false
 
-Template.survey_users.onRendered ->
+Template.participants.onRendered ->
   @survey = @data.survey
   @fetched.set false
   if @survey.has 'invitedUsers'
@@ -20,11 +20,11 @@ Template.survey_users.onRendered ->
   else
     @fetched.set true
 
-Template.survey_users.helpers
+Template.participants.helpers
   users: ->
     Template.instance().users?.find()
 
-Template.survey_users.events
+Template.participants.events
   'click .remove-user': (event, instance) ->
     user = @
     instance.survey.removeInvitedUser(@objectId)
