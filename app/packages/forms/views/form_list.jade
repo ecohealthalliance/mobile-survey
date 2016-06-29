@@ -1,0 +1,15 @@
+template(name="form_list")
+  if hasForms
+    ul.list-group#formList
+      each forms
+        li.list-group-item.with-handle(data-id=objectId)
+          span.sortable-handle
+            i.mdi.mdi-drag
+          a(href="{{pathFor 'form_details' id=surveyId formId=objectId}}")=title
+          .actions
+            unless surveyIsActive
+              a.btn.btn-default.action.edit-form(href="forms/#{objectId}/edit") Edit
+              button.btn.btn-danger.action.delete.delete-form
+                | Delete
+  else
+    p This survey has no forms

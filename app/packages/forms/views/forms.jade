@@ -7,19 +7,14 @@ template(name="forms")
 
   .main-content
     if fetched
-      if hasForms
-        ul.list-group#formList
-          each forms
-            li.list-group-item.with-handle(data-id=objectId)
-              span.sortable-handle
-                i.mdi.mdi-drag
-              a(href="{{pathFor 'form_details' id=surveyId formId=objectId}}")=title
-              .actions
-                unless surveyIsActive
-                  a.btn.btn-default.action.edit-form(href="forms/#{objectId}/edit") Edit
-                  button.btn.btn-danger.action.delete.delete-form
-                    | Delete
+      if surveyIsActive
+        +form_results(
+          survey=survey
+          forms=forms)
       else
-        p This survey has no forms
+        +form_list(
+          survey=survey
+          surveyState=surveyState
+          forms=forms)
     else
      +loading
