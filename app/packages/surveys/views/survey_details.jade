@@ -3,37 +3,17 @@ template(name="survey_details")
     .container-fluid-padded
       h3.inline Details
   .main-content
-    .container-fluid-padded
-      .survey--details
-        if fetched
-          p.description=description
-          button.btn.btn-primary.activate(disabled="{{#if activating}} true {{/if}}")
-            if activating
-              span.fa.fa-spinner.fa-pulse
-            else
-              span(class='{{activateButtonClass}}').mdi
-            span
-              =activateButtonText
-              | Survey
-          if forms
-            ul.forms.list-unstyled
-              each forms
-                li.form
-                  h4
-                    span.trigger(class=trigger.type)
-                    a(href="{{pathFor 'form_details' id=../survey.id formId=objectId}}")
-                      span=title
-                  if questions
-                    ul.questions.list-unstyled
-                      each questions
-                        li.question
-                          span.question-type(class=type)
-                          if surveyIsActive
-                            span=text
-                          else
-                            a(href="{{pathFor 'question_details' id=../../survey.id formId=../objectId questionId=objectId}}")
-                              span=text
-          else
-            p This survey currently has no forms.
-        else
-          +loading
+    if fetched
+      if surveyIsActive
+        +survey_details_active(
+          survey=survey
+          surveyDetails=surveyDetails
+          surveyState=surveyState
+          forms=forms)
+      else
+        +survey_details_pending(
+          survey=survey
+          surveyDetails=surveyDetails
+          forms=forms)
+    else
+      +loading

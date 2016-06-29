@@ -5,7 +5,8 @@ template(name="survey")
         .container-fluid-padded
           .navbar-header.navbar-header-secondary
             +buttonBack path='surveys'
-            h2=title
+            h2
+              a(href="{{pathFor 'survey_details' id=survey.id}}")=title
             .header--actions
               unless surveyIsActive
                 button.btn.btn-default.btn-sm.pull-right(
@@ -16,15 +17,10 @@ template(name="survey")
 
           nav
             ul.nav.navbar-nav.navbar-right.navbar-secondary
-              li(class="{{isActiveRoute 'survey_details'}}")
-                a.survey-admin--view-link(href="{{pathFor 'survey_details' id=survey.id}}" data-page='details') Details
               li(class="{{isActiveRoute regex='forms|forms_new|form_details|form_edit'}}")
                 a.survey-admin--view-link(href="{{pathFor 'forms' id=survey.id}}" data-page='forms') Forms
               li(class="{{isActiveRoute 'participants'}}")
                 a.survey-admin--view-link(href="{{pathFor 'participants' id=survey.id}}" data-page='users') Participants
-              if surveyIsActive
-                li(class="{{isActiveRoute 'survey_results'}}")
-                  a.survey-admin--view-link(href="{{pathFor 'survey_results' id=survey.id}}" data-page='results') Results
 
       if isActiveRoute 'survey_details'
         +survey_details(
