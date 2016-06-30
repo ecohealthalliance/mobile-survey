@@ -20,8 +20,10 @@ fi
 function finish {
   echo "Cleaning-up..."
   mongo localhost:13001/meteor .scripts/database/drop.js
-  mongorestore -h 127.0.0.1 --port 13001 -d meteor tests/dump/meteor
-  rm -rf tests/dump/
+  echo "Restoring the original 'meteor' db from a dump file..."
+  mongorestore -h 127.0.0.1 --port 13001 -d meteor tests/dump/meteor --quiet
+  echo "done."
+  rm -rf tests/dump/ # cle
 }
 trap finish EXIT
 trap finish INT
@@ -34,8 +36,9 @@ trap finish SIGTERM # 15
 
 # Back up the current database
 rm -rf tests/dump/
-echo "Create a bson dump of our 'meteor' db..."
-mongodump -h 127.0.0.1 --port 13001 -d meteor -o tests/dump/
+echo "Creating a bson dump of our 'meteor' db..."
+mongodump -h 127.0.0.1 --port 13001 -d meteor -o tests/dump/ --quiet
+echo "done."
 
 
 # Run the tests
