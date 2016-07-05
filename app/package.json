@@ -6,8 +6,8 @@
     "start-test": "meteor -p 13000 --settings settings-test.json",
     "server": "parse-server --appId testapp --masterKey testkey --databaseURI mongodb://localhost:13001/meteor",
     "pretest": "npm install --only=dev",
-    "test": ".scripts/run-tests.sh",
-    "test-watch": "WATCH=true .scripts/run-tests.sh"
+    "chimp-test": ".scripts/run-tests.sh",
+    "chimp-watch": "WATCH=true .scripts/run-tests.sh"
   },
   "dependencies": {
     "autoprefixer": "^6.3.1",
@@ -22,10 +22,11 @@
     "utf-8-validate": "^1.2.1"
   },
   "devDependencies": {
+    "chimp": "^0.35.0",
     "underscore": "^1.8.3",
     "jquery": "^2.0.0",
     "coffee-script": "^1.10.0",
-    "express": "*",
-    "parse-server": "*"
+    "express": "^4.13.4",
+    "parse-server": "^2.2.10"
   }
 }

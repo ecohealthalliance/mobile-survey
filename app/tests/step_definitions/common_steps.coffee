@@ -23,6 +23,7 @@ do ->
         .setValue('input#inputEmail', 'yursky555@blurg.com')
         .setValue('input#inputPassword', 'P@ssw0rd')
         .submitForm('input#inputEmail')
+        .pause 2000
 
     @When 'I fill out the add survey form', ->
       @client

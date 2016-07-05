@@ -13,9 +13,9 @@ parse-server:
 	meteor npm run server
 
 # Acceptance test
-run-test:
-	meteor npm test
+test:
+	npm run chimp-test
 
 # Acceptance test (watch)
 test-watch:
-	meteor npm test-watch
+	npm run chimp-watch
