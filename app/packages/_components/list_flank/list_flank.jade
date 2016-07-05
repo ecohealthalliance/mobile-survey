@@ -1,0 +1,8 @@
+template(name="list_flank")
+  ul.participants-results--list.list-unstyled.list-flank
+    if collection.count
+      each collection
+        +list_flank_item item=this key=../key selectedId=../selectedId
+
+template(name="list_flank_item")
+  li.list-flank--item(class="{{#if selected}} selected {{/if}}")=item
