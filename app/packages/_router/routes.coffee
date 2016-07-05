@@ -38,13 +38,6 @@ adminRoutes.route '/surveys/:id/forms',
       main: 'survey'
       params: params
 
-adminRoutes.route '/surveys/:id/users',
-  name: 'survey_users'
-  action: (params) ->
-    BlazeLayout.render 'layout',
-      main: 'survey'
-      params: params
-
 adminRoutes.route '/surveys/:id/results',
   name: 'survey_results'
   action: (params) ->
@@ -52,8 +45,15 @@ adminRoutes.route '/surveys/:id/results',
       main: 'survey'
       params: params
 
-adminRoutes.route '/surveys/:id/users/new',
-  name: 'survey_user_edit'
+adminRoutes.route '/surveys/:id/participants',
+  name: 'participants'
+  action: (params) ->
+    BlazeLayout.render 'layout',
+      main: 'survey'
+      params: params
+
+adminRoutes.route '/surveys/:id/participants/new',
+  name: 'participants_edit'
   action: (params) ->
     BlazeLayout.render 'layout',
       main: 'survey'

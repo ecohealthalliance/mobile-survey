@@ -1,0 +1,14 @@
+template(name="survey_details_active")
+  .container-fluid-padded
+    .survey--details
+      p.description=description
+
+      .space-top-2
+        h4 Forms
+        span=forms.count
+
+      .space-top-2
+        p
+          a(href="{{pathFor 'forms' id=survey.id}}") Form Results
+        p
+          a(href="{{pathFor 'participants' id=survey.id}}") Participant Results

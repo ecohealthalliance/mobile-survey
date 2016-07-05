@@ -1,0 +1,12 @@
+template(name="participants")
+  +participants_header path='participants_edit' id=survey.id object='Participant' buttonAdd=true
+  .main-content
+    if fetched
+      if surveyIsActive
+        +participant_results(
+          participants=participants)
+      else
+        +participant_list(
+          participants=participants)
+    else
+     +loading
