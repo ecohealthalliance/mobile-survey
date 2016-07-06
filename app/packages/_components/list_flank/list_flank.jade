@@ -1,8 +1,15 @@
 template(name="list_flank")
-  ul.participants-results--list.list-unstyled.list-flank
-    if collection.count
-      each collection
-        +list_flank_item item=this key=../key selectedId=../selectedId
+  ul.participants-results--list.list-unstyled.list-flank(class=location)
+    each collections
+      if collection.count
+        h5=settings.name
+        each collection
+          +list_flank_item(
+            item=this
+            settings=../settings
+            selectMultiple=../../selectMultiple
+            selected=../../selected)
 
 template(name="list_flank_item")
-  li.list-flank--item(class="{{#if selected}} selected {{/if}}")=item
+  li.list-flank--item(
+    class="{{#if selected}} selected {{/if}} {{#if selectable}} selectable {{/if}}")=title

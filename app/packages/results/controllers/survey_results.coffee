@@ -6,7 +6,7 @@ Template.survey_results.onCreated ->
   @submissions = new Meteor.Collection null
   @questions = new Meteor.Collection null
   @answers = new Meteor.Collection null
-  @selectedForms = new Meteor.Collection null
+  @selectedForms= new Meteor.Collection null
   @selectedQuestions = new ReactiveVar []
   @fetched = new ReactiveVar false
   @participant = @data.participant
@@ -45,10 +45,6 @@ Template.survey_results.onRendered ->
 
   instance = @
 
-  # TODO Filter by form
-  # @autorun ->
-  #   instance.selectedForms.find().fetch()
-
   # Filter by user - get submissions of user
   @autorun ->
     instance.submissions.remove {}
@@ -85,11 +81,11 @@ Template.survey_results.helpers
     Template.instance().forms?.find()
 
   formsFiltered: ->
-    selectedForms = Template.instance().selectedForms.find().fetch()
-    selectedForms = _.map selectedForms, (form) ->
-      form.formId
-    if selectedForms.length
-      Template.instance().forms.find({ objectId: $in: selectedForms })
+    selectedFormIds = Template.instance().data.selectedFormIds.find().fetch()
+    selectedFormIds = _.map selectedFormIds, (formId) ->
+      formId.id
+    if selectedFormIds.length
+      Template.instance().forms.find({ objectId: $in: selectedFormIds })
     else
       Template.instance().forms.find()
 

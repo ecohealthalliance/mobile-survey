@@ -1,12 +1,6 @@
 template(name="survey_results")
   .main-content
     if fetched
-      //- .container-fluid-padded.form-selector--wrapper
-      //-   .form-selector--container.clearfix
-      //-     +form_link title='All Forms' id='all' selected=allFormsSelected
-      //-     each _forms
-      //-       +form_link title=title id=objectId selected=formSelected
-
       each formsFiltered
         .form-results
           .form-results--header.container-fluid-padded
