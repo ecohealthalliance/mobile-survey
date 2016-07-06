@@ -43,11 +43,11 @@ template(name="survey")
       else if isActiveRoute 'participants'
         +participants survey=survey surveyState=surveyState
 
+      else if isActiveRoute regex='participants_edit'
+        +participants_edit survey=survey surveyState=surveyState
+
       else if isActiveRoute 'survey_results'
         +survey_results survey=survey surveyState=surveyState
-
-      else if isActiveRoute regex='participants|participants_edit'
-        +participants_edit survey=survey surveyState=surveyState
 
     +edit_survey_modal(
       survey=survey

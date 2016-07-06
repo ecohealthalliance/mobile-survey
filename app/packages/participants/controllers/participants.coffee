@@ -9,8 +9,17 @@ Template.participants.onRendered ->
   if @survey.has 'invitedUsers'
     @users = new Meteor.Collection null
     instance = @
-    @survey.getInvitedUsers()
+    # @survey.getInvitedUsers()
+    # Fetch all the users until we fully implement Invited Users
+    query = new Parse.Query Parse.User
+    formIds = null
+    query.find()
       .then (participants) ->
+      #   instance.survey.getForms()
+      # .then (forms) ->
+      #   formIds = _.map forms, (form) ->
+      #     form.id
+      #   console.log formIds
         participants.forEach (participant) ->
           instance.participants.insert participant.toJSON()
       .fail (err) ->

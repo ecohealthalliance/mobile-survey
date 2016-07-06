@@ -6,27 +6,17 @@ Template.survey_results.onCreated ->
   @submissions = new Meteor.Collection null
   @questions = new Meteor.Collection null
   @answers = new Meteor.Collection null
-  @users = new Meteor.Collection null
   @selectedForms = new Meteor.Collection null
-  @selectedUsers = new ReactiveVar []
   @selectedQuestions = new ReactiveVar []
   @fetched = new ReactiveVar false
+  @participant = @data.participant
 
 Template.survey_results.onRendered ->
-  instance = @
-  @autorun ->
-    instance.fetched.get()
-    instance.selectedForms.find().fetch()
-    Meteor.defer ->
-      instance.$('.table').floatThead
-        position: 'fixed'
-
   @survey = @data.survey
-  # submissions
   @forms.remove {}
-  @submissions.remove {}
   @questions.remove {}
-  @answers.remove {}
+
+  # Get forms and questions of sruvey
   @survey.getForms()
     .then (forms) =>
       forms.forEach (form) =>
@@ -37,22 +27,6 @@ Template.survey_results.onRendered ->
             _form.trigger = trigger.toJSON()
             delete _form.triggers
             @forms.upsert _form.objectId, _form
-        # get results
-        query = new Parse.Query('Submission')
-        query.equalTo('formId', _form.objectId)
-        query.find().then (submissions) =>
-          submissions.forEach (submission) =>
-            _submission = submission.toJSON()
-            @submissions.upsert _submission.objectId, _submission
-            for questionId, answer of _submission.answers
-              @answers.insert
-                formId: _submission.formId
-                userId: _submission.userId.objectId
-                questionId: questionId
-                answer: answer
-                # plural: false
-                # average:
-                createdAt: _submission.createdAt
         # get forms
         form.getQuestions()
           .then (questions) =>
@@ -64,33 +38,53 @@ Template.survey_results.onRendered ->
               _question.questionId = _question.objectId
               # populate the @questions minimongo collection
               @questions.upsert _question.objectId, _question
-      # users
-      @users.remove {}
-      query = new Parse.Query Parse.User
-      query.find()
-        .then (users) =>
-          users.forEach (user) =>
-            user = user.toJSON()
-            userSubmissions = @submissions.find('userId.objectId': user.objectId).fetch()
-            user.submittedForms = _.map userSubmissions, (sumbission) ->
-              sumbission.formId
-            @users.insert user
     .fail (err) ->
       toastr.error err.message
     .always =>
       @fetched.set true
 
+  instance = @
+
+  # TODO Filter by form
+  # @autorun ->
+  #   instance.selectedForms.find().fetch()
+
+  # Filter by user - get submissions of user
+  @autorun ->
+    instance.submissions.remove {}
+    instance.answers.remove {}
+    participant = instance.participant.get()
+    instance.fetched.set false
+    instance.forms?.find().forEach (form) ->
+      _participant = new Parse.User()
+      _participant.id = participant.objectId
+      query = new Parse.Query 'Submission'
+      query.equalTo('formId', form.objectId)
+      query.equalTo('userId', _participant)
+      query.find()
+        .then (submissions) ->
+          submissions.forEach (submission) ->
+            _submission = submission.toJSON()
+            instance.submissions.upsert _submission.objectId, _submission
+            for questionId, answer of _submission.answers
+              instance.answers.insert
+                formId: _submission.formId
+                userId: _submission.userId.objectId
+                questionId: questionId
+                answer: answer
+                createdAt: _submission.createdAt
+        .always ->
+          instance.fetched.set true
+        .fail (err) ->
+          console.log err
+
+
+
 Template.survey_results.helpers
-  _forms: ->
-    Template.instance().forms.find()
+  forms: ->
+    Template.instance().forms?.find()
 
-  _questions: ->
-    Template.instance().questions.find()
-
-  _users: ->
-    Template.instance().users.find()
-
-  _formsFiltered: ->
+  formsFiltered: ->
     selectedForms = Template.instance().selectedForms.find().fetch()
     selectedForms = _.map selectedForms, (form) ->
       form.formId
@@ -99,34 +93,23 @@ Template.survey_results.helpers
     else
       Template.instance().forms.find()
 
-  _questionsFiltered: (parentForm) ->
-    return false unless _.isArray(parentForm.questions)
-    selectedQuestions = Template.instance().selectedQuestions.get()
-    filters = { questionId: $in: parentForm.questions }
+  questions: ->
+    return false unless _.isArray @questions
+    filters = { questionId: $in: @questions }
     questions = Template.instance().questions.find(filters)
     if questions.count()
-      questions.map (question) ->
-        question.formId = parentForm.objectId
+      questions.map (question) =>
+        question.formId = @objectId
         question
     else
       false
 
-  _usersFiltered: (question) ->
-    users = Template.instance().users
-    users = users.find(submittedForms: question.formId).fetch()
-    users.map (user) ->
-      user.questionId = question.objectId
-      user.questionType = question.type
-      user
-
-  usersWhoHaveSubmitted: (form) ->
-    users = Template.instance().users
-    users.find(submittedForms: form.objectId).fetch()
-
-  _answer: (user) ->
-    filters = { questionId: user.questionId }
-    if user.objectId then filters.userId = user.objectId
-    Template.instance().answers.findOne(filters)
+  answer: ->
+    instance = Template.instance()
+    participant = instance.data.participant.get()
+    instance.answers.findOne
+      userId: participant.objectId
+      questionId: @objectId
 
   count: (cursor) ->
     cursor?.count() or 0
@@ -146,6 +129,8 @@ Template.survey_results.helpers
   formSelected: ->
     Template.instance().selectedForms.findOne(formId: @objectId)
 
+  participantHasSubmitted: ->
+    Template.instance().submissions.findOne formId: @objectId
 
 Template.survey_results.events
   'change #users': (event, instance) ->
@@ -181,7 +166,8 @@ Template.survey_results_question_details.helpers
       when 'datetime' then 'Date/Time'
       else type
 
-typeGroup = (type, group) ->
+typeGroup = (group) ->
+  type = @type
   if type in ['shortAnswer', 'longAnswer']
     return group is 'simple'
   else if type is 'multipleChoice'
@@ -206,12 +192,8 @@ Template.form_info.helpers
     if type is 'datetime'
       time = moment(properties.datetime).format('MMMM Do YYYY \\a\\t h:mm a')
       "#{time}"
-  _formatDate: (timestamp) ->
-    moment(timestamp).format('MMMM Do YYYY \\a\\t h:mm a')
-
-Template.form_link.helpers
-
-
+  formatDate: ->
+    moment(@answer).format('MMMM Do YYYY \\a\\t h:mm a')
 
 Template.answer.helpers
   answered: ->
@@ -220,5 +202,8 @@ Template.answer.helpers
   answerType: (type) ->
     type is @type
 
-  _formatDate: (timestamp) ->
-    moment(timestamp).format('MMMM Do YYYY, h:mm:ss a')
+  answer: ->
+    @answer.answer
+
+  formatDate: ->
+    moment(@answer.answer).format('MMMM Do YYYY, h:mm:ss a')

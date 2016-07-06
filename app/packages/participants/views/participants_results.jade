@@ -7,7 +7,10 @@ template(name="participant_results")
         key='username'
         selectedId=participantId)
       .participants-results--results
-        if participant
+        if participantSelected
           h1=participant.username
+          +survey_results(
+            participant=selectedParticipant
+            survey=survey)
         else
           p Select a user to see results

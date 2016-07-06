@@ -4,9 +4,11 @@ template(name="participants")
     if fetched
       if surveyIsActive
         +participant_results(
-          participants=participants)
+          participants=participants
+          survey=survey)
       else
         +participant_list(
-          participants=participants)
+          participants=participants
+          survey=survey)
     else
      +loading
