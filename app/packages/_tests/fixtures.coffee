@@ -1,6 +1,4 @@
-'use strict'
-
-{Survey, Form, Trigger, Question} = require 'meteor/gq:api'
+{ Survey, Form } = require 'meteor/gq:api'
 { questions } = require './imports/data'
 
 Meteor.methods
@@ -43,7 +41,6 @@ Meteor.methods
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Et
                     ille ridens: Video, inquit, quid agas; Omnia contraria, quos
                     etiam insanos esse vultis.'
-      createdBy: Parse.User.current()
       deleted: false
       active: false
     survey = new Survey()

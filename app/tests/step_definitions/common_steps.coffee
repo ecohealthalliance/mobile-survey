@@ -3,7 +3,6 @@ do ->
   'use strict'
 
   _ = require('underscore')
-  {Survey, Form, Trigger, Question} = require 'meteor/gq:api'
 
   module.exports = ->
 
@@ -26,23 +25,31 @@ do ->
           .then (forms) ->
             forms[0]
 
-    @Before (callback) ->
+    @Before ->
       @server.call 'resetFixture'
-      @client.url(url.resolve(process.env.ROOT_URL, '/'))
+      @server.call 'createUserFixture'
+      @client.url url.resolve(process.env.ROOT_URL, '/')
 
 
-    @Given 'There is a survey in the database', ->
+    @Given 'there is a test user in the database', ->
+      @server.call 'createUserFixture', (err, res) ->
+        console.log err, res
+
+    @Given 'there is a survey in the database', ->
       @server.call 'createSurveyFixture'
 
-    @Given 'There is a form in Test Survey', ->
+    @Given 'there is a form in Test Survey', ->
       getTestSurvey.then (survey) =>
         @server.call 'createSurveyFixture', survey
 
-    @Given 'There are questions of every type in Test Form', ->
+    @Given 'there are questions of every type in Test Form', ->
       getForm()
         .then (form) =>
           @server.call 'createTestQuestions', form
 
+    @When /^I navigate to "([^"]*)"$/, (relativePath) ->
+      @client
+        .url(url.resolve(process.env.ROOT_URL, relativePath))
 
     @When /^I click "([^"]*)"$/, (selector) ->
       @client
@@ -56,14 +63,6 @@ do ->
         .setValue('input#inputPassword', 'P@ssw0rd')
         .submitForm('input#inputEmail')
         .pause 2000
-
-    @When 'I fill out the add survey form', ->
-      @client
-        .waitForVisible('input[name="title"]')
-        .pause 1000
-        .setValue('input[name="title"]', 'Test Survey')
-        .click('#confirm-create-survey')
-        .pause 1000
 
     @When /^I navigate to "([^"]*)"$/, (relativePath) ->
       @client
