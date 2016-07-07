@@ -1,0 +1,21 @@
+@import '{gq:base-styles}/variables'
+
+.list-flank--item
+  cursor pointer
+  padding-left 25%
+  padding .75em 0 .75em 25%
+  position relative
+  border-bottom 1px solid $border-primary-l
+  &:hover
+    background lighten($border-primary-l, 70%)
+  &::after
+    position absolute
+    right 1em
+    top 50%
+    transform translate(0, -50%)
+    content '\f105'
+    font-family 'FontAwesome'
+    color $primary-light
+  &.selected
+    font-weight 600
+    background lighten($border-primary-l, 30%)

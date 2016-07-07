@@ -1,0 +1,13 @@
+template(name="participant_results")
+  .participants-results
+    .participants-results--content
+      +list_flank(
+        name='Participants'
+        collection=participants
+        key='username'
+        selectedId=participantId)
+      .participants-results--results
+        if participant
+          h1=participant.username
+        else
+          p Select a user to see results

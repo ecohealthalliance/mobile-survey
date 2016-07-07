@@ -14,16 +14,20 @@ Package.onUse(function(api) {
     'blaze-html-templates',
     'templating',
     'mquandalle:jade',
+    'stylus'
   ], ['client']);
 
   api.addFiles([
+    'styles/results.import.styl',
+    'styles/index.styl',
     'views/participants_header.jade',
     'views/participant_list.jade',
     'views/participants.jade',
     'views/participants_edit.jade',
-    'views/participant_results.jade',
+    'views/participants_results.jade',
     'controllers/participants.coffee',
     'controllers/participant_list.coffee',
+    'controllers/participants_results.coffee',
     'controllers/participants_edit.coffee'
   ], 'client');
 });
