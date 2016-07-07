@@ -1,19 +1,29 @@
 .participants-results
   position relative
-
-.participants-results
-.participants-results--content
   height 100%
 
 .participants-results--content
   display flex
   align-items stretch
+  min-height 100%
 
 .participants-results--list
   flex 1
-  margin 0 2% 0 0
-  border-right 2px solid $border-primary-l
+  margin 0
+  border-right 1px solid $primary-light
+  &.right
+    border-left 2px solid $primary-light
+    border-right 0
 
 .participants-results--results
   flex 4
-  padding-top 1em
+  .user
+    padding-top .75em
+    padding-bottom .75em
+    padding-left 5%
+    margin 0
+    font-weight 600
+    background-color lighten($border-primary-l, 10%)
+    border-bottom 1px solid $border-primary-l
+    line-height 1em
+    font-size 1em

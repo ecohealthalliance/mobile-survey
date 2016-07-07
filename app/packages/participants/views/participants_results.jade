@@ -2,12 +2,27 @@ template(name="participant_results")
   .participants-results
     .participants-results--content
       +list_flank(
-        name='Participants'
-        collection=participants
-        key='username'
-        selectedId=participantId)
+        collections=collections
+        selected=participantId
+        selectMultiple=false
+        location='left')
       .participants-results--results
-        if participant
-          h1=participant.username
+        if hasSubmissions
+          if participantSelected
+            h2.user=username
+            +survey_results(
+              participant=selectedParticipant
+              selectedFormIds=selectedFormIds
+              survey=survey)
+          else
+            .centered.info-text
+              p Select a user to see results
         else
-          p Select a user to see results
+          .centered.info-text
+            p Currently no users have submitted forms
+
+      +list_flank(
+        collections=formCollection
+        selected=selectedFormIds
+        selectMultiple=true
+        location='right')

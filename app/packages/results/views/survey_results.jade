@@ -1,41 +1,22 @@
 template(name="survey_results")
   .main-content
-    .header-page
-      .container-fluid-padded
-        h3 Survey Results
-        .details
-          span Forms: {{count _forms}}
-          span |
-          span Participants: {{count _users}}
     if fetched
-      .container-fluid-padded.form-selector--wrapper
-        .form-selector--container.clearfix
-          +form_link title='All Forms' id='all' selected=allFormsSelected
-          each _forms
-            +form_link title=title id=objectId selected=formSelected
-
-      each _formsFiltered
+      each formsFiltered
         .form-results
           .form-results--header.container-fluid-padded
             h2.inline= title
             +form_info this
-          if usersWhoHaveSubmitted this
+          if participantHasSubmitted
             .table-wrapper
               table.table
-                thead
-                  tr
-                    each usersWhoHaveSubmitted this
-                      th=objectId
                 tbody
-                  each _questionsFiltered this
+                  each questions
                     tr.question
                       td.question--text(colspan='9000')
                         span=text
                     tr
-                      each _usersFiltered this
-                        td.answer
-                          with _answer this
-                            +survey_result
+                      td.answer
+                        +survey_result answer=answer type=type
           else
             .no-submissions
               .container-fluid-padded
@@ -70,22 +51,22 @@ template(name="survey_results_question_details")
         span {{this}},
 
 template(name="survey_result")
-  if _typeGroup ../../type 'simple'
+  if _typeGroup 'simple'
     +answer answer=answer type='string'
 
-  else if _typeGroup ../../type 'date'
+  else if _typeGroup 'date'
     +answer answer=answer type='date'
 
-  else if _typeGroup ../../type 'number'
+  else if _typeGroup 'number'
     +answer answer=answer type='string'
 
-  else if _typeGroup ../../type 'scale'
+  else if _typeGroup 'scale'
     +answer answer=answer type='string'
 
-  else if _typeGroup ../../type 'choice'
+  else if _typeGroup 'choice'
     +answer answer=answer type='string'
 
-  else if _typeGroup ../../type 'multiple'
+  else if _typeGroup 'multiple'
     +answer answer=answer type='multiple'
 
 template(name="answer")
@@ -94,7 +75,7 @@ template(name="answer")
         span= answer
 
     else if answerType 'date'
-        span {{_formatDate answer}}
+      span {{formatDate}}
 
     else if answerType 'multiple'
       span

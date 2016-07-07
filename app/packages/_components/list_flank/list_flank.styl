@@ -1,21 +1,65 @@
 @import '{gq:base-styles}/variables'
 
+$flank-padding = 22%
+
 .list-flank--item
   cursor pointer
-  padding-left 25%
-  padding .75em 0 .75em 25%
   position relative
   border-bottom 1px solid $border-primary-l
-  &:hover
-    background lighten($border-primary-l, 70%)
-  &::after
-    position absolute
-    right 1em
-    top 50%
-    transform translate(0, -50%)
-    content '\f105'
-    font-family 'FontAwesome'
-    color $primary-light
-  &.selected
+  font-size .9em
+  &.selectable
+    &:hover
+      background lighten($border-primary-l, 70%)
+    &::before
+    &::after
+      position absolute
+      top 50%
+      transform translate(0, -50%)
+      font-family 'FontAwesome'
+      color $primary-light
+    &::before
+      display none
+    &::after
+      right 1em
+      content '\f105'
+    &.selected
+      background lighten($border-primary-l, 60%)
+  &:not(.selectable)
+    color $d-gray
+    cursor default
+
+.list-flank
+  h5
+    padding-top .75em
+    padding-bottom .75em
+    margin 0
+    padding-left $flank-padding - 2
+    padding-right 1em
     font-weight 600
-    background lighten($border-primary-l, 30%)
+    background-color lighten($border-primary-l, 10%)
+    border-bottom 1px solid $border-primary-l
+    color $primary
+    line-height 1em
+    &:first-of-type
+      margin-top 0
+  &.left
+    .list-flank--item
+      padding .75em 2.5em .75em $flank-padding
+  &.right
+    h5
+      padding-left 1.7em
+    .list-flank--item
+      padding .75em $flank-padding .75em 2.5em
+      &.selectable
+        &::after
+          display none
+        &::before
+          display block
+          content '\f046'
+          left 1em
+          color $l-gray
+      &.selected
+        background none
+        &::before
+          color $primary-dark
+          content '\f046'

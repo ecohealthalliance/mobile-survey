@@ -1,12 +1,16 @@
 template(name="participants")
-  +participants_header path='participants_edit' id=survey.id object='Participant' buttonAdd=true
-  .main-content
+  unless surveyIsActive
+    +participants_header path='participants_edit' id=survey.id object='Participant' buttonAdd=true
+  .main-content.active-content
     if fetched
       if surveyIsActive
         +participant_results(
-          participants=participants)
+          participants=participants
+          survey=survey
+          forms=forms)
       else
         +participant_list(
-          participants=participants)
+          participants=participants
+          survey=survey)
     else
      +loading
