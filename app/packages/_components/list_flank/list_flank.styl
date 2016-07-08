@@ -68,3 +68,16 @@ $flank-padding = 22%
       &.selectable
         &::before
           left 1em
+
+.results--list-header
+  position relative
+  .select-all
+    position absolute
+    right 1em
+    top 50%
+    transform translate(0, -50%)
+    font-size .75em
+    color darken($primary-light, 20%)
+    cursor pointer
+    &:hover
+      color $primary

@@ -2,7 +2,14 @@ template(name="list_flank")
   ul.results--list.list-unstyled.list-flank(class=location)
     each collections
       if collection.count
-        h5=settings.name
+        .results--list-header
+          h5=settings.name
+          if settings.selectAll
+            a.select-all
+              if allItemsSelected
+                | Deselect All
+              else
+                | Select All
         each collection
           +list_flank_item(
             item=this

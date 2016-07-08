@@ -5,9 +5,8 @@ Template.form_results.onCreated ->
 Template.form_results.onRendered ->
   instance = @
   @autorun =>
-    _selectedFormIds =
-      _.map @selectedFormIdCollection.find().fetch(), (form) -> form.id
-    @selectedFormIds.set _selectedFormIds
+    _selectedFormIds = @selectedFormIdCollection.find {}, {fields: {id: 1}}
+    @selectedFormIds.set _.pluck(_selectedFormIds.fetch(), 'id')
 
 Template.form_results.helpers
   formCollection: ->
@@ -17,6 +16,7 @@ Template.form_results.helpers
         name: 'Forms'
         key: 'title'
         selectable: true
+        selectAll: true
     [forms]
 
   selectedFormIds: ->
