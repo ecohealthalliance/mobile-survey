@@ -1,8 +1,7 @@
 { Survey, Form } = require 'meteor/gq:api'
-{ questions } = require './imports/data'
+{ questions } = require './data'
 
-Meteor.methods
-
+fixtures =
   resetFixture: ->
     # Reset the local Meteor+Parse data, grant yourself write permissions
     if Meteor.settings.public.parseServerUrl.match(/localhost|127\.0\.0\.1/)
@@ -66,3 +65,7 @@ Meteor.methods
 
       question = new Question()
       question.create(props, index-1, form)
+
+
+module.exports =
+  fixtures: fixtures

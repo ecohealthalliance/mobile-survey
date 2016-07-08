@@ -5,7 +5,7 @@ Feature: Forms
   @forms
   Scenario: Adding a form to a survey
     When I sign in
-    Then I click ".surveys:first-child"
+    Then I click ".surveys li:first-child"
     Then I click "[data-page=forms]"
     Then I click ".btn-add"
     And I fill out the edit form form

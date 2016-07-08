@@ -320,7 +320,6 @@ Template.form_edit.events
         .fail (error) ->
           toastr.error error.message
     else
-      console.log props
       instance.survey.addForm(props)
         .then (form) ->
           FlowRouter.go "/surveys/#{instance.survey.id}/forms/#{form.id}"

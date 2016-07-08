@@ -2,11 +2,12 @@ do ->
 
   'use strict'
 
-  _ = require('underscore')
+  _ = require 'underscore'
 
   module.exports = ->
 
     url = require 'url'
+    { fixtures } = require '../../packages/_tests/fixtures'
 
     getTestSurvey = ->
       new Promise (resolve) ->
@@ -26,26 +27,25 @@ do ->
             forms[0]
 
     @Before ->
-      @server.call 'resetFixture'
-      @server.call 'createUserFixture'
+      fixtures.setFixture()
+      fixtures.createUserFixture()
       @client.url url.resolve(process.env.ROOT_URL, '/')
 
 
     @Given 'there is a test user in the database', ->
-      @server.call 'createUserFixture', (err, res) ->
-        console.log err, res
+      fixtures.createUserFixture()
 
     @Given 'there is a survey in the database', ->
-      @server.call 'createSurveyFixture'
+      fixtures.createSurveyFixture()
 
     @Given 'there is a form in Test Survey', ->
       getTestSurvey.then (survey) =>
-        @server.call 'createSurveyFixture', survey
+        fixtures.createSurveyFixture survey
 
     @Given 'there are questions of every type in Test Form', ->
       getForm()
         .then (form) =>
-          @server.call 'createTestQuestions', form
+          fixtures.createTestQuestions form
 
     @When /^I navigate to "([^"]*)"$/, (relativePath) ->
       @client

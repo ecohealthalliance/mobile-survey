@@ -8,21 +8,18 @@ Package.onUse(function(api) {
   api.versionsFrom('1.3.2.2');
 
   api.use([
-    'modules',
     'coffeescript',
     'ecmascript',
     'gq:parse'
-  ]);
+  ], 'client');
 
   api.addFiles([
     'survey.coffee',
     'form.coffee',
     'question.coffee',
-    'trigger.coffee',
-    'index.coffee'
-  ]);
+    'trigger.coffee'
+  ], 'client');
 
   api.mainModule('index.coffee', 'client');
-  api.mainModule('index.coffee', 'server');
 
 });
