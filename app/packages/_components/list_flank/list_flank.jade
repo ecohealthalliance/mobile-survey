@@ -1,5 +1,5 @@
 template(name="list_flank")
-  ul.participants-results--list.list-unstyled.list-flank(class=location)
+  ul.results--list.list-unstyled.list-flank(class=location)
     each collections
       if collection.count
         h5=settings.name
@@ -12,4 +12,4 @@ template(name="list_flank")
 
 template(name="list_flank_item")
   li.list-flank--item(
-    class="{{#if selected}} selected {{/if}} {{#if selectable}} selectable {{/if}}")=title
+    class="{{#if selected}} selected {{/if}} {{#if selectable}} selectable {{/if}} {{#if selectMultiple}} select-multiple {{/if}} ")=title
