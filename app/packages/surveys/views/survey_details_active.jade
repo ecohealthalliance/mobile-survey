@@ -1,14 +1,9 @@
 template(name="survey_details_active")
-  .container-fluid-padded
-    .survey--details
-      p.description=description
-
-      .space-top-2
-        h4 Forms
-        span=forms.count
-
-      .space-top-2
-        p
-          a(href="{{pathFor 'forms' id=survey.id}}") Form Results
-        p
-          a(href="{{pathFor 'participants' id=survey.id}}") Participant Results
+  .survey--details
+    .menu
+      a.menu-item(href="{{pathFor 'forms' id=survey.id}}")
+        i.fa.fa-bar-chart
+        | View Form Results
+      a.menu-item(href="{{pathFor 'participants' id=survey.id}}")
+        i.fa.fa-list
+        | View Participant Results

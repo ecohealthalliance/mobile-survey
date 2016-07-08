@@ -9,7 +9,11 @@ body
   font-family $body-font
 
 a
+  color $highlight
   &:hover
+  &:focus
+  &:hover:focus
+    color darken($highlight, 20%)
     text-decoration none
 
 .actions

@@ -17,6 +17,8 @@ Package.onUse(function(api) {
   ], 'client');
 
   api.addFiles([
+    'styles/details.import.styl',
+    'styles/main.import.styl',
     'styles/index.styl',
     'views/survey.jade',
     'views/survey_details.jade',

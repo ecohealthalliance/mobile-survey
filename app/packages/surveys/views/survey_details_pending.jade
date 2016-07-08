@@ -1,7 +1,6 @@
 template(name="survey_details_pending")
   .container-fluid-padded
     .survey--details
-      p.description=description
       button.btn.btn-primary.activate(disabled="{{#if activating}} true {{/if}}")
         if activating
           span.fa.fa-spinner.fa-pulse
