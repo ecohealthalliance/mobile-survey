@@ -143,4 +143,11 @@ Form = Parse.Object.extend 'Form',
       .fail (err) ->
         console.log err
 
+  getSubmissions: ->
+    query = new Parse.Query 'Submission'
+    query.equalTo 'formId', @id
+    query.find()
+      .then (forms) ->
+        forms
+
 module.exports = Form
