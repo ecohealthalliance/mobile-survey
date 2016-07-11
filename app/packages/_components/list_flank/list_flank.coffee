@@ -1,20 +1,18 @@
 allItemsSelected = (instance) ->
-  # Right now this will work when the first collection matches the collection
-  # being worked with
-  collection = instance.data.collections[0].collection
-  instance.data.selected.find().count() is collection.find().count()
+  instanceData = instance.data
+  instanceData.selected.find().count() is instanceData.collection.find().count()
 
-Template.list_flank.onCreated ->
+Template.list_flank_sub_list.onCreated ->
   @allItemsSelected = new ReactiveVar false
 
-Template.list_flank.helpers
+Template.list_flank_sub_list.helpers
   collection: ->
     @collection.find()
 
   allItemsSelected: ->
     Template.instance().allItemsSelected.get()
 
-Template.list_flank.events
+Template.list_flank_sub_list.events
   'click li.selectable': (event, instance) ->
     data = instance.data
     selected = data.selected
