@@ -7,6 +7,56 @@ Triggers = new Meteor.Collection("Trigger", { _driver: database})
 FormTriggers = new Meteor.Collection("_Join:triggers:Form", {_driver: database })
 Notifications = new Meteor.Collection("Notification", { _driver: database }) #TODO, maybe make this a Parse.Object so its viewable in the dashboard
 Invitations = new Meteor.Collection("Invitation", { _driver: database})
+Submissions = new Meteor.Collection("Submission", { _driver: database})
+
+Mongo.Collection::aggregate = (pipeline, options) ->
+  collection = if @rawCollection then @rawCollection() else @_getCollection()
+  Meteor.wrapAsync(collection.aggregate.bind(collection)) pipeline, options
+
+###
+  ensures that indexes are created on the uniqueId columns
+
+  Note: if duplicates already exist meteor will report that the
+   'MongoError: driver is incompatible with this server version'
+   and the index will not be created on the collection.  The dropDups options
+   was dropped in Mongo v3.0
+
+  @param {bool} dropDups, should the method should drop duplicates before creating the indexes
+###
+ensureIndexes = (dropDups) ->
+  dropDups ?= true
+  _collections =
+    Invitations: Invitations
+    Submissions: Submissions
+  for k,v of _collections
+    # drop duplicates within the uniqueId column from each collection
+    if dropDups
+      dropDuplicates(v, 'uniqueId')
+    # create the index, in v3.0 of mongo this is synonymous with ensureIndex method
+    v.rawCollection().createIndex {uniqueId: 1}, {unique: true}, (error) ->
+      if error
+        console.warn "[#{k}.createIndex]: ", error
+
+###
+  aggregately drops duplicates from a column
+
+  @param {object} collection, the collection to search aggregately
+  @param {string} columnName, the name of the column to drop duplicates
+###
+dropDuplicates = (collection, columnName) ->
+  q = [
+    { $group:
+      _id: value: "$#{columnName}"
+      dups: $addToSet: '$_id'
+      count: $sum: 1 }
+    { $match: count: $gt: 1 }
+  ]
+  cursor = collection.aggregate(q)
+  cursor.forEach (doc) ->
+    index = 1
+    while index < doc.dups.length
+      collection.remove doc.dups[index]
+      index++
 
 ###
  user may only have one notification sent for each trigger
@@ -139,6 +189,10 @@ checkForNotifications = () ->
   return
 
 Meteor.startup ->
+  # ensure index on the uniqueId columns
+  ensureIndexes()
+
+  # check for notifications on interval
   if Meteor.settings.private.enableNotifications
     Meteor.setInterval(checkForNotifications, Meteor.settings.private.notificationIntervalInMinutes * 60 * 1000);
     checkForNotifications()
