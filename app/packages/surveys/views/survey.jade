@@ -1,57 +1,58 @@
 template(name="survey")
-  if fetched
-    .survey-admin
-      .header-secondary.clearfix
-        .container-fluid-padded
-          .navbar-header.navbar-header-secondary
-            +buttonBack path='surveys'
-            h2
-              a(href="{{pathFor 'survey_details' id=survey.id}}")=title
-            .header--actions
-              unless surveyIsActive
-                button.btn.btn-default.btn-sm.pull-right(
-                  data-toggle="modal"
-                  data-target="#edit-survey-modal"
-                  data-id=survey.id)
-                  | Edit
+  .main-content
+    if fetched
+      .survey-admin
+        .header-secondary.clearfix
+          .container-fluid-padded
+            .navbar-header.navbar-header-secondary
+              +buttonBack path='surveys'
+              h2
+                a(href="{{pathFor 'survey_details' id=survey.id}}")=title
+              .header--actions
+                unless surveyIsActive
+                  button.btn.btn-default.btn-sm.pull-right(
+                    data-toggle="modal"
+                    data-target="#edit-survey-modal"
+                    data-id=survey.id)
+                    | Edit
 
-          nav
-            ul.nav.navbar-nav.navbar-right.navbar-secondary
-              li(class="{{isActiveRoute regex='forms|forms_new|form_details|form_edit'}}")
-                a.survey-admin--view-link(href="{{pathFor 'forms' id=survey.id}}" data-page='forms') Forms
-              li(class="{{isActiveRoute 'participants'}}")
-                a.survey-admin--view-link(href="{{pathFor 'participants' id=survey.id}}" data-page='users') Participants
+            nav
+              ul.nav.navbar-nav.navbar-right.navbar-secondary
+                li(class="{{isActiveRoute regex='forms|forms_new|form_details|form_edit'}}")
+                  a.survey-admin--view-link(href="{{pathFor 'forms' id=survey.id}}" data-page='forms') Forms
+                li(class="{{isActiveRoute 'participants'}}")
+                  a.survey-admin--view-link(href="{{pathFor 'participants' id=survey.id}}" data-page='users') Participants
 
-      if isActiveRoute 'survey_details'
-        +survey_details(
-          survey=survey
-          surveyDetails=surveyDetails
-          surveyState=surveyState)
+        if isActiveRoute 'survey_details'
+          +survey_details(
+            survey=survey
+            surveyDetails=surveyDetails
+            surveyState=surveyState)
 
-      else if isActiveRoute 'forms'
-        +forms survey=survey surveyState=surveyState
+        else if isActiveRoute 'forms'
+          +forms survey=survey surveyState=surveyState
 
-      else if isActiveRoute regex='form_edit|form_new'
-        +form_edit data
+        else if isActiveRoute regex='form_edit|form_new'
+          +form_edit data
 
-      else if isActiveRoute 'form_details'
-        +form_details data
+        else if isActiveRoute 'form_details'
+          +form_details data
 
-      else if isActiveRoute 'question_details'
-        +question_details data
+        else if isActiveRoute 'question_details'
+          +question_details data
 
-      else if isActiveRoute 'participants'
-        +participants survey=survey surveyState=surveyState
+        else if isActiveRoute 'participants'
+          +participants survey=survey surveyState=surveyState
 
-      else if isActiveRoute regex='participants_edit'
-        +participants_edit survey=survey surveyState=surveyState
+        else if isActiveRoute regex='participants_edit'
+          +participants_edit survey=survey surveyState=surveyState
 
-      else if isActiveRoute 'survey_results'
-        +survey_results survey=survey surveyState=surveyState
+        else if isActiveRoute 'survey_results'
+          +survey_results survey=survey surveyState=surveyState
 
-    +edit_survey_modal(
-      survey=survey
-      surveyDetails=surveyDetails
-      surveyState=surveyState)
-  else
-    +loading
+      +edit_survey_modal(
+        survey=survey
+        surveyDetails=surveyDetails
+        surveyState=surveyState)
+    else
+      +loading
