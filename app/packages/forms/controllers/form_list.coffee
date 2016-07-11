@@ -5,7 +5,6 @@ Template.form_list.onCreated ->
   @forms = @data.forms
   @fetched = new ReactiveVar false
   @survey = @data.survey
-  instance = @
 
 Template.form_list.onRendered ->
   instance = @
@@ -26,10 +25,10 @@ Template.form_list.helpers
     Template.instance().survey.id
 
 Template.form_list.events
- 'click .delete-form': (event, instance) ->
-   form = @
-   instance.survey.getForm(@objectId)
-    .then (form) ->
-      form.delete()
-    .then ->
-      instance.forms.remove form._id
+  'click .delete-form': (event, instance) ->
+    form = @
+    instance.survey.getForm(@objectId)
+      .then (form) ->
+        form.delete()
+      .then ->
+        instance.forms.remove form._id

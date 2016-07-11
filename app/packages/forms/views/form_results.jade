@@ -1,3 +1,13 @@
 template(name="form_results")
-  .container-fluid-padded
-    h2 Results
+  .results
+    .results--content
+      +list_flank(
+        collections=formCollection
+        selected=selectedFormIds
+        selectMultiple=true
+        location='left')
+      .results--results
+        .forms-results
+          each forms
+            .forms-results--result
+              p=title

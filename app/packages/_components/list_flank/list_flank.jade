@@ -1,15 +1,29 @@
 template(name="list_flank")
-  ul.participants-results--list.list-unstyled.list-flank(class=location)
+  ul.results--list.list-unstyled.list-flank(class=location)
     each collections
-      if collection.count
-        h5=settings.name
-        each collection
-          +list_flank_item(
-            item=this
-            settings=../settings
-            selectMultiple=../../selectMultiple
-            selected=../../selected)
+      +list_flank_sub_list(
+        collection=collection
+        settings=settings
+        selectMultiple=../selectMultiple
+        selected=../selected)
+
+template(name="list_flank_sub_list")
+  if collection.count
+    .results--list-header
+      h5=settings.name
+      if settings.selectAll
+        a.select-all
+          if allItemsSelected
+            | Deselect All
+          else
+            | Select All
+    each collection
+      +list_flank_item(
+        item=this
+        settings=../settings
+        selectMultiple=../selectMultiple
+        selected=../selected)
 
 template(name="list_flank_item")
   li.list-flank--item(
-    class="{{#if selected}} selected {{/if}} {{#if selectable}} selectable {{/if}}")=title
+    class="{{#if selected}} selected {{/if}} {{#if selectable}} selectable {{/if}} {{#if selectMultiple}} select-multiple {{/if}} ")=title

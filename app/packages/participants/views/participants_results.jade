@@ -1,12 +1,12 @@
 template(name="participant_results")
-  .participants-results
-    .participants-results--content
+  .results
+    .results--content
       +list_flank(
         collections=collections
         selected=participantId
         selectMultiple=false
         location='left')
-      .participants-results--results
+      .results--results
         if hasSubmissions
           if participantSelected
             h2.user=username
