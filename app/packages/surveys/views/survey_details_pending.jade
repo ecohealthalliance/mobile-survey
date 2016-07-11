@@ -1,11 +1,9 @@
 template(name="survey_details_pending")
   .container-fluid-padded
     .survey--details
-      button.btn.btn-primary.activate(disabled="{{#if activating}} true {{/if}}")
+      button.btn.btn-primary.btn-featured.btn-centered.activate(disabled="{{#if activating}} true {{/if}}")
         if activating
           span.fa.fa-spinner.fa-pulse
-        else
-          span(class='{{activateButtonClass}}').mdi
         span
           =activateButtonText
           | Survey

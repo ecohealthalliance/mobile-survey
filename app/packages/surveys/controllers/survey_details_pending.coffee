@@ -36,3 +36,5 @@ Template.survey_details_pending.events
         instance.data.surveyState.set activeState.get()
         state = (if activeState.get() then "activated" else "deactivated")
         toastr.success("You have " + state + " your survey.")
+      .fail (error) ->
+        toastr.error error.message

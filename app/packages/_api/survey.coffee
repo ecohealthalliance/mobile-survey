@@ -134,7 +134,10 @@ Survey = Parse.Object.extend 'Survey',
   ###
   setUserACL: (access) ->
     survey = @
-    @getInvitedUsers()
+    # Fetch all users until we implement invited users.
+    # When we do simply call @invitedUsers
+    query = new Parse.Query Parse.User
+    query.find()
       .then (users) ->
         users.forEach (user) ->
           setUserACL survey, user, access
