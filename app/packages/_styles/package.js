@@ -7,7 +7,7 @@ Package.describe({
 Package.onUse(function(api) {
   api.versionsFrom('1.3.2.2');
 
-  api.use(['stylus'], 'client');
+  api.use('stylus', 'client');
 
   api.addFiles([
     'variables.styl',

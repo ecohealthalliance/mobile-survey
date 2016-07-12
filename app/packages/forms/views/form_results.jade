@@ -19,3 +19,12 @@ template(name="form_results")
                   submissions=submissions)
               else
                 +loading
+            .forms-results--result
+              p=title
+      ul#forms-export
+        each exportButtons
+          li
+            a(href=data download="{{fileName title}}")
+              button.btn.btn-primary
+               i.mdi.mdi-arrow-down-bold-circle-outline
+               | Save "{{title}}" ({{questionCount}}) as CSV

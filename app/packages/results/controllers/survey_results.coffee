@@ -12,6 +12,7 @@ Template.survey_results.onCreated ->
   @participant = @data.participant
 
 Template.survey_results.onRendered ->
+  instance = @
   @survey = @data.survey
   @forms.remove {}
   @questions.remove {}
@@ -42,8 +43,6 @@ Template.survey_results.onRendered ->
       toastr.error err.message
     .always =>
       @fetched.set true
-
-  instance = @
 
   # Filter by user - get submissions of user
   @autorun ->
