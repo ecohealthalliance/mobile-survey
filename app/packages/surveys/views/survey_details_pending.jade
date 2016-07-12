@@ -1,12 +1,10 @@
 template(name="survey_details_pending")
   .container-fluid-padded
     .survey--details
-      button.btn.btn-primary.btn-featured.btn-centered.activate(disabled="{{#if activating}} true {{/if}}")
+      button.btn.btn-success.btn-featured.btn-centered.activate(disabled="{{#if activating}} true {{/if}}")
         if activating
           span.fa.fa-spinner.fa-pulse
-        span
-          =activateButtonText
-          | Survey
+        span Activate Survey
       if forms
         ul.forms.list-unstyled
           each forms

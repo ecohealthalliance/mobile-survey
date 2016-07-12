@@ -15,6 +15,7 @@ Package.onUse(function(api) {
     'utilities.styl',
     'validator.styl',
     'lists.styl',
+    'buttons.styl',
     'index.styl'
   ], 'client', {isImport: true});
 

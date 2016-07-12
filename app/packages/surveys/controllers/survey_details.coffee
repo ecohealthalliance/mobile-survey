@@ -5,6 +5,7 @@ Template.survey_details.onCreated ->
   @forms = new Meteor.Collection null
   @invitedUsers = new Meteor.Collection null
   @fetched = new ReactiveVar false
+
   instance = @
   @survey.getForms()
     .then (forms) ->
