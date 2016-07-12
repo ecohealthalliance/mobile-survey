@@ -20,6 +20,12 @@ Package.onUse(function(api) {
   api.addFiles([
     'styles/index.styl',
     'views/survey_results.jade',
-    'controllers/survey_results.coffee'
+    'views/form_results_detail.jade',
+    'views/types/basic_results_info.jade',
+    'views/types/datetime_results.jade',
+    'controllers/survey_results.coffee',
+    'controllers/types/basic_results_info.coffee',
+    'controllers/types/datetime_results.coffee',
+    'controllers/form_results_detail.coffee'
   ], 'client');
 });

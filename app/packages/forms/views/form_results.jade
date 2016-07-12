@@ -13,9 +13,10 @@ template(name="form_results")
             .forms-results--result
               h3=title
               if fetched
-                each submissions
-                  h5 Submission ID: #{objectId}
-                else
-                  p No submissions
+                +form_results_detail(
+                  form=this
+                  questions=questions
+                  submissions=submissions)
               else
+                h1 @@@@@@@@@@@@@@@@@@@@@@@
                 +loading
