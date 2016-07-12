@@ -7,10 +7,10 @@ template(name="form_results")
         selectMultiple=true
         location='left'
         lastClickedItemId=lastClickedFormId)
-      .results--results
-        .forms-results
+      .results--details
+        .form-results
           each forms
-            .forms-results--result
+            .form-results--result
               h3=title
               if fetched
                 +form_results_detail(
@@ -18,5 +18,4 @@ template(name="form_results")
                   questions=questions
                   submissions=submissions)
               else
-                h1 @@@@@@@@@@@@@@@@@@@@@@@
                 +loading

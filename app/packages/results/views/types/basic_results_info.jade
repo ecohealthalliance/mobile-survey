@@ -1,11 +1,11 @@
 template(name="basic_results_info")
-  .basic-info
+  .question-results--basic-info
     .basic-info--item
       +type_icon type=type
     .basic-info--item
-      span=particpation
-      h3 Participation
+      span.statistic=particpation
+      h5 Participation
 
 template(name="type_icon")
   i.fa(class="fa-#{icon}")
-  h3=type
+  h5=type

@@ -1,0 +1,67 @@
+
+.question-results
+  margin-bottom 20px
+  h5
+    font-weight 300
+    font-size 1.25em
+    text-transform uppercase
+    color $dd-gray
+  i
+  .statistic
+    display block
+    font-size 3em
+    font-weight 800
+    color $primary
+    line-height 1
+    &.minor
+      color $d-gray
+      font-size 1.5em
+      font-weight 600
+    &.major
+      font-size 1.75em
+      margin-bottom .25em
+  i
+    font-weight 300
+
+.separator
+  width 30%
+  margin 10px auto
+  border-bottom 1px solid $border-primary-l
+
+
+.question-results--title
+  padding 5px 10px
+  background lighten($border-primary-l, 50%)
+
+.question-results--details
+  display flex
+
+.question-results--basic-info
+  flex 1
+  max-width 200px
+  border-right 2px solid $border-primary-l
+
+.basic-info--item
+  padding 20px 10px
+  text-align center
+  border-bottom 1px solid $border-primary-l
+  &:last-of-type
+    border 0
+
+.question-results--summary
+  display flex
+  flex 3
+  padding 25px
+  align-items center
+  text-align center
+
+.summary-items
+  flex 1
+  border-right 1px solid $border-primary-l
+  &:last-of-type
+    border 0
+
+.summary-item
+  margin-bottom 20px
+  &:last-of-type
+    margin 0

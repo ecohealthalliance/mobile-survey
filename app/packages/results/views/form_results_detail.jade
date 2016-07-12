@@ -2,8 +2,9 @@ template(name="form_results_detail")
   each questions
     .question-results
       .question-results--title
-        h5=text
-      if answers
-        +Template.dynamic template=type data=templateData
-      else
-        p No Submissions
+        h4=text
+      .question-results--details
+        if answers
+          +Template.dynamic template=type data=templateData
+        else
+          p No Submissions
