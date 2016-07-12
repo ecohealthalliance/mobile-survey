@@ -1,19 +1,28 @@
 template(name="survey_details")
-  .header-page
-    .container-fluid-padded
-      h3.inline Details
   .main-content
-    if fetched
-      if surveyIsActive
-        +survey_details_active(
-          survey=survey
-          surveyDetails=surveyDetails
-          surveyState=surveyState
-          forms=forms)
-      else
-        +survey_details_pending(
-          survey=survey
-          surveyDetails=surveyDetails
-          forms=forms)
+    .basic-details
+      .detail
+        span=participantCount
+        h2 Participants
+      .detail
+        span=formCount
+        h2 Forms
+      .detail
+        span=questionCount
+        h2 Questions
+
+    .container-fluid-padded
+      p.description=description
+
+    if surveyIsActive
+      +survey_details_active(
+        survey=survey
+        surveyDetails=surveyDetails
+        surveyState=surveyState
+        forms=forms)
     else
-      +loading
+      +survey_details_pending(
+        survey=survey
+        surveyDetails=surveyDetails
+        surveyState=surveyState
+        forms=forms)
