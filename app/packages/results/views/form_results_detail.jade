@@ -1,0 +1,10 @@
+template(name="form_results_detail")
+  each questions
+    .question-results
+      .question-results--title
+        h4=text
+      .question-results--details
+        if answers
+          +Template.dynamic template=type data=templateData
+        else
+          p No Submissions
