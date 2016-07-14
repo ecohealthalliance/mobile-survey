@@ -220,35 +220,38 @@ Template.form_results.helpers
 formatDate = (dateString) ->
   moment(dateString).format('MM/DD/YYYY hh:mm:ss')
 formatQuestionType = (type) ->
-  if type is 'number'
-    'Number'
-  else if type is 'scale'
-    'Scale'
-  else if type is 'multipleChoice'
-    'Multiple Choice'
-  else if type is 'checkboxes'
-    'Checkbox'
-  else if type is 'shortAnswer'
-    'Short Answer'
-  else if type is 'longAnswer'
-    'Long Answer'
-  else if type is 'date'
-    'Date'
-  else if type is 'datetime'
-    'DateTime'
-  else
-    type
+  switch type
+    when 'number' then 'Number'
+    when 'scale' then 'Scale'
+    when 'multipleChoice' then 'Multiple Choice'
+    when 'checkboxes' then 'Checkbox'
+    when 'shortAnswer' then 'Short Answer'
+    when 'longAnswer' then 'Long Answer'
+    when 'date' then 'Date'
+    when 'datetime' then 'DateTime'
+    else
+      type
+
 formatAnswer = (answer, type) ->
-  # console.log type
+  switch type
+    when 'shortAnswer' then escapeString(answer)
+    when 'longAnswer' then escapeString(answer)
+    when 'date' then formatDate(answer)
+    when 'datetime' then formatDate(answer)
+    when 'multipleChoice' then escapeString(answer)
+    when 'checkboxes' then escapeString(answer.join ',')
+    else
+      answer
+
   if type in [ 'shortAnswer', 'longAnswer' ]
     answer = escapeString(answer)
   else if type is 'date'
     answer = formatDate(answer)
   else if type is 'datetime'
     answer = formatDate(answer.iso)
-  else if type in [ 'multipleChoice' ]
+  else if type is 'multipleChoice'
     answer = escapeString(answer)
-  else if type in [ 'checkboxes' ]
+  else if type is 'checkboxes'
     answer = escapeString(answer.join ',')
   answer
 escapeString = (inputString) ->
