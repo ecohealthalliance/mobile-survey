@@ -31,11 +31,11 @@ Package.onUse(function(api) {
     'views/forms.jade',
     'views/form_list.jade',
     'views/form_details.jade',
-    'views/form_results.jade',
+    'views/form_results/form_results.jade',
     'controllers/forms.coffee',
     'controllers/form_list.coffee',
     'controllers/form_edit.coffee',
     'controllers/form_details.coffee',
-    'controllers/form_results.coffee',
+    'controllers/form_results/form_results.coffee',
   ], 'client');
 });

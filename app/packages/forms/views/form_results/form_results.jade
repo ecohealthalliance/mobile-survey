@@ -1,0 +1,21 @@
+template(name="form_results")
+  .results
+    .results--content
+      +list_flank(
+        collections=formCollection
+        selected=selectedFormIds
+        selectMultiple=true
+        location='left'
+        lastClickedItemId=lastClickedFormId)
+      .results--results
+        .forms-results
+          each forms
+            .forms-results--result
+              h3=title
+              if fetched
+                each submissions
+                  h5 Submission ID: #{objectId}
+                else
+                  p No submissions
+              else
+                +loading

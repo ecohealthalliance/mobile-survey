@@ -17,6 +17,9 @@ Template.list_flank_sub_list.events
     data = instance.data
     selected = data.selected
     itemId = @item.objectId
+
+    data.lastClickedItemId?.set itemId
+
     if data.selectMultiple
       if selected.findOne(id: itemId)
         selected.remove id: itemId
