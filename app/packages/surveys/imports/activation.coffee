@@ -8,11 +8,9 @@ activate = (instance) ->
   activeState.set not activeState.get()
   props =
     active: activeState.get()
+  instance.activating.set true
   instance.data.survey.save(props)
     .then (survey) ->
-      instance.activating.set true
-      survey.setUserACL(activeState.get())
-    .then ->
       instance.activating.set false
       instance.data.surveyState.set activeState.get()
       state = (if activeState.get() then "activated" else "deactivated")
