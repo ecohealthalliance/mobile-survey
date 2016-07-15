@@ -30,6 +30,18 @@ Template.datetime_results.onCreated ->
     date: earliest.format 'MMMM Do YYYY'
     time: earliest.format 'h:mm:ss a'
 
+  if @data.type is 'date'
+    formaredDates = _.map @dates, (date) ->
+      date.format('MDYY')
+
+    @summaryDetails.insert
+      detailName: 'Most Common'
+      date: earliest.format 'MMMM Do YYYY'
+
 Template.datetime_results.helpers
   summaryDetails: ->
+    console.log Template.instance().summaryDetails.find().fetch()
     Template.instance().summaryDetails.find()
+
+  datetime: ->
+    Template.instance().data.type is 'datetime'
