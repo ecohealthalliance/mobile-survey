@@ -1,10 +1,7 @@
 template(name="datetime_results")
-  +basic_results_info type=type particpation=particpation
-  .question-results--summary
-
-    each summaryDetails
-      .summary-items
-        span.statistic.major=date
-        span.statistic.minor=time
-        .separator
-        h5=detailName
+  each summaryDetails
+    .summary-items
+      span.statistic.major=date
+      span.statistic.minor=time
+      .separator
+      h5=detailName

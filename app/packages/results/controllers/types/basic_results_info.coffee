@@ -1,10 +1,13 @@
 Template.basic_results_info.helpers
   particpation: ->
     '30%'
+  hasRange: ->
+    @type in ['number']
 
 Template.type_icon.helpers
   icon: ->
-    type = Template.instance().data.type
-    switch type
+    switch @type
       when 'datetime'
         'calendar'
+      when 'number'
+        'hashtag'

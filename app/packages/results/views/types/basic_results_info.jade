@@ -2,6 +2,10 @@ template(name="basic_results_info")
   .question-results--basic-info
     .basic-info--item
       +type_icon type=type
+    if hasRange
+      .basic-info--item
+        span.statistic #{props.min} - #{props.max}
+        h5 Range
     .basic-info--item
       span.statistic=particpation
       h5 Participation
