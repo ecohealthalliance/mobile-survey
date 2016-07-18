@@ -27,6 +27,7 @@ Package.onUse(function(api) {
   ], 'server');
 
   api.addFiles([
+    'styles/forms.styl',
     'views/form_edit.jade',
     'views/forms.jade',
     'views/form_list.jade',
