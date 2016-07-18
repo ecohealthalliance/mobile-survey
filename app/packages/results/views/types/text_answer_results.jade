@@ -1,0 +1,6 @@
+template(name="text_answer_results")
+  .question-results--summary.full-width
+    each recentAnswers
+      .summary-item.full-width
+        p=content
+        span.date=createdAt

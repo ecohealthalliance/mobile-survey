@@ -1,18 +1,19 @@
 { moment } = require 'meteor/momentjs:moment'
 
 Template.datetime_results.onCreated ->
-  dates = _.pluck @data.answers, 'iso'
-  dateTimeStamps = _.map dates, (date) ->
-    new Date(date).valueOf()
-  @dates = _.map dates, (date) ->
-    moment date
+  dateTimeStamps = []
+  momentDates = []
+  @data.answers.find().forEach (answer) ->
+    date = answer.content.iso
+    dateTimeStamps.push date
+    momentDates.push moment date
 
   @summaryDetails = new Meteor.Collection null
 
   total = 0
   for dateTimeStamp in dateTimeStamps
     total += dateTimeStamp
-  average = new Date Math.round(total / dates.length)
+  average = new Date Math.round(total / dateTimeStamps.length)
   average = moment(average)
 
   @summaryDetails.insert
@@ -20,13 +21,13 @@ Template.datetime_results.onCreated ->
     date: average.format 'MMMM D, YYYY'
     time: average.format 'h:mm:ss a'
 
-  latest = moment.min @dates
+  latest = moment.min momentDates
   @summaryDetails.insert
     detailName: 'Latest'
     date: latest.format 'MMMM D, YYYY'
     time: latest.format 'h:mm:ss a'
 
-  earliest = moment.max @dates
+  earliest = moment.max momentDates
   @summaryDetails.insert
     detailName: 'Earliest'
     date: earliest.format 'MMMM D, YYYY'

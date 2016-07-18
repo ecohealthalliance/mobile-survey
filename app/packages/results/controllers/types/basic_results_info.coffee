@@ -14,3 +14,7 @@ Template.type_icon.helpers
         'calendar'
       when 'number'
         'hashtag'
+      when 'shortAnswer'
+        'minus'
+      when 'longAnswer'
+        'align-left'

@@ -59,9 +59,12 @@
 .question-results--summary
   display flex
   flex 3
-  padding 35px
-  align-items center
-  text-align center
+  padding 25px
+  &.centered
+    align-items center
+    text-align center
+  &.full-width
+    flex-direction column
 
 .summary-items
   flex 1
@@ -75,3 +78,9 @@
     margin 0
     h5
       margin-bottom 0
+  &.full-width
+    max-width 70%
+  .date
+    display block
+    font-style italic
+    color $d-gray
