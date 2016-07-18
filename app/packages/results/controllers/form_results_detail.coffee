@@ -1,10 +1,12 @@
 Template.form_results_detail.helpers
   template: ->
     type = @type
-    if type in ['longAnswer', 'shortAnswer']
-      type = 'text_answer'
-    else if type is 'date'
+    if type is 'date'
       type = 'datetime'
+    else if type in ['longAnswer', 'shortAnswer']
+      type = 'text_answer'
+    else if type in ['checkboxes', 'multipleChoice']
+      type = 'multiple'
     "#{type}_results"
 
   templateData: ->

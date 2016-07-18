@@ -18,3 +18,7 @@ Template.type_icon.helpers
         'minus'
       when 'longAnswer'
         'align-left'
+      when 'checkboxes'
+        'check-square-o'
+      when 'multipleChoice'
+        'list-ul'

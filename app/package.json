@@ -18,6 +18,7 @@
     "meteor-node-stubs": "^0.2.3",
     "moment": "^2.13.0",
     "parse": "^1.8.3",
+    "randomcolor": "^0.4.4",
     "sortablejs": "^1.4.2",
     "utf-8-validate": "^1.2.1"
   },

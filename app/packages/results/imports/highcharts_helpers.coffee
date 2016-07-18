@@ -1,3 +1,5 @@
+{ pluckAnswers } = require './results_helpers'
+
 gaugeOptions =
   chart:
     type: 'solidgauge'
@@ -32,6 +34,12 @@ gaugeOptions =
       align: 'center'
   credits: enabled: false
 
+###
+  Returns label for chart
+  @param [Number] value, Value of statistic to show in label
+  @param [String] label, Label text content
+  @return [String] Label html as string
+###
 label = (value, label) ->
   """
     <div class='gauge-title'>
@@ -41,6 +49,12 @@ label = (value, label) ->
      </div>
   """
 
+###
+  Builds the options object for a Highcharts guage chart
+  @param [Object] props, Question properties (max/min)
+  @param [Array] answers, Array of submitted answers
+  @return [Object] Containing options for average, lowest, highest gauge charts
+###
 buildGaugeChartOptions = (props, answers) ->
   total = 0
   total = _.reduce answers, (answer, nextAnswer) ->
@@ -82,5 +96,25 @@ buildGaugeChartOptions = (props, answers) ->
   lowestChartOptions: lowestChartOptions
   highestChartOptions: highestChartOptions
 
+
+###
+  Builds the options object for a Highcharts guage chart
+  @param [Object] instance, Blaze Template instance
+  @param [Array] elementNamePrefix, Prefix of elements to contain charts
+###
+showGaugeChart = (instance, elementNamePrefix) ->
+  props = instance.data.question.properties
+  answers = pluckAnswers instance.data.answers
+  console.log props, answers
+
+  {averageChartOptions, lowestChartOptions, highestChartOptions} =
+    buildGaugeChartOptions props, answers
+
+  instance.$(".#{elementNamePrefix}-average").highcharts averageChartOptions
+  instance.$(".#{elementNamePrefix}-min").highcharts lowestChartOptions
+  instance.$(".#{elementNamePrefix}-max").highcharts highestChartOptions
+
+
+
 module.exports =
-  buildGaugeChartOptions: buildGaugeChartOptions
+  showGaugeChart: showGaugeChart
