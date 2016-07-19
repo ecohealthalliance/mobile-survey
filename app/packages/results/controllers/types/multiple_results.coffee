@@ -5,18 +5,27 @@ Template.multiple_results.onCreated ->
   @stats = new Meteor.Collection null
 
 Template.multiple_results.onRendered ->
-  choices = @data.question.properties.choices
+  question  = @data.question
+  choices   = question.properties.choices
   answers = pluckAnswers @data.answers
-  @chartData = []
+  chartData = []
 
-  _.each choices, (choice) =>
-    occurences = _.filter answers, (answer) -> answer is choice
-    count = occurences.length
+  if question.type is 'checkboxes'
+    answerCounts = _.countBy _.flatten(answers)
+    for choice, count of answerCounts
+      chartData.push [choice, count]
+  else
+    _.each choices, (choice) =>
+      occurences = _.filter answers, (answer) -> answer is choice
+      chartData.push [choice,  occurences.length]
+
+  _.each chartData, (dataPoint) =>
+    choice = dataPoint[0]
+    count = dataPoint[1]
     @stats.insert
       choice: choice
       count: count
       percentage: (count / answers.length) * 100
-    @chartData.push [choice, count]
 
   chartColors = randomcolor
     count: choices.length
@@ -24,10 +33,6 @@ Template.multiple_results.onRendered ->
   @$('.multiple-chart').highcharts
     chart:
       type: 'pie'
-      options3d:
-        enabled: true
-        alpha: 45
-        beta: 0
     credits: enabled: false
     colors: chartColors
     title: null
@@ -35,7 +40,6 @@ Template.multiple_results.onRendered ->
       pie:
         allowPointSelect: true
         cursor: 'pointer'
-        depth: 35
         showInLegend: true
         dataLabels:
           enabled: false
@@ -45,9 +49,9 @@ Template.multiple_results.onRendered ->
     series: [{
       type: 'pie'
       name: null
-      data: @chartData
+      data: chartData
     }]
 
 Template.multiple_results.helpers
   detailedResults: ->
-    Template.instance().stats.find()
+    Template.instance().stats.find {}, sort: count: -1

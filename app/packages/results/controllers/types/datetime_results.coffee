@@ -5,7 +5,7 @@ Template.datetime_results.onCreated ->
   momentDates = []
   @data.answers.find().forEach (answer) ->
     date = answer.content.iso
-    dateTimeStamps.push date
+    dateTimeStamps.push new Date(date).valueOf()
     momentDates.push moment date
 
   @summaryDetails = new Meteor.Collection null

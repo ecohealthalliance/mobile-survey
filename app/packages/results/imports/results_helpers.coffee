@@ -3,7 +3,6 @@
   @param [Object] answers, answers containing content and createdAt
 ###
 pluckAnswers = (answers) ->
-  console.log answers
   _.pluck answers.find().fetch(), 'content'
 
 
