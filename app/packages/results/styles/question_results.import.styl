@@ -1,3 +1,16 @@
+.statistic
+  display block
+  font-size 3em
+  font-weight 800
+  color $primary
+  line-height 1
+  &.minor
+    color $d-gray
+    font-size 1.5em
+    font-weight 600
+  &.major
+    font-size 1.75em
+    margin-bottom .25em
 
 .question-results
   margin-bottom 20px
@@ -7,19 +20,7 @@
     text-transform uppercase
     color $dd-gray
   i
-  .statistic
-    display block
-    font-size 3em
-    font-weight 800
-    color $primary
-    line-height 1
-    &.minor
-      color $d-gray
-      font-size 1.5em
-      font-weight 600
-    &.major
-      font-size 1.75em
-      margin-bottom .25em
+    @extend .statistic
   i
     font-weight 300
 
@@ -27,7 +28,10 @@
   width 30%
   margin 10px auto
   border-bottom 1px solid $border-primary-l
-
+  &.wide
+    width 60%
+  &.full-width
+    width 100%
 
 .question-results--title
   padding 5px 10px
@@ -38,7 +42,7 @@
 
 .question-results--basic-info
   flex 1
-  max-width 200px
+  min-width 300px
   border-right 2px solid $border-primary-l
 
 .basic-info--item
@@ -50,7 +54,7 @@
 
 .question-results--summary
   display flex
-  flex 3
+  flex 4
   padding 25px
   align-items center
   text-align center

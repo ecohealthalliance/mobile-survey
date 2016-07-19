@@ -1,15 +1,15 @@
 Template.form_results_detail.helpers
-  type: ->
+  template: ->
     "#{@type}_results"
 
   templateData: ->
-    questionId = @objectId
+    question = @
     answers = []
     Template.instance().data.submissions.forEach (submission) ->
-      answers.push submission.answers[questionId]
+      answers.push submission.answers[question.objectId]
 
+    question: question
     answers: answers
-    type: @type
 
   answers: ->
     Template.instance().data.submissions.fetch()
