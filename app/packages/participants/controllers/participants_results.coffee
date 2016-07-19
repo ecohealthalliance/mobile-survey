@@ -62,10 +62,14 @@ Template.participant_results.helpers
         name: 'Forms'
         key: 'title'
         selectable: true
+        selectAll: true
     [formCollection]
 
   selectedFormIds: ->
     Template.instance().selectedFormIds
+
+  formSelected: ->
+    Template.instance().selectedFormIds.findOne()
 
   hasSubmissions: ->
     Template.instance().data.participants.findOne hasSubmitted: true
