@@ -2,7 +2,7 @@ Template.basic_results_info.helpers
   particpation: ->
     '30%'
   hasRange: ->
-    @type in ['number']
+    @type in ['number', 'scale']
 
 Template.type_icon.helpers
   icon: ->

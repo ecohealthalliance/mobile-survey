@@ -1,12 +1,12 @@
 highchartOptions = require '../../imports/highcharts_options'
 
-Template.number_results.onRendered ->
+Template.scale_results.onRendered ->
   props = @data.question.properties
   answers = @data.answers
 
   {averageChartOptions, lowestChartOptions, highestChartOptions} =
     highchartOptions.buildGaugeChartOptions props, answers
 
-  @$('.number-average').highcharts averageChartOptions
-  @$('.number-min').highcharts lowestChartOptions
-  @$('.number-max').highcharts highestChartOptions
+  @$('.scale-average').highcharts averageChartOptions
+  @$('.scale-min').highcharts lowestChartOptions
+  @$('.scale-max').highcharts highestChartOptions
