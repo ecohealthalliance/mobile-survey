@@ -1,0 +1,12 @@
+template(name="multiple_results")
+  .question-results--summary.centered
+    .summary-items
+      .multiple-chart
+
+    .summary-items.left
+      each detailedResults
+        .choice
+          span=choice
+          .result
+            span #{percentage}%
+            span (#{count})

@@ -6,7 +6,6 @@ template(name="form_results_detail")
       .question-results--details
         if answers
           +basic_results_info type=type props=properties particpation=particpation
-          .question-results--summary
-            +Template.dynamic template=template data=templateData
+          +Template.dynamic template=template data=templateData
         else
           p No Submissions
