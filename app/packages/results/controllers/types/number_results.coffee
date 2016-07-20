@@ -2,7 +2,7 @@ highchartOptions = require '../../imports/highcharts_options'
 
 Template.number_results.onRendered ->
   props = @data.question.properties
-  answers = @data.answers
+  answers = _.pluck @data.answers.find().fetch(), 'content'
 
   {averageChartOptions, lowestChartOptions, highestChartOptions} =
     highchartOptions.buildGaugeChartOptions props, answers
