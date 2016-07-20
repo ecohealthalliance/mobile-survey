@@ -1,7 +1,32 @@
 template(name="datetime_results")
-  each summaryDetails
+  +basic_results_info type=type particpation=particpation
+  .question-results--summary
     .summary-items
-      span.statistic.major=date
-      span.statistic.minor=time
+      span.statistic.major=averageDate.date
+      if datetime
+        span.statistic.minor=time
       .separator
-      h5=detailName
+      h5=averageDate.detailName
+
+    .summary-items
+      .summary-item
+        span.statistic.major=earliestDate.date
+        if datetime
+          span.statistic.minor=latestDate.time
+        .separator
+        h5=earliestDate.detailName
+
+      .summary-item
+        span.statistic.major=latestDate.date
+        if datetime
+          span.statistic.minor=latestDate.time
+        .separator
+        h5=latestDate.detailName
+
+    if mostCommonDate
+      .summary-items
+        span.statistic.major=mostCommonDate.date
+        .separator
+        if mostCommonDate.count
+          span.statistic.minimal #{mostCommonDate.count} occurrences
+        h5=mostCommonDate.detailName

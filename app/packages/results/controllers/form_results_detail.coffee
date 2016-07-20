@@ -1,6 +1,9 @@
 Template.form_results_detail.helpers
   template: ->
-    "#{@type}_results"
+    type = @type
+    if type is 'date'
+      type = 'datetime'
+    "#{type}_results"
 
   templateData: ->
     question = @
