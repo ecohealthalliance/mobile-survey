@@ -10,10 +10,14 @@ template(name="participant_results")
         if hasSubmissions
           if participantSelected
             h2.user=username
-            +survey_results(
-              participant=selectedParticipant
-              selectedFormIds=selectedFormIds
-              survey=survey)
+            if formSelected
+              +survey_results(
+                participant=selectedParticipant
+                selectedFormIds=selectedFormIds
+                survey=survey)
+            else
+              .centered.info-text
+                p Select a form to see results
           else
             .centered.info-text
               p Select a user to see results
