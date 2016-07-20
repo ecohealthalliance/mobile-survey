@@ -2,6 +2,8 @@
   formatQuestionType
   formatAnswer
   escapeString } = require '../imports/format_helpers'
+fetchForm        = require '../imports/fetch_form'
+
 
 Template.form_results.onCreated ->
   @selectedFormIdCollection = new Meteor.Collection null
@@ -18,64 +20,63 @@ Template.form_results.onCreated ->
 
 Template.form_results.onRendered ->
   instance = @
-  @autorun ->
-    fetched = instance.fetched
-    queriedFormIds = instance.queriedFormIds
-    _queriedFormIds = _.pluck queriedFormIds.find().fetch(), 'id'
-    lastClickedFormId = instance.lastClickedFormId.get()
-    if not lastClickedFormId or lastClickedFormId in _queriedFormIds
-      fetched.set true
-    else
-      fetched.set false
-      query = new Parse.Query 'Submission'
-      query.equalTo 'formId', lastClickedFormId
-      query.each (submission) ->
-        instance.submissions.insert submission.toJSON()
-      .then ->
-        query = new Parse.Query 'Form'
-        query.get(lastClickedFormId)
-      .then (form) ->
-        instance.form = form.toJSON()
-        form.getQuestions()
-      .then (questions) ->
-        _.each questions, (question, i) ->
-          question = question.toJSON()
-          question.formId = lastClickedFormId
-          instance.questions.insert question
-        query = new Parse.Query Parse.User
-        query.find()
-      .then (participants) ->
-        participants.forEach (participant) ->
-          _participant = participant.toJSON()
-          instance.participants.insert _participant
+  queriedFormIds = instance.queriedFormIds
 
+  # Load all forms initially
+  if not @selectedFormIds.get().length and not @lastClickedFormId.get()
+    @data.forms.find().forEach (form) ->
+      fetchForm instance, form.objectId
+      queriedFormIds.insert id: form.objectId
+
+  @autorun ->
+    lastClickedFormId = instance.lastClickedFormId.get()
+    _queriedFormIds = _.pluck queriedFormIds.find().fetch(), 'id'
+
+    # Fetch form if not cached
+    if not lastClickedFormId in _queriedFormIds
+      instance.fetched.set true
+      fetchForm instance, lastClickedFormId
+
+    # Add the id of the last clicked form to collection of cached forms
     if lastClickedFormId
       query = id: lastClickedFormId
-      queriedFormIds.upsert query, query
+      instance.queriedFormIds.upsert query, query
+
+    # Update the selectedFormIds
     _selectedFormIds = instance.selectedFormIdCollection.find {}, {fields: {id: 1}}
     instance.selectedFormIds.set _.pluck(_selectedFormIds.fetch(), 'id')
 
 Template.form_results.helpers
   formCollection: ->
+    instance = Template.instance()
     forms =
-      collection: Template.instance().data.forms
+      fetched: instance.fetched
+      collection: instance.data.forms
       settings:
         name: 'Forms'
         key: 'title'
         selectable: true
         selectAll: true
     [forms]
+
   selectedFormIds: ->
     Template.instance().selectedFormIdCollection
+
   forms: ->
     ids = Template.instance().selectedFormIds.get()
     Template.instance().data.forms.find objectId: {$in: ids}
+
   questions: ->
     Template.instance().questions.find formId: @objectId
+
   lastClickedFormId: ->
     Template.instance().lastClickedFormId
+
   submissions: ->
     Template.instance().submissions.find formId: @objectId
+
+  fetched: ->
+    Template.instance().fetched
 
   csvExport: ->
     instance = Template.instance()
