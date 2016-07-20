@@ -27,6 +27,7 @@ Package.onUse(function(api) {
   ], 'server');
 
   api.addFiles([
+    'imports/format_helpers.coffee',
     'styles/forms.styl',
     'views/form_edit.jade',
     'views/forms.jade',

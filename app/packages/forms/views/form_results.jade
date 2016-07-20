@@ -9,20 +9,17 @@ template(name="form_results")
         lastClickedItemId=lastClickedFormId)
       .results--details
         .form-results
-          each forms
-            .form-results--result
-              h3=title
-              if fetched
+          if fetched
+            each forms
+              .form-results--result
+                .result-header
+                  h3.inline=title
+                  a.btn.btn-primary.btn-sm.inline.download-csv(href=csvExport download="{{fileName title}}")
+                     i.mdi.mdi-arrow-down-bold-circle-outline
+                     | Save as CSV
                 +form_results_detail(
                   form=this
                   questions=questions
                   submissions=submissions)
-              else
-                +loading
-      //- ul#forms-export
-      //-   each exportButtons
-      //-     li
-      //-       a(href=data download="{{fileName title}}")
-      //-         button.btn.btn-primary
-      //-          i.mdi.mdi-arrow-down-bold-circle-outline
-      //-          | Save "{{title}}" ({{questionCount}}) as CSV
+          else
+            +loading

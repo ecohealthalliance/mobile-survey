@@ -105,7 +105,6 @@ buildGaugeChartOptions = (props, answers) ->
 showGaugeChart = (instance, elementNamePrefix) ->
   props = instance.data.question.properties
   answers = pluckAnswers instance.data.answers
-  console.log props, answers
 
   {averageChartOptions, lowestChartOptions, highestChartOptions} =
     buildGaugeChartOptions props, answers
