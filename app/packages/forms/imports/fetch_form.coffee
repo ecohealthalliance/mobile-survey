@@ -4,8 +4,6 @@
   @param [String] formId, ObjectId of form
 ###
 fetchForm = (instance, formId) ->
-  fetched = instance.fetched
-  fetched.set false
   query = new Parse.Query 'Submission'
   query.equalTo 'formId', formId
   query.each (submission) ->
@@ -20,12 +18,9 @@ fetchForm = (instance, formId) ->
       question = question.toJSON()
       question.formId = formId
       instance.questions.insert question
-    query = new Parse.Query Parse.User
-    query.find()
-  .then (participants) ->
-    participants.forEach (participant) ->
-      _participant = participant.toJSON()
-      instance.participants.insert _participant
-    fetched.set true
+    participants = instance.participants.find().fetch()
+    _.each participants, (particpant) ->
+      if instance.submissions.findOne('userId.objectId': particpant.objectId)
+        instance.participantsWithSubmissions.insert particpant
 
 module.exports = fetchForm

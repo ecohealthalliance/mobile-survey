@@ -9,7 +9,7 @@ template(name="forms")
   .main-content
     if fetched
       if surveyIsActive
-        +form_results(survey=survey forms=forms)
+        +form_results(survey=survey forms=forms participants=participants)
       else
         +form_list(survey=survey surveyState=surveyState forms=forms)
     else

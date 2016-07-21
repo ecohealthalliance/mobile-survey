@@ -7,7 +7,9 @@ template(name="basic_results_info")
         span.statistic #{props.min} - #{props.max}
         h5 Range
     .basic-info--item
-      span.statistic=particpation
+      span.statistic #{participation.percentage}%
+      span.statistic.minimal #{participation.count} of #{participation.total} participants
+      .separator
       h5 Participation
 
 template(name="type_icon")

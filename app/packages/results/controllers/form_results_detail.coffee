@@ -23,3 +23,14 @@ Template.form_results_detail.helpers
 
   answers: ->
     Template.instance().data.submissions.fetch()
+
+  participation: ->
+    instanceData = Template.instance().data
+    participantCount = Template.instance().data.participants.count()
+    totalParticipantCount = Template.instance().data.totalParticipantCount
+    percentage =
+      (participantCount / totalParticipantCount) * 100
+
+    percentage: Math.round percentage
+    count: participantCount
+    total: totalParticipantCount

@@ -6,25 +6,29 @@ fetchForm              = require '../imports/fetch_form'
 Template.form_results.onCreated ->
   @selectedFormIdCollection = new Meteor.Collection null
   @selectedFormIds = new ReactiveVar []
-  @fetched = new ReactiveVar true
+  @fetched = new ReactiveVar false
   @queriedFormIds = new Meteor.Collection null
   @lastClickedFormId = new ReactiveVar null
   @forms = new Meteor.Collection null
   @submissions = new Meteor.Collection null
   @questions = new Meteor.Collection null
   @answers = new Meteor.Collection null
-  @participants = new Meteor.Collection null
+  @participants = @data.participants
+  @participantsWithSubmissions = new Meteor.Collection null
   @survey = @data.survey
 
 Template.form_results.onRendered ->
   instance = @
   queriedFormIds = instance.queriedFormIds
+  fetched = instance.fetched
 
   # Load all forms initially
   if not @selectedFormIds.get().length and not @lastClickedFormId.get()
-    @data.forms.find().forEach (form) ->
+    @data.forms.find().forEach (form, i, forms) ->
       fetchForm instance, form.objectId
       queriedFormIds.insert id: form.objectId
+      if i == forms.count()
+        fetched.set true
 
   @autorun ->
     lastClickedFormId = instance.lastClickedFormId.get()
@@ -75,6 +79,12 @@ Template.form_results.helpers
 
   fetched: ->
     Template.instance().fetched
+
+  totalParticipantCount: ->
+    Template.instance().participants.find().count()
+
+  participantsWithSubmissions: ->
+    Template.instance().participantsWithSubmissions.find()
 
   csvExport: ->
     instance = Template.instance()
