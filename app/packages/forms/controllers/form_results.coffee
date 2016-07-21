@@ -14,7 +14,6 @@ Template.form_results.onCreated ->
   @questions = new Meteor.Collection null
   @answers = new Meteor.Collection null
   @participants = @data.participants
-  @participantsWithSubmissions = new Meteor.Collection null
   @survey = @data.survey
 
 Template.form_results.onRendered ->
@@ -24,11 +23,15 @@ Template.form_results.onRendered ->
 
   # Load all forms initially
   if not @selectedFormIds.get().length and not @lastClickedFormId.get()
+    promises = []
     @data.forms.find().forEach (form, i, forms) ->
-      fetchForm instance, form.objectId
-      queriedFormIds.insert id: form.objectId
-      if i == forms.count()
-        fetched.set true
+      promises.push new Promise (resolve) ->
+        fetchForm(instance, form.objectId).then ->
+          queriedFormIds.insert id: form.objectId
+          resolve()
+
+    Promise.all(promises).then ->
+      fetched.set true
 
   @autorun ->
     lastClickedFormId = instance.lastClickedFormId.get()
@@ -75,16 +78,16 @@ Template.form_results.helpers
     Template.instance().lastClickedFormId
 
   submissions: ->
-    Template.instance().submissions.find formId: @objectId
+    Template.instance().submissions
 
   fetched: ->
-    Template.instance().fetched
+    Template.instance().fetched.get()
+
+  participantIds: ->
+    Template.instance().participants.find({}, fields: {objectId: 1}).fetch()
 
   totalParticipantCount: ->
     Template.instance().participants.find().count()
-
-  participantsWithSubmissions: ->
-    Template.instance().participantsWithSubmissions.find()
 
   csvExport: ->
     instance = Template.instance()

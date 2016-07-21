@@ -4,23 +4,32 @@
   @param [String] formId, ObjectId of form
 ###
 fetchForm = (instance, formId) ->
+  _submissions = null
   query = new Parse.Query 'Submission'
   query.equalTo 'formId', formId
-  query.each (submission) ->
-    instance.submissions.insert submission.toJSON()
-  .then ->
-    query = new Parse.Query 'Form'
-    query.get(formId)
-  .then (form) ->
-    form.getQuestions()
-  .then (questions) ->
-    _.each questions, (question, i) ->
-      question = question.toJSON()
-      question.formId = formId
-      instance.questions.insert question
-    participants = instance.participants.find().fetch()
-    _.each participants, (particpant) ->
-      if instance.submissions.findOne('userId.objectId': particpant.objectId)
-        instance.participantsWithSubmissions.insert particpant
+  query.find()
+    .then (submissions) ->
+      _submissions = submissions
+      # Cache Submissions
+      _.each _submissions, (submission) ->
+        instance.submissions.insert submission.toJSON()
+      query = new Parse.Query 'Form'
+      query.get(formId)
+    .then (form) ->
+      # Cache Form
+      instance.form = form.toJSON()
+      form.getQuestions()
+    .then (questions) ->
+      _.each questions, (question, i) ->
+        # Cache Questions
+        question = question.toJSON()
+        question.formId = formId
+        question.answers = []
+        _submissions.forEach (submission, i) ->
+          question.answers.push
+            content: submission.get('answers')[question.objectId]
+            userId: submission.get('userId').id
+            createdAt: submission.get 'createdAt'
+        instance.questions.insert question
 
 module.exports = fetchForm
