@@ -5,7 +5,6 @@ Template.participants.onCreated ->
 
 Template.participants.onRendered ->
   @survey = @data.survey
-  @fetched.set false
   @users = new Meteor.Collection null
   instance = @
   _participants = null
@@ -26,7 +25,7 @@ Template.participants.onRendered ->
         _participant = participant.toJSON()
         instance.participants.insert _participant
     .then ->
-      instance.participants.find().forEach (participant) ->
+      instance.participants.find().forEach (participant, i, participants) ->
         _participant = new Parse.User()
         _participant.id = participant.objectId
         query = new Parse.Query 'Submission'
@@ -36,11 +35,12 @@ Template.participants.onRendered ->
           .then (submission) ->
             if submission
               instance.participants.update {_id: participant._id}, {$set: {hasSubmitted: true}}
+            if i == participants.count() - 1
+              instance.fetched.set true
           .fail (err) ->
             console.log err
     .fail (err) ->
       toastr.error err.message
-    .always ->
       instance.fetched.set true
 
 Template.participants.helpers

@@ -1,9 +1,28 @@
+sort = sort: {username: 1}
+
+addSubmissions = (participants, collection, query) ->
+  participants.find(query, sort)
+    .forEach (participant) ->
+      collection.insert participant
+
 Template.participant_results.onCreated ->
   @participantId = new ReactiveVar null
   @participant = new ReactiveVar null
   @selectedFormIds = new Meteor.Collection null
 
+  participants = @data.participants
+
+  @participantsWithSubmissions = new Meteor.Collection null
+  addSubmissions(participants, @participantsWithSubmissions, {hasSubmitted: true})
+
+  @participantsWithoutSubmissions = new Meteor.Collection null
+  addSubmissions(participants, @participantsWithoutSubmissions, {hasSubmitted: {$exists: false}})
+
 Template.participant_results.onRendered ->
+
+  # Select and show results of first user
+  @participantId.set @participantsWithSubmissions.findOne({}, sort).objectId
+
   @autorun =>
     participantId = @participantId.get()
     @participant.set @data.participants.findOne(objectId: participantId)
@@ -13,26 +32,16 @@ Template.participant_results.onRendered ->
 
 Template.participant_results.helpers
   collections: ->
+    instance = Template.instance()
     collections = []
-    # Users with submissions
-    participants = Template.instance().data.participants.find hasSubmitted: true
-    participantsWithSubmissions = new Meteor.Collection null
-    participants.forEach (participant) ->
-      participantsWithSubmissions.insert participant
     collections.push
-      collection: participantsWithSubmissions
+      collection: instance.participantsWithSubmissions
       settings:
         name: 'Participants with Submissions'
         key: 'username'
         selectable: true
-
-    # Users without submissions
-    participants = Template.instance().data.participants.find hasSubmitted: {$exists: false}
-    participantsWithoutSubmissions = new Meteor.Collection null
-    participants.forEach (participant) ->
-      participantsWithoutSubmissions.insert participant
     collections.push
-      collection: participantsWithoutSubmissions
+      collection: instance.participantsWithoutSubmissions
       settings:
         name: 'Participants without Submissions'
         key: 'username'
