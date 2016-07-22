@@ -97,9 +97,11 @@ Template.form_results.helpers
     hasData = false
     userIds = []
     questionIds = []
+    questions = instance.questions
+    submissions = instance.submissions
 
     # Step 1: get the list of Questions for the current form
-    instance.questions.find(formId:@objectId)
+    questions.find(formId:@objectId)
       .forEach (question, i) ->
         rows[0].push "Question #{i+1}: #{formatQuestionType(question.text)}"
         questionIds.push question.objectId
@@ -108,7 +110,7 @@ Template.form_results.helpers
     form.questionCount = questionIds.length
 
     # Step 2: retrieve all submissions for the current form
-    instance.submissions.find(
+    submissions.find(
       { formId: form.objectId },
       { sort: createdAt: -1 }
     ).forEach (submission) ->
@@ -119,7 +121,7 @@ Template.form_results.helpers
     instance.participants.find(objectId: $in: userIds).forEach (user, u) ->
       # Col 1: Username
       result = [ user.username ]
-      instance.submissions.find(
+      submissions.find(
         formId: form.objectId
         'userId.objectId': user.objectId
       ).forEach (submission) ->
@@ -127,10 +129,10 @@ Template.form_results.helpers
         result.push formatDate(submission.createdAt)
         # Cols 3+: Answers
         for questionId in questionIds
-          result.push formatAnswer(
-            submission.answers[questionId],
-            instance.questions.findOne(objectId:questionId).type
-          )
+          answer = submission.answers[questionId]
+          if answer
+            type = questions.findOne(objectId:questionId).type
+            result.push formatAnswer(answer, type)
       rows.push result
 
     # Final step: Merge rows and columns into a CSV document

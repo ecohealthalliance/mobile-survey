@@ -9,7 +9,10 @@ formatDate = (dateString) ->
 formatAnswer = (answer, type) ->
   switch type
     when 'shortAnswer', 'longAnswer', 'longAnswer'
-      escapeString(answer)
+      if typeof answer is 'string'
+        escapeString(answer)
+      else
+        answer
     when 'date', 'datetime'
       formatDate(answer)
     when 'multipleChoice' then escapeString(answer)

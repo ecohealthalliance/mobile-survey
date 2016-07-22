@@ -1,6 +1,7 @@
 {Survey, Form, Question} = require 'meteor/gq:api'
 validator = require 'bootstrap-validator'
 questionTypes = require '../imports/question_types'
+{ mostCommonItem } = require 'meteor/gq:helpers'
 
 Template.questions_add.onCreated ->
   @form = @data.form
@@ -44,8 +45,11 @@ Template.questions_add.events
       return
     event.preventDefault()
     instance.submitting.set true
+
+    type = instance.type.get()
     form = event.currentTarget
-    unless instance.type.get()
+
+    unless type
       return
 
     formData = _.object $(form).serializeArray().map(
@@ -53,7 +57,7 @@ Template.questions_add.events
     )
     questionProperties = _.omit(formData, 'text', '_id')
 
-    if instance.type.get() == 'multipleChoice' or instance.type.get() == 'checkboxes'
+    if type in ['multipleChoice', 'checkboxes']
       if instance.choices.find().count() == 0
         instance.typeError.set 'Please add choices to the question'
         return
@@ -63,6 +67,10 @@ Template.questions_add.events
           instance.typeError.set 'Please fill in all choices to the question'
           return
         instance.typeError.set null
+        # Check the array of choices for duplicates
+        if mostCommonItem(choiceStrings)
+          instance.typeError.set 'All choices must be unique'
+          return
         questionProperties.choices = choiceStrings
 
     if questionProperties.min?.length

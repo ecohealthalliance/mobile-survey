@@ -1,4 +1,5 @@
 { moment } = require 'meteor/momentjs:moment'
+{ mostCommonItem } = require 'meteor/gq:helpers'
 
 Template.datetime_results.onCreated ->
   dateTimeStamps = []
@@ -37,16 +38,8 @@ Template.datetime_results.onCreated ->
 
   if @data.question.type is 'date'
     _dates = dateTimeStamps.sort()
-    frequency = {}
-    maxOccurence = 0
-    count = 0
-    for i of _dates
-      _date = _dates[i]
-      frequency[_date] = (frequency[_date] or 0) + 1
-      if frequency[_date] > maxOccurence
-        maxOccurence = frequency[_date]
-        mostCommon = _date
-        count++
+
+    { mostCommon, count } = mostCommonItem _dates
 
     if mostCommon and count > 1
       @summaryDetails.insert
