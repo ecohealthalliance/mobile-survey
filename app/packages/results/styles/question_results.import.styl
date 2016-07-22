@@ -3,7 +3,7 @@
   font-size 3em
   font-weight 800
   color $primary
-  line-height 1
+  line-height 1.5
   &.minor
     color $d-gray
     font-size 1.5em
@@ -15,6 +15,16 @@
     font-size 1.25em
     font-weight 400
     color $d-gray
+
+@media(max-width:1200px)
+  .statistic
+    font-size 2em
+    &.minor
+      font-size 1.25em
+    &.major
+      font-size 1.5em
+    &.minimal
+      font-size 1em
 
 .question-results
   margin-bottom 20px
@@ -46,7 +56,8 @@
 
 .question-results--basic-info
   flex 1
-  min-width 300px
+  min-width 150px
+  max-width 200px
   border-right 2px solid $border-primary-l
 
 .basic-info--item
@@ -69,6 +80,7 @@
 .summary-items
   flex 1
   border-right 1px solid $border-primary-l
+  padding 0 1em
   &:last-of-type
     border 0
   &.left
