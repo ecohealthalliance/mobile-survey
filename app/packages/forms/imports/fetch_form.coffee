@@ -14,7 +14,6 @@ fetchForm = (instance, formId) ->
     query = new Parse.Query 'Form'
     query.get(formId)
   .then (form) ->
-    instance.form = form.toJSON()
     form.getQuestions()
   .then (questions) ->
     _.each questions, (question, i) ->
