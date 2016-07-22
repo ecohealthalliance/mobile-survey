@@ -1,9 +1,7 @@
 { formatDate
-  formatQuestionType
-  formatAnswer
-  escapeString } = require '../imports/format_helpers'
-fetchForm        = require '../imports/fetch_form'
-
+  formatAnswer }       = require '../imports/format_helpers'
+{ formatQuestionType } = require 'meteor/gq:helpers'
+fetchForm              = require '../imports/fetch_form'
 
 Template.form_results.onCreated ->
   @selectedFormIdCollection = new Meteor.Collection null

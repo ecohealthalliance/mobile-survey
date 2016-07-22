@@ -92,9 +92,27 @@ getRole = (role) ->
   query.equalTo 'name', role
   query.first()
 
+###
+  @param [String] Type of question
+  @return [String] Formated question type string
+###
+formatQuestionType = (type) ->
+  switch type
+    when 'number' then 'Number'
+    when 'scale' then 'Scale'
+    when 'multipleChoice' then 'Multiple Choice'
+    when 'checkboxes' then 'Checkbox'
+    when 'shortAnswer' then 'Short Answer'
+    when 'longAnswer' then 'Long Answer'
+    when 'date' then 'Date'
+    when 'datetime' then 'DateTime'
+    else
+      type
+
 module.exports =
   buildMeteorCollection: buildMeteorCollection
   updateSortOrder      : updateSortOrder
   setAdminACL          : setAdminACL
   setUserACL           : setUserACL
   getRole              : getRole
+  formatQuestionType   : formatQuestionType
