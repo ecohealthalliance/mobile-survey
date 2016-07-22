@@ -8,9 +8,10 @@ template(name="basic_results_info")
         h5 Range
     .basic-info--item
       span.statistic #{participation.percentage}%
-      span.statistic.minimal #{participation.count} of #{participation.total} participants
       .separator
       h5 Participation
+      .separator
+      span.statistic.minimal #{participation.count} of #{participation.total} participants
 
 template(name="type_icon")
   i.fa(class="fa-#{icon}")
