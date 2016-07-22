@@ -1,28 +1,42 @@
 .basic-details
   display flex
-  padding 2em 0
+  padding 2em 10%
   border-bottom 1px solid $border-primary-l
 
 .detail
   flex 1
   text-align center
-  &:first-of-type
-    padding-left 5%
-  &:last-of-type
-    padding-right 5%
-  span
-    display block
-    font-size 3em
-    font-weight 800
-    line-height 1
-    margin-bottom .1em
+  padding 2.5%
+  border-right 1px solid lighten($border-primary-l, 10%)
+  &:last-child
+    border 0
   h2
     text-transform uppercase
-    font-size 1.25em
+    font-size 1.5em
     font-weight 300
     margin 0
     color $d-gray
     letter-spacing .05em
+    padding .25em 0
+  .call-to-action-text
+    padding .5em 3em
+  &:hover
+    .call-to-action-text
+      $call-to-action-color = lighten($primary-light, 20%)
+      background $call-to-action-color
+      border-color darken($call-to-action-color, 20%)
+
+.detail--info
+  display flex
+  align-items center
+  justify-content space-around
+  max-width 50%
+  margin 0 auto 1.5em auto
+  .info
+    min-width 200px
+    border-right 1px solid lighten($border-primary-l, 10%)
+    &:last-child
+      border 0
 
 .description
   padding 2em 1em

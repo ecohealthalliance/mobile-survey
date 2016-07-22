@@ -1,13 +1,6 @@
 template(name="survey_details_active")
   .survey--details
-    .menu
-      a.menu-item(href="{{pathFor 'forms' id=survey.id}}")
-        i.fa.fa-bar-chart
-        | View Form Results
-      a.menu-item(href="{{pathFor 'participants' id=survey.id}}")
-        i.fa.fa-list
-        | View Participant Results
-    button.btn.btn-warning.btn-featured.btn-centered.de-activate(disabled="{{#if activating}} true {{/if}}")
+    button.btn.btn-default.btn-featured.btn-centered.de-activate(disabled="{{#if activating}} true {{/if}}")
       if activating
         span.fa.fa-spinner.fa-pulse
       span Deactivate Survey
