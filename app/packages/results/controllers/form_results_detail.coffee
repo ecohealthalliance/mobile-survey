@@ -13,13 +13,26 @@ Template.form_results_detail.helpers
     question = @
     questionId = @objectId
     answers = new Meteor.Collection null
-    Template.instance().data.submissions.forEach (submission) ->
+    _.each question.answers, (answer) ->
       answers.insert
-        content: submission.answers[questionId]
-        createdAt: submission.createdAt
+        content: answer.content
+        createdAt: answer.createdAt
+        userId: answer.userId
 
     question: question
     answers: answers
 
   answers: ->
-    Template.instance().data.submissions.fetch()
+    Template.instance().data.submissions.find().fetch()
+
+  participation: ->
+    usersWithAnswers = _.pluck @answers, 'userId'
+
+    participantCount = usersWithAnswers.length
+    totalParticipantCount = Template.instance().data.totalParticipantCount
+    percentage =
+      (participantCount / totalParticipantCount) * 100
+
+    percentage: Math.round percentage
+    count: participantCount
+    total: totalParticipantCount

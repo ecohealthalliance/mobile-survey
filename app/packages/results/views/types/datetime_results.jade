@@ -26,6 +26,7 @@ template(name="datetime_results")
       .summary-items
         span.statistic.major=mostCommonDate.date
         .separator
+        h5=mostCommonDate.detailName
+        .separator
         if mostCommonDate.count
           span.statistic.minimal #{mostCommonDate.count} occurrences
-        h5=mostCommonDate.detailName

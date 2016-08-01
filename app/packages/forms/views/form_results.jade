@@ -20,6 +20,8 @@ template(name="form_results")
                 +form_results_detail(
                   form=this
                   questions=questions
-                  submissions=submissions)
+                  submissions=submissions
+                  participantIds=participantIds
+                  totalParticipantCount=totalParticipantCount)
           else
             +loading

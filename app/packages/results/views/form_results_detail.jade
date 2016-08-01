@@ -5,7 +5,10 @@ template(name="form_results_detail")
         h4=text
       .question-results--details
         if answers
-          +basic_results_info type=type props=properties particpation=particpation
+          +basic_results_info(
+            type=type
+            props=properties
+            participation=participation)
           +Template.dynamic template=template data=templateData
         else
           p No Submissions

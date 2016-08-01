@@ -4,7 +4,7 @@ Template.datetime_results.onCreated ->
   dateTimeStamps = []
   momentDates = []
   @data.answers.find().forEach (answer) ->
-    date = answer.content.iso
+    date = answer.content
     dateTimeStamps.push new Date(date).valueOf()
     momentDates.push moment date
 
