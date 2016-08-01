@@ -1,8 +1,13 @@
+{ formatQuestionType } = require 'meteor/gq:helpers'
+
 Template.basic_results_info.helpers
   particpation: ->
     '30%'
+
   hasRange: ->
     @type in ['number', 'scale']
+
+  formatQuestionType: -> formatQuestionType(@type)
 
 Template.type_icon.helpers
   icon: ->

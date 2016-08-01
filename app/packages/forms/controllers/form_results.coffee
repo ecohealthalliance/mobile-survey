@@ -1,3 +1,8 @@
+{ formatDate
+  formatAnswer }       = require '../imports/format_helpers'
+{ formatQuestionType } = require 'meteor/gq:helpers'
+fetchForm              = require '../imports/fetch_form'
+
 Template.form_results.onCreated ->
   @selectedFormIdCollection = new Meteor.Collection null
   @selectedFormIds = new ReactiveVar []
@@ -13,248 +18,117 @@ Template.form_results.onCreated ->
 
 Template.form_results.onRendered ->
   instance = @
+  queriedFormIds = instance.queriedFormIds
+
+  # Load all forms initially
+  if not @selectedFormIds.get().length and not @lastClickedFormId.get()
+    @data.forms.find().forEach (form) ->
+      fetchForm instance, form.objectId
+      queriedFormIds.insert id: form.objectId
+
   @autorun ->
-    fetched = instance.fetched
-    queriedFormIds = instance.queriedFormIds
-    _queriedFormIds = _.pluck queriedFormIds.find().fetch(), 'id'
     lastClickedFormId = instance.lastClickedFormId.get()
-    if not lastClickedFormId or lastClickedFormId in _queriedFormIds
-      fetched.set true
-    else
-      fetched.set false
-      query = new Parse.Query 'Submission'
-      query.equalTo 'formId', lastClickedFormId
-      query.each (submission) ->
-        instance.submissions.insert submission.toJSON()
-      .then ->
-        query = new Parse.Query 'Form'
-        query.get(lastClickedFormId)
-      .then (form) ->
-        instance.form = form
-        form.getQuestions()
-      .then (questions) ->
-        _.each questions, (question, i) ->
-          question = question.toJSON()
-          question.formId = lastClickedFormId
-          instance.questions.insert question
-          if questions.length == i + 1
-            fetched.set true
+    _queriedFormIds = _.pluck queriedFormIds.find().fetch(), 'id'
+
+    # Fetch form if not cached
+    if not lastClickedFormId in _queriedFormIds
+      instance.fetched.set true
+      fetchForm instance, lastClickedFormId
+
+    # Add the id of the last clicked form to collection of cached forms
     if lastClickedFormId
       query = id: lastClickedFormId
-      queriedFormIds.upsert query, query
+      instance.queriedFormIds.upsert query, query
+
+    # Update the selectedFormIds
     _selectedFormIds = instance.selectedFormIdCollection.find {}, {fields: {id: 1}}
     instance.selectedFormIds.set _.pluck(_selectedFormIds.fetch(), 'id')
 
 Template.form_results.helpers
   formCollection: ->
+    instance = Template.instance()
     forms =
-      collection: Template.instance().data.forms
+      fetched: instance.fetched
+      collection: instance.data.forms
       settings:
         name: 'Forms'
         key: 'title'
         selectable: true
         selectAll: true
     [forms]
+
   selectedFormIds: ->
     Template.instance().selectedFormIdCollection
+
   forms: ->
     ids = Template.instance().selectedFormIds.get()
     Template.instance().data.forms.find objectId: {$in: ids}
+
   questions: ->
     Template.instance().questions.find formId: @objectId
+
   lastClickedFormId: ->
     Template.instance().lastClickedFormId
+
   submissions: ->
     Template.instance().submissions.find formId: @objectId
 
-Template.form_results.onRendered ->
-  instance = @
-  @survey.getForms()
-    .then (forms) ->
-      forms.forEach (form) ->
-        _form = form.toJSON()
-        # populate the @forms minimongo collection
-        form.getTrigger()
-          .then (trigger) ->
-            _form.trigger = trigger.toJSON()
-            delete _form.triggers
-            instance.forms.upsert _form.objectId, _form
-        # get forms
-        form.getQuestions()
-          .then (questions) ->
-            _questions = questions.map (item) ->
-              item.toJSON().objectId
-            instance.forms.update _form.objectId, $set: _questions: _questions
-            questions.forEach (question) ->
-              _question = question.toJSON()
-              _question.questionId = _question.objectId
-              # populate the @questions minimongo collection
-              instance.questions.upsert _question.objectId, _question
-    .fail (err) ->
-      console.log err
-  # Participants
-  formIds = null
-  @survey.getForms()
-    .then (forms) ->
-      formIds = _.map forms, (form) ->
-        form.id
-      query = new Parse.Query Parse.User
-      query.find()
-    .then (participants) ->
-      _participants = participants
-      participants.forEach (participant) ->
-        _participant = participant.toJSON()
-        instance.participants.insert _participant
-    .then ->
-      instance.participants.find().forEach (participant) ->
-        _participant = new Parse.User()
-        _participant.id = participant.objectId
-        query = new Parse.Query 'Submission'
-        query.containedIn 'formId', formIds
-        query.equalTo 'userId', _participant
-        query.first()
-          .then (submission) ->
-            if submission
-              instance.participants.update {_id: participant._id}, {$set: {hasSubmitted: true}}
-          .fail (err) ->
-            console.log err
-    .fail (err) ->
-      console.log err
-  # Submissions (Answers)
-  @autorun ->
-    instance.submissions.remove {}
-    instance.answers.remove {}
-    instance.forms.find().forEach (form) ->
-      query = new Parse.Query 'Submission'
-      query.equalTo('formId', form.objectId)
-      query.find()
-        .then (submissions) ->
-          submissions.forEach (submission) ->
-            _submission = submission.toJSON()
-            instance.submissions.upsert _submission.objectId, _submission
-            for questionId, answer of _submission.answers
-              instance.answers.insert
-                formId: _submission.formId
-                userId: _submission.userId.objectId
-                questionId: questionId
-                answer: answer
-                createdAt: _submission.createdAt
-        .fail (err) ->
-          console.log err
-  # Filter by user - get submissions of user
-  @autorun ->
-    instance.submissions.remove {}
-    instance.answers.remove {}
-    instance.forms.find().forEach (form) ->
-      query = new Parse.Query 'Submission'
-      query.equalTo('formId', form.objectId)
-      query.find()
-        .then (submissions) ->
-          submissions.forEach (submission) ->
-            _submission = submission.toJSON()
-            instance.submissions.upsert _submission.objectId, _submission
-            for questionId, answer of _submission.answers
-              instance.answers.insert
-                formId: _submission.formId
-                userId: _submission.userId.objectId
-                questionId: questionId
-                answer: answer
-                createdAt: _submission.createdAt
-        .fail (err) ->
-          console.log err
+  fetched: ->
+    Template.instance().fetched
 
-Template.form_results.helpers
-  exportButtons: ->
+  csvExport: ->
     instance = Template.instance()
-    buttons = []
-    # Iterate through forms for the current Survey
-    instance.forms.find({}, {sort: {order: -1}}).forEach (button) ->
-      csv = ""
-      rows = [ ['email', 'Timestamp'] ]
-      hasData = false
-      userIds = []
-      questionIds = []
-      # Step 1: get the list of Questions for the current form
-      filter = { questionId: { $in: button._questions or [] } }
-      instance.questions.find(filter).forEach (q, i) ->
-        rows[0].push "Question #{i+1}: #{formatQuestionType(q.type)}"
-        questionIds.push q.objectId
-      # Step 1.5: put the amount of questions into the file name
-      button.questionCount = questionIds.length
-      # Step 2: retrieve all submissions for the current form
+    form = @
+    csv = ""
+    rows = [ ['email', 'Timestamp'] ]
+    hasData = false
+    userIds = []
+    questionIds = []
+
+    # Step 1: get the list of Questions for the current form
+    instance.questions.find(formId:@objectId)
+      .forEach (question, i) ->
+        rows[0].push "Question #{i+1}: #{formatQuestionType(question.text)}"
+        questionIds.push question.objectId
+
+    # Step 1.5: put the amount of questions into the file name
+    form.questionCount = questionIds.length
+
+    # Step 2: retrieve all submissions for the current form
+    instance.submissions.find(
+      { formId: form.objectId },
+      { sort: createdAt: -1 }
+    ).forEach (submission) ->
+      userIds.push submission.userId.objectId
+      hasData = true
+
+    # Step 3: iterate over Participants
+    instance.participants.find(objectId: $in: userIds).forEach (user, u) ->
+      # Col 1: Username
+      result = [ user.username ]
       instance.submissions.find(
-        { formId: button.objectId },
-        { sort: createdAt: -1 }
+        formId: form.objectId
+        'userId.objectId': user.objectId
       ).forEach (submission) ->
-        userIds.push submission.userId.objectId
-        hasData = true
-      # Step 3: iterate over Participants
-      instance.participants.find(objectId: $in: userIds).forEach (user, u) ->
-        # Col 1: Username
-        result = [ user.username ]
-        instance.submissions.find(
-          formId: button.objectId
-          'userId.objectId': user.objectId
-        ).forEach (submission) ->
-          # Col 2: Timestamp
-          result.push formatDate(submission.createdAt)
-          # Cols 3+: Answers
-          for a in questionIds
-            result.push formatAnswer(
-              submission.answers[a],
-              instance.questions.findOne(a).type
-            )
-        rows.push result
-      # Final step: Merge rows and columns into a CSV document
-      if hasData
-        i = 0
-        ilen = rows.length
-        while i < ilen
-          csv += rows[i++].join(',')
-          csv += '\n'
-        button.data = "data:text/csv;base64,#{btoa csv}"
-        buttons.push button
-    buttons
+        # Col 2: Timestamp
+        result.push formatDate(submission.createdAt)
+        # Cols 3+: Answers
+        for questionId in questionIds
+          result.push formatAnswer(
+            submission.answers[questionId],
+            instance.questions.findOne(objectId:questionId).type
+          )
+      rows.push result
+
+    # Final step: Merge rows and columns into a CSV document
+    if hasData
+      i = 0
+      ilen = rows.length
+      while i < ilen
+        csv += rows[i++].join(',')
+        csv += '\n'
+
+    "data:text/csv;base64,#{btoa csv}"
+
   fileName: (formTitle) ->
     formTitle.replace(/\s+/g, '-') + '-results'
-formatDate = (dateString) ->
-  moment(dateString).format('MM/DD/YYYY hh:mm:ss')
-formatQuestionType = (type) ->
-  switch type
-    when 'number' then 'Number'
-    when 'scale' then 'Scale'
-    when 'multipleChoice' then 'Multiple Choice'
-    when 'checkboxes' then 'Checkbox'
-    when 'shortAnswer' then 'Short Answer'
-    when 'longAnswer' then 'Long Answer'
-    when 'date' then 'Date'
-    when 'datetime' then 'DateTime'
-    else
-      type
-
-formatAnswer = (answer, type) ->
-  switch type
-    when 'shortAnswer' then escapeString(answer)
-    when 'longAnswer' then escapeString(answer)
-    when 'date' then formatDate(answer)
-    when 'datetime' then formatDate(answer)
-    when 'multipleChoice' then escapeString(answer)
-    when 'checkboxes' then escapeString(answer.join ',')
-    else
-      answer
-
-  if type in [ 'shortAnswer', 'longAnswer' ]
-    answer = escapeString(answer)
-  else if type is 'date'
-    answer = formatDate(answer)
-  else if type is 'datetime'
-    answer = formatDate(answer.iso)
-  else if type is 'multipleChoice'
-    answer = escapeString(answer)
-  else if type is 'checkboxes'
-    answer = escapeString(answer.join ',')
-  answer
-escapeString = (inputString) ->
-  inputString = inputString.replace(/\n/g, '\\n')
-  inputString = inputString.replace(/"/g, '\\"')
-  "\"#{inputString}\""
