@@ -3,6 +3,7 @@
 Template.datetime_results.onCreated ->
   dateTimeStamps = []
   momentDates = []
+
   @data.answers.find().forEach (answer) ->
     date = answer.content
     dateTimeStamps.push new Date(date).valueOf()
@@ -10,16 +11,17 @@ Template.datetime_results.onCreated ->
 
   @summaryDetails = new Meteor.Collection null
 
-  total = 0
-  for dateTimeStamp in dateTimeStamps
-    total += dateTimeStamp
-  average = new Date Math.round(total / dateTimeStamps.length)
-  average = moment(average)
+  if dateTimeStamps.length > 1
+    total = 0
+    for dateTimeStamp in dateTimeStamps
+      total += dateTimeStamp
+    average = new Date Math.round(total / dateTimeStamps.length)
+    average = moment(average)
 
-  @summaryDetails.insert
-    detailName: 'Average'
-    date: average.format 'MMMM D, YYYY'
-    time: average.format 'h:mm:ss a'
+    @summaryDetails.insert
+      detailName: 'Average'
+      date: average.format 'MMMM D, YYYY'
+      time: average.format 'h:mm:ss a'
 
   latest = moment.min momentDates
   @summaryDetails.insert
