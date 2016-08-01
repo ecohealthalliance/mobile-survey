@@ -1,63 +1,69 @@
 template(name="question_details_edit")
-  with question
-    .panel.panel-default
-      .panel-heading
-        h4 Edit question
-      .panel-body
-        form#question-form-edit
-          .form-group
-            label.control-label(for='new-label') Question *
-            input#new-label.form-control(type='text' minlength='5' name='text' value=text required)
-            .help-block.with-errors
+  .panel.panel-default
+    .panel-heading
+      h4
+        if question
+          | Edit question
+        else
+          | Add Question
+    .panel-body
+      form#question-form-edit
+        .form-group
+          label.control-label(for='new-label') Question *
+          input#new-label.form-control(type='text' minlength='5' name='text' value=question.text required)
+          .help-block.with-errors
 
-          .form-group(class='{{#if typeInvalid}} has-error {{/if}}')
-            label.control-label(for='new-type') Question Type
-            .btn-grid
-              each types
-                button.btn.btn-default.type(type='button' class='{{#if selected}} active {{/if}}' data-type=name)= text
-            if typeInvalid
-              .help-block.with-errors Please select a type
-
-          .form-group
-            label.control-label Required
-              input.form-control(type='checkbox' name='required' checked=required)
-
-          if match type regex='shortAnswer|longAnswer'
-            .form-group
-              label.control-label(for='new-placeholder') Placeholder
-              input#new-placeholder.form-control(type='text', name='placeholder' value=properties.placeholder)
-
-          if match type regex='checkboxes|multipleChoice'
-            .form-group(class='{{#if choicesInvalid}} has-error {{/if}}')
-              label.control-label Choices
-              each choices
-                .choice-container
-                  input.form-control.choice(type='text' data-id=_id value=name)
-                  a.delete-choice(data-id=_id)
-                    i.mdi.mdi-close-circle
-              else
-                button.btn.btn-primary.add-choice(type="button")
-                  i.mdi.mdi-plus-circle Add a choice
-
-              unless isEmpty choices
-                button.btn.btn-primary.add-choice(type="button")
-                  i.mdi.mdi-plus-circle Add another choice
-              if choicesInvalid
-                .help-block.with-errors=choiceInvalidMessage
-
-          if match type regex='scale|number'
-            .form-group
-              label.control-label Minimum
-                input.form-control.choice(type='number' name='min' step='any' value=properties.min)
-            .form-group
-              label.control-label Maximum
-                input.form-control.choice(type='number' name='max' step='any' value=properties.max)
-
+        .form-group(class='{{#if typeInvalid}} has-error {{/if}}')
+          label.control-label(for='new-type') Question Type
+          .btn-grid
+            each types
+              button.btn.btn-default.type(type='button' class='{{#if selected}} active {{/if}}' data-type=name)= text
           if typeInvalid
-            .type-error
-              p Please select a type
+            .help-block.with-errors Please select a type
 
+        .form-group
+          label.control-label Required
+            input.form-control(type='checkbox' name='required' checked=required)
+
+        if match type regex='shortAnswer|longAnswer'
           .form-group
-            button.btn.btn-primary(type='submit')
-              span.mdi.mdi-library-check
+            label.control-label(for='new-placeholder') Placeholder
+            input#new-placeholder.form-control(type='text', name='placeholder' value=question.properties.placeholder)
+
+        if match type regex='checkboxes|multipleChoice'
+          .form-group(class='{{#if choicesInvalid}} has-error {{/if}}')
+            label.control-label Choices
+            each choices
+              .choice-container
+                input.form-control.choice(type='text' data-id=_id value=name)
+                a.delete-choice(data-id=_id)
+                  i.mdi.mdi-close-circle
+            else
+              button.btn.btn-primary.add-choice(type="button")
+                i.mdi.mdi-plus-circle Add a choice
+
+            unless isEmpty choices
+              button.btn.btn-primary.add-choice(type="button")
+                i.mdi.mdi-plus-circle Add another choice
+            if choicesInvalid
+              .help-block.with-errors=choiceInvalidMessage
+
+        if match type regex='scale|number'
+          .form-group
+            label.control-label Minimum
+              input.form-control.choice(type='number' name='min' step='any' value=question.properties.min)
+          .form-group
+            label.control-label Maximum
+              input.form-control.choice(type='number' name='max' step='any' value=question.properties.max)
+
+        if typeInvalid
+          .type-error
+            p Please select a type
+
+        .form-group
+          button.btn.btn-primary(type='submit')
+            span.mdi.mdi-library-check
+            if question
               | Update Question
+            else
+              | Add Question

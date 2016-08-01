@@ -14,8 +14,8 @@ template(name="question_details")
           h4=text
         else
           +question_details_edit(
-            surveyId=../survey.id
-            formId=../formId
+            surveyId=survey.id
+            form=form
             question=question
             choices=choices
             surveyState=surveyState

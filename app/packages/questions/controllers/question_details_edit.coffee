@@ -2,32 +2,41 @@ validator = require 'bootstrap-validator'
 questionTypes = require '../imports/question_types'
 { mostCommonItem } = require 'meteor/gq:helpers'
 
+
 Template.question_details_edit.onCreated ->
-  @surveyId = @data.surveyId
-  @formId= @data.formId
-  @question = @data.question
-  @choices = @data.choices
-  @type = @data.type
+  @surveyId   = @data.surveyId
+  @form       = @data.form
+  @question   = @data.question
+  @questions  = @data.questions
+  @choices    = @data.choices or new Meteor.Collection null
+  @type       = @data.type or new ReactiveVar null
   @submitting = new ReactiveVar false
-  @typeError = new ReactiveVar null
+  @typeError  = new ReactiveVar null
 
 Template.question_details_edit.onRendered ->
   @$('#question-form-edit').validator()
 
 Template.question_details_edit.helpers
   types: -> questionTypes
+
   type: ->
     Template.instance().type.get()
+
   question: ->
-    Template.instance().question.toJSON()
+    Template.instance().question?.toJSON()
+
   selected: ->
     @name is Template.instance().type.get()
+
   choices: ->
     Template.instance().choices.find()
+
   typeInvalid: ->
     Template.instance().submitting.get() and not Template.instance().type.get()
+
   choicesInvalid: ->
     Template.instance().submitting.get() and Template.instance().typeError.get()
+
   choiceInvalidMessage: ->
     Template.instance().typeError.get()
 
@@ -93,11 +102,27 @@ Template.question_details_edit.events
       required: questionProperties.required is 'on'
       properties: questionProperties
 
-    instance.question.save(props)
-      .then ->
-        FlowRouter.go("/surveys/#{instance.surveyId}/forms/#{instance.formId}")
-      .fail (err) ->
-        toastr.error err.message
+    if instance.question
+      instance.question.save(props)
+        .then ->
+          FlowRouter.go("/surveys/#{instance.surveyId}/forms/#{instance.form.id}")
+        .fail (err) ->
+          toastr.error err.message
+    else
+      instance.form.addQuestion(props)
+        .then (question) ->
+          instance.submitting.set false
+          form.reset()
+          instance.choices.find().forEach ({_id})->
+            instance.choices.remove _id
+          lastItemOrder = instance.questions.findOne({}, sort: {order: -1})?.order
+          instance.questions.insert
+            objectId: question.id
+            order: ++lastItemOrder or 1
+            text: question.get 'text'
+          toastr.success 'Question added'
+        .fail (error) ->
+          toastr.error error.message
 
   'click .add-choice': (event, instance)->
     instance.choices.insert {}

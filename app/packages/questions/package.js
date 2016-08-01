@@ -19,11 +19,9 @@ Package.onUse(function(api) {
 
   api.addFiles([
     'styles/index.styl',
-    'views/questions_add.jade',
     'views/question_details.jade',
     'views/question_details_edit.jade',
     'views/questions.jade',
-    'controllers/questions_add.coffee',
     'controllers/question_details.coffee',
     'controllers/question_details_edit.coffee',
     'controllers/questions.coffee',

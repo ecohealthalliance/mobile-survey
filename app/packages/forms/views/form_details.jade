@@ -15,7 +15,7 @@ template(name="form_details")
             .row
               unless surveyIsActive
                 .col-md-4
-                  +questions_add form=form questions=questionsCollection
+                  +question_details_edit form=form questions=questionsCollection
               .col-md-8
                 +questions(
                   form=form
