@@ -109,6 +109,29 @@ formatQuestionType = (type) ->
     else
       type
 
+###
+  @param [Array] items, Items in which to determine most common element
+  @return [Object] Count of occurences and mostCommon
+###
+mostCommonItem = (items) ->
+  frequency = {}
+  maxOccurence = 0
+  count = 0
+  for i of items
+    item = items[i]
+    frequency[item] = (frequency[item] or 0) + 1
+    if frequency[item] > maxOccurence
+      maxOccurence = frequency[item]
+      mostCommon = item
+      count++
+
+  if count > 1
+    count: count
+    mostCommon: mostCommon
+  else
+    false
+
+
 module.exports =
   buildMeteorCollection: buildMeteorCollection
   updateSortOrder      : updateSortOrder
@@ -116,3 +139,4 @@ module.exports =
   setUserACL           : setUserACL
   getRole              : getRole
   formatQuestionType   : formatQuestionType
+  mostCommonItem       : mostCommonItem
