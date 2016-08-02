@@ -4,7 +4,7 @@ $sides = {
   left: left
   right: right
 }
-for $num in -2 -1 0 1 2 3
+for $num in -2 -1 0 1 2 3 4 5
   for prop, className in $sides
     .space-{className}-{$num}
       margin-{prop} $num*10px

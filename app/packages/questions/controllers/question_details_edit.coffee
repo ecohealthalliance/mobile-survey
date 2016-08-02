@@ -34,11 +34,18 @@ Template.question_details_edit.helpers
   typeInvalid: ->
     Template.instance().submitting.get() and not Template.instance().type.get()
 
+  typeChosen: ->
+    type = Template.instance().type.get()
+    type and type not in ['datetime', 'date']
+
   choicesInvalid: ->
     Template.instance().submitting.get() and Template.instance().typeError.get()
 
   choiceInvalidMessage: ->
     Template.instance().typeError.get()
+
+  typeIcon: ->
+    @name
 
 Template.question_details_edit.events
   'keyup .choice': (event, instance) ->
@@ -49,7 +56,7 @@ Template.question_details_edit.events
   'click .delete-choice': (event, instance)->
     instance.choices.remove($(event.currentTarget).data('id'))
 
-  'click .type': (event, instance) ->
+  'click .question-type': (event, instance) ->
     typeString = $(event.currentTarget).data 'type'
     instance.type.set(typeString)
 
@@ -72,17 +79,17 @@ Template.question_details_edit.events
 
     if type in ['multipleChoice', 'checkboxes']
       if instance.choices.find().count() == 0
-        instance.typeError.set 'Please add choices to the question'
+        instance.typeError.set 'Please add choices to the question.'
         return
       else
         choiceStrings = instance.choices.find().map(({name})-> name)
         if _.any(choiceStrings, _.isEmpty)
-          instance.typeError.set 'Please fill in all choices to the question'
+          instance.typeError.set 'Please fill in all choices for the question.'
           return
         instance.typeError.set null
         # Check the array of choices for duplicates
         if mostCommonItem(choiceStrings)
-          instance.typeError.set 'All choices must be unique'
+          instance.typeError.set 'All choices must be unique.'
           return
         questionProperties.choices = choiceStrings
 

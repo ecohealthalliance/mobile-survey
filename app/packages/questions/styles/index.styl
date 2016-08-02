@@ -5,21 +5,15 @@
   position relative
   margin-bottom 10px
   .delete-choice
-    font-size 20px
+    font-size 1.5em
     position absolute
-    right 10px
-    top 5px
-    color $l-gray
-
-.btn-grid
-  border 1px solid transparent
-  border-radius 3px
-  .btn
-    padding 5px
-    width 90px
-    height 50px
-    margin 5px
-    white-space normal
+    right -25px
+    top 50%
+    transform translate(0, -50%)
+    color $m-gray
+    cursor pointer
+    &:hover
+      color $delete
 
 .has-error
   .btn-grid
@@ -28,7 +22,88 @@
 label
   display block
 
+.type-details
+  background lighten($ll-gray, 50%)
+  padding-top 2em
+  padding-bottom 2em
+
 .question-link
   span
     padding-top 15px
     padding-bottom 15px
+
+.add-question
+  cursor pointer
+
+.question-types-wrapper
+  background $ll-gray
+  border-top 2px solid $border-primary-l
+  border-bottom 1px solid $border-primary-l
+
+.question-types-wrapper
+.type-details
+  .form-group
+    margin 0
+
+.question-types
+  display flex
+  align-items stretch
+  justify-content space-around
+  flex-direction row
+
+.question-type
+  flex 1
+  display flex
+  align-items center
+  flex-direction column
+  padding 2em 1em
+  border-left 1px solid $border-primary-l
+  border-right 1px solid $border-primary-l
+  text-align center
+  cursor pointer
+  &:hover
+    background $border-primary-l
+  &.selected
+    background $secondary-light
+    color $primary-dark
+    border-color $secondary-light
+    position relative
+    margin-top -2px
+    margin-bottom -1px
+    transition .1s ease-in-out
+    .question-type-icon
+      &::before
+        color $primary-dark
+  span
+    flex 1
+  .question-type-icon
+    font-size 1.75em
+    text-align center
+    display block
+    margin-bottom .5em
+    margin-right 0
+
+
+@media(max-width: $mobile-break)
+  .question-types-wrapper
+    padding 0
+  .question-types
+    flex-direction column
+  .question-type
+    flex-direction row
+    align-items center
+    padding 1em 5%
+    border 0
+    border-bottom 1px solid $border-primary-l
+    text-align left
+    &.selected
+      &::after
+        position absolute
+        right 15px
+        font-family 'FontAwesome'
+        content '\f058'
+    .question-type-icon
+      font-size 1.5em
+      margin 0
+      &::before
+        margin 0 .6em 0 0

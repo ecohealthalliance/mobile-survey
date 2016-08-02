@@ -1,5 +1,6 @@
 Template.form_details.onCreated ->
   @fetched = new ReactiveVar false
+  @addingQuestion = new ReactiveVar false
   @questionCollection = new Meteor.Collection null
   @survey = @data.survey
   instance = @
@@ -15,6 +16,10 @@ Template.form_details.helpers
     Template.instance().form
   questionsCollection: ->
     Template.instance().questionCollection
+  showAddQuestion: ->
+    Template.instance().addingQuestion.get() and not Template.instance().data.surveyState.get()
+  addingQuestion: ->
+    Template.instance().addingQuestion
 
 Template.form_details.events
  'click .delete-form': (event, instance) ->

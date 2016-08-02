@@ -10,18 +10,15 @@ template(name="form_details")
         survey=survey
         showEdit=true)
       .main-content
-        .container-fluid-padded
-          .form--details
-            .row
-              unless surveyIsActive
-                .col-md-4
-                  +question_details_edit form=form questions=questionsCollection
-              .col-md-8
-                +questions(
-                  form=form
-                  survey=survey
-                  surveyState=surveyState
-                  questions=questionsCollection)
+        .form--details
+          +questions(
+            form=form
+            survey=survey
+            surveyState=surveyState
+            questions=questionsCollection
+            addingQuestion=addingQuestion)
+          unless surveyIsActive
+            +question_details_edit form=form questions=questionsCollection
     else
      +loading
 
@@ -34,7 +31,7 @@ template(name="form_header")
         .header--actions
           unless surveyIsActive
             if showEdit
-              a.btn.btn-default.btn-sm(href="{{pathFor 'form_edit' id=survey.id formId=form.id}}") Edit
+              a.btn.btn-default.btn-sm(href="{{pathFor 'form_edit' id=survey.id formId=form.id}}") Edit Details
             button.btn.btn-danger.btn-sm.delete.delete-form Delete
       else
         h3 New Form
