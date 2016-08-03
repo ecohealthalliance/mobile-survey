@@ -41,9 +41,18 @@
 .question-results--title
   padding 5px 10px
   background lighten($border-primary-l, 50%)
+  border-radius 3px
+  border-top-right-radius 0
+  border-bottom-right-radius 0
 
 .question-results--details
   display flex
+  .empty
+    display block
+    width 100%
+    background lighten($warning, 70%)
+    padding 10px
+    border-bottom-left-radius 3px
 
 .question-results--basic-info
   flex 1
