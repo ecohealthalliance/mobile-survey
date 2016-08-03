@@ -7,18 +7,17 @@ template(name="question_details")
       classNames='small'
       form=form
       showEdit=true)
-  .main-content.space-top-2
-    .container-fluid-padded
-      if fetched
-        if surveyIsActive
-          h4=text
-        else
-          +question_details_edit(
-            surveyId=../survey.id
-            formId=../formId
-            question=question
-            choices=choices
-            surveyState=surveyState
-            type=type)
+  .main-content
+    if fetched
+      if surveyIsActive
+        h4=text
       else
-        +loading
+        +question_details_edit(
+          surveyId=survey.id
+          form=form
+          question=question
+          choices=choices
+          surveyState=surveyState
+          type=type)
+    else
+      +loading

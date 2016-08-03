@@ -17,7 +17,7 @@ template(name="survey_details_pending")
                 ul.questions.list-unstyled
                   each questions
                     li.question
-                      span.question-type(class=type)
+                      span.question-type-icon(class=type)
                       a(href="{{pathFor 'question_details' id=../../survey.id formId=../objectId questionId=objectId}}")
                         span=text
       else

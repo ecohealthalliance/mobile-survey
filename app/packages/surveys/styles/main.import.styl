@@ -27,7 +27,9 @@ verticallyCenter($position=true)
     margin-left 10px
 
 .form--details
-  margin 20px 0
+  margin 0 0 20px 0
+  .list-group
+    margin 0
 
 #toggleTrigger
   position relative
@@ -214,26 +216,24 @@ $question-types = {
   .question
     margin-bottom 5px
 
-.survey--details
-.survey-admin--content
-  .trigger
-  .question-type
-    margin-right 4px
-    &::before
-      font-family 'FontAwesome'
-      font-size 1em
-      color $d-gray
-  .trigger
-    content '\f0e7'
-    for type, unicode in $trigger-types
-      &.{type}
-        &::before
-          content unicode
-  .question-type
-    for type, unicode in $question-types
-      &.{type}
-        &::before
-          content unicode
+.trigger
+.question-type-icon
+  margin-right 4px
+  &::before
+    font-family 'FontAwesome'
+    font-size 1em
+    color $d-gray
+.trigger
+  content '\f0e7'
+  for type, unicode in $trigger-types
+    &.{type}
+      &::before
+        content unicode
+.question-type-icon
+  for type, unicode in $question-types
+    &.{type}
+      &::before
+        content unicode
 
 .controls
   width 80px

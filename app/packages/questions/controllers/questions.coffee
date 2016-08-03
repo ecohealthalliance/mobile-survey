@@ -4,6 +4,7 @@ Sort = require 'sortablejs'
 
 Template.questions.onCreated ->
   @fetched = new ReactiveVar false
+  @addingQuestion = @data.addingQuestion
   @survey = @data.survey
   @questions = @data.questions
   @form = @data.form
@@ -31,6 +32,8 @@ Template.questions.helpers
     Template.instance().questions?.findOne()
   questions: ->
     Template.instance().questions?.find {}, sort: {order: 1}
+  addingQuestion: ->
+    Template.instance().addingQuestion.get()
 
 Template.questions.events
   'click .delete-question': (event, instance) ->
@@ -40,3 +43,6 @@ Template.questions.events
         question.delete()
       .then () =>
         instance.questions.remove @_id
+  'click .add-question': (event, instance) ->
+    addingQuestion = instance.addingQuestion
+    addingQuestion.set not addingQuestion.get()

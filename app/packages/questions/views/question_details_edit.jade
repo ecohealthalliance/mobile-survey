@@ -1,63 +1,95 @@
 template(name="question_details_edit")
-  with question
-    .panel.panel-default
-      .panel-heading
-        h4 Edit question
-      .panel-body
-        form#question-form-edit
+  .container-fluid-padded.minor-heading
+    h4
+      if question
+        | Edit Form Question
+      else
+        i.fa.fa-plus-circle.left
+        span New Quesion
+        span #{question.text}
+  form#question-form-edit
+    .container-fluid-padded
+      .row
+        .col-sm-8.col-md-5
           .form-group
-            label.control-label(for='new-label') Question *
-            input#new-label.form-control(type='text' minlength='5' name='text' value=text required)
+            label.control-label(for='new-label')
+              span Question Text
+            input#new-label.form-control(type='text' minlength='5' name='text' value=question.text required)
             .help-block.with-errors
 
-          .form-group(class='{{#if typeInvalid}} has-error {{/if}}')
-            label.control-label(for='new-type') Question Type
-            .btn-grid
-              each types
-                button.btn.btn-default.type(type='button' class='{{#if selected}} active {{/if}}' data-type=name)= text
-            if typeInvalid
-              .help-block.with-errors Please select a type
+      .form-group.space-btm-3
+        .checkbox
+          label.control-label
+            input(type='checkbox' name='required' checked=required)
+            | Require participants to answer?
 
-          .form-group
-            label.control-label Required
-              input.form-control(type='checkbox' name='required' checked=required)
+    .container-fluid-padded
+      label
+        span Question Type
+    .container-fluid-padded.question-types-wrapper
+      .form-group(class='{{#if typeInvalid}} has-error {{/if}}')
+        .question-types
+          each types
+            .question-type(type='button' class='{{#if selected}} selected {{/if}}' data-type=name)
+              i.fa.question-type-icon(class="#{typeIcon}")
+              span=text
+        if typeInvalid
+          .help-block.with-errors Please select a type
 
-          if match type regex='shortAnswer|longAnswer'
-            .form-group
-              label.control-label(for='new-placeholder') Placeholder
-              input#new-placeholder.form-control(type='text', name='placeholder' value=properties.placeholder)
+    if typeChosen
+      .container-fluid-padded.type-details
+        if match type regex='shortAnswer|longAnswer'
+          .row
+            .col-sm-8.col-md-5
+              .form-group
+                label.control-label(for='new-placeholder')
+                  span Placeholder
+                input#new-placeholder.form-control(type='text', name='placeholder' value=question.properties.placeholder)
 
-          if match type regex='checkboxes|multipleChoice'
-            .form-group(class='{{#if choicesInvalid}} has-error {{/if}}')
-              label.control-label Choices
-              each choices
-                .choice-container
-                  input.form-control.choice(type='text' data-id=_id value=name)
-                  a.delete-choice(data-id=_id)
-                    i.mdi.mdi-close-circle
-              else
-                button.btn.btn-primary.add-choice(type="button")
-                  i.mdi.mdi-plus-circle Add a choice
+        if match type regex='checkboxes|multipleChoice'
+          .form-group(class='{{#if choicesInvalid}} has-error {{/if}}')
+            .row
+              .col-sm-8.col-md-5
+                each choices
+                  .choice-container
+                    input.form-control.choice(type='text' data-id=_id value=name)
+                    a.delete-choice(data-id=_id)
+                      i.fa.fa-times
+                else
+                  button.btn.btn-primary.add-choice(type="button")
+                    i.fa.fa-plus-circle
+                    span Add a choice
 
-              unless isEmpty choices
-                button.btn.btn-primary.add-choice(type="button")
-                  i.mdi.mdi-plus-circle Add another choice
-              if choicesInvalid
-                .help-block.with-errors=choiceInvalidMessage
+            if choicesInvalid
+              .help-block.with-errors=choiceInvalidMessage
 
-          if match type regex='scale|number'
-            .form-group
-              label.control-label Minimum
-                input.form-control.choice(type='number' name='min' step='any' value=properties.min)
-            .form-group
-              label.control-label Maximum
-                input.form-control.choice(type='number' name='max' step='any' value=properties.max)
+            unless isEmpty choices
+              button.btn.btn-primary.add-choice.space-top-1(type="button")
+                i.fa.fa-plus-circle
+                span Add another choice
 
-          if typeInvalid
-            .type-error
-              p Please select a type
+        if match type regex='scale|number'
+          .row
+            .col-sm-5.col-md-2
+              .form-group
+                label.control-label
+                  span Minimum
+                  input.form-control.choice(type='number' name='min' step='any' value=question.properties.min)
+            .col-sm-5.col-md-2
+              .form-group
+                label.control-label
+                  span Maximum
+                  input.form-control.choice(type='number' name='max' step='any' value=question.properties.max)
 
-          .form-group
-            button.btn.btn-primary(type='submit')
-              span.mdi.mdi-library-check
-              | Update Question
+        if typeInvalid
+          .type-error
+            p Please select a type
+
+    .container-fluid-padded
+      .form-group.space-top-4
+        button.btn.btn-primary.btn-featured(type='submit')
+          span.mdi.mdi-library-check
+          if question
+            | Update Question
+          else
+            | Add Question
