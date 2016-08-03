@@ -64,8 +64,26 @@
   padding 20px 10px
   text-align center
   border-bottom 1px solid $border-primary-l
+  .through
+    font-weight 400
+    &::before
+      display inline-block
+      content '-'
   &:last-of-type
     border 0
+  &.long-content
+    .statistic
+      font-size 2em
+      span
+        display block
+        line-height 1
+        margin-bottom 5px
+      .through
+        margin-bottom 10px
+        &::before
+          content 'to'
+          font-size .75em
+          color $d-gray
 
 .question-results--summary
   display flex

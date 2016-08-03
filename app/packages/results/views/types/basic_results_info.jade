@@ -3,8 +3,11 @@ template(name="basic_results_info")
     .basic-info--item
       +type_icon type=type
     if hasRange
-      .basic-info--item
-        span.statistic #{props.min} - #{props.max}
+      .basic-info--item(class="{{#if longContent}} long-content {{/if}}")
+        span.statistic
+          span=min
+          span.through
+          span=max
         h5 Range
     .basic-info--item
       span.statistic #{participation.percentage}%
