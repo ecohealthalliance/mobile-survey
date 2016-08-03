@@ -4,8 +4,6 @@ Template.basic_results_info.helpers
   hasRange: ->
     @type in ['number', 'scale']
 
-  formatQuestionType: -> formatQuestionType(@type)
-
 Template.type_icon.helpers
   icon: ->
     type = Template.instance().data.type
@@ -26,3 +24,5 @@ Template.type_icon.helpers
         'sliders'
       when 'shortAnswer'
         'minus'
+
+  formatQuestionType: -> formatQuestionType(@type)
