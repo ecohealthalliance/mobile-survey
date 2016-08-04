@@ -22,11 +22,11 @@ Template.form_results_detail.helpers
     question: question
     answers: answers
 
-  answers: ->
-    Template.instance().data.submissions.find().fetch()
+  hasSubmissions: ->
+    Template.instance().data.submissions.findOne "answers.#{@objectId}": {$exists: true}
 
   participation: ->
-    usersWithAnswers = _.pluck @answers, 'userId'
+    usersWithAnswers = _.uniq _.pluck(@answers, 'userId')
 
     participantCount = usersWithAnswers.length
     totalParticipantCount = Template.instance().data.totalParticipantCount

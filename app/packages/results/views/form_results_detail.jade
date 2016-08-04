@@ -1,14 +1,14 @@
 template(name="form_results_detail")
   each questions
     .question-results
-      .question-results--title
+      .question-results--title(class="{{#unless hasSubmissions}} no-submissions {{/unless}}")
         h4=text
       .question-results--details
-        if answers
+        if hasSubmissions
           +basic_results_info(
             type=type
             props=properties
             participation=participation)
           +Template.dynamic template=template data=templateData
         else
-          p No Submissions
+          p.empty Currently no participant submissions.
