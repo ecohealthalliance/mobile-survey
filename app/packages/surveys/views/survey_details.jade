@@ -1,7 +1,7 @@
 template(name="survey_details")
   .main-content
     .basic-details
-      a.detail(href="{{pathFor 'forms' id=survey.id}}")
+      .detail
         .detail--info
           .info
             span.statistic=formCount
@@ -9,22 +9,35 @@ template(name="survey_details")
           .info
             span.statistic=questionCount
             h2 Questions
-        span.btn.btn-primary.call-to-action-text
-          if surveyIsActive
-            | View Results
-          else
-            | Edit
+        .detail--actions
+          unless surveyIsActive
+            .action
+              a.btn.btn-primary.call-to-action-text(href="{{pathFor 'form_new' id=survey.id}}")
+                | Add New Form
+          .action
+            a.btn.btn-primary.call-to-action-text(href="{{pathFor 'forms' id=survey.id}}")
+              if surveyIsActive
+                | View Results
+              else
+                | Edit
 
-      a.detail(href="{{pathFor 'participants' id=survey.id}}")
+      .detail
         .detail--info
           .info
             span.statistic=participantCount
             h2 Participants
-        span.btn.btn-primary.call-to-action-text
-          if surveyIsActive
-            | View Results
-          else
-            | Edit
+        .detail--actions
+          unless surveyIsActive
+            .action
+              a.btn.btn-primary.call-to-action-text(href="{{pathFor 'participants_edit' id=survey.id}}")
+                | Add New Participant
+
+          .action
+            a.btn.btn-primary.call-to-action-text(href="{{pathFor 'participants' id=survey.id}}")
+              if surveyIsActive
+                | View Results
+              else
+                | Edit
 
     .container-fluid-padded
       p.description=description
