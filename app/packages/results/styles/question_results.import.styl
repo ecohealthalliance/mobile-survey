@@ -27,7 +27,7 @@
       font-size 1em
 
 .question-results
-  margin-bottom 20px
+  margin-bottom 50px
   h5
     font-weight 300
     font-size 1.25em
@@ -53,6 +53,11 @@
     background lighten($warning, 70%)
     padding 10px
     border-bottom-left-radius 3px
+  .results
+    display flex
+    flex-direction column
+    display flex
+    flex 3
 
 .question-results--basic-info
   flex 1
@@ -128,6 +133,25 @@
           margin-left .5em
           color $m-gray
 
+.show-individual-results
+  background lighten($border-primary-l, 70%)
+  padding 1em
+  text-align center
+  color $primary-light
+  cursor pointer
+  &:hover
+    background lighten($border-primary-l, 60%)
+.individual-results
+  thead
+    border-color lighten($border-primary-l, 50%)
+  th
+    background white
+    border-color lighten($border-primary-l, 50%)
+    &:last-child
+      border-right 0
+  td
+    width auto
+    min-width 150px
 
 .summary-item
   margin-bottom 40px

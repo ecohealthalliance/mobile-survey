@@ -17,11 +17,11 @@ template(name="form_results")
                   a.btn.btn-primary.btn-sm.inline.download-csv(href=csvExport download="{{fileName title}}")
                      i.mdi.mdi-arrow-down-bold-circle-outline
                      | Save as CSV
-                +form_results_detail(
-                  form=this
-                  questions=questions
-                  submissions=submissions
-                  participantIds=participantIds
-                  totalParticipantCount=totalParticipantCount)
+                each questions
+                  +question_results(
+                    question=this
+                    submissions=submissions
+                    participantIds=participantIds
+                    totalParticipantCount=totalParticipantCount)
           else
             +loading

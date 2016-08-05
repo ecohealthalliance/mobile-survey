@@ -56,10 +56,14 @@ label = (value, label) ->
   @return [Object] Containing options for average, lowest, highest gauge charts
 ###
 buildGaugeChartOptions = (props, answers) ->
-  total = 0
-  total = _.reduce answers, (answer, nextAnswer) ->
-    answer + nextAnswer
-  average = Math.round(total/answers.length)
+  answers = _.without answers, undefined
+  if answers.length > 1
+    total = 0
+    total = _.reduce answers, (answer, nextAnswer) ->
+      answer + nextAnswer
+    average = Math.round(total/answers.length)
+  else
+    average = answers[0]
 
   lowest = _.min answers
   highest = _.max answers
@@ -109,7 +113,8 @@ showGaugeChart = (instance, elementNamePrefix) ->
   {averageChartOptions, lowestChartOptions, highestChartOptions} =
     buildGaugeChartOptions props, answers
 
-  instance.$(".#{elementNamePrefix}-average").highcharts averageChartOptions
+  if averageChartOptions
+    instance.$(".#{elementNamePrefix}-average").highcharts averageChartOptions
   instance.$(".#{elementNamePrefix}-min").highcharts lowestChartOptions
   instance.$(".#{elementNamePrefix}-max").highcharts highestChartOptions
 
