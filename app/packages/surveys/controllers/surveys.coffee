@@ -1,4 +1,4 @@
-{ Survey }       = require 'meteor/gq:api'
+{ Survey } = require 'meteor/gq:api'
 
 Template.surveys.onCreated ->
   @fetched = new ReactiveVar false
