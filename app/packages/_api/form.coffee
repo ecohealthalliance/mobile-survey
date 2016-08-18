@@ -32,14 +32,6 @@ Form = Parse.Object.extend 'Form',
         else
           questions
 
-  getLastQuestionOrder: ->
-    query = @relation('questions').query()
-    query.descending 'order'
-    query.select 'order'
-    query.first()
-      .then (lastQuestion) ->
-        lastQuestion?.get('order')
-
   getQuestion: (questionId) ->
     query = @relation('questions').query()
     query.equalTo 'objectId', questionId
@@ -71,11 +63,9 @@ Form = Parse.Object.extend 'Form',
 
   addQuestion: (props) ->
     form = @
-    @getLastQuestionOrder()
-      .then (lastQuestionOrder) ->
-        question = new Question()
-        props.deleted = false
-        question.create(props, lastQuestionOrder, form)
+    question = new Question()
+    props.deleted = false
+    question.create(props, form)
       .then (question) ->
         question
 

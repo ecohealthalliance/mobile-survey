@@ -39,7 +39,7 @@ Template.questions.events
   'click .delete-question': (event, instance) ->
     query = new Parse.Query Question
     query.get(@objectId)
-      .then (question) =>
+      .then (question) ->
         question.delete()
       .then () =>
         instance.questions.remove @_id
