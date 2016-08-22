@@ -1,10 +1,8 @@
-Feature: Admin
+Feature: Surveys
 
-  @dev
-  @admin
+  @surveys
   Scenario: Creating a survey
     When I sign in
-    And I should see content "Sign Out"
     Then I click "#add-survey"
     And I fill out the add survey form
-    And I should see content "Test Survey"
+    Then I should see content "Test Survey"
