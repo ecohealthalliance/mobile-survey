@@ -42,21 +42,16 @@ Survey = Parse.Object.extend 'Survey',
       .then (form) ->
         form
 
-  getLastFormOrder: ->
-    query = @relation('forms').query()
-    query.descending 'order'
-    query.select 'order'
-    query.first().then (lastForm) ->
-      lastForm?.get('order')
-
   buildForm: (props) ->
-    @getLastFormOrder().then (lastFormOrder) ->
-      order = ++lastFormOrder or 1
-      title: props.title
-      createdBy: Parse.User.current()
-      order: order
-      trigger: props.trigger
-      deleted: false
+    order = {
+      __op: "Increment"
+      amount: 1
+    }
+    title: props.title
+    createdBy: Parse.User.current()
+    order: order
+    trigger: props.trigger
+    deleted: false
 
   addForm: (props) ->
     survey = @

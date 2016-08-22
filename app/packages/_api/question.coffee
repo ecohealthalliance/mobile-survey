@@ -1,9 +1,12 @@
 { setAdminACL } = require 'meteor/gq:helpers'
 
 Question = Parse.Object.extend 'Question',
-  create: (props, lastQuestionOrder, form) ->
+  create: (props, form) ->
     question = @
-    props.order = ++lastQuestionOrder or 1
+    props.order = {
+      __op: "Increment"
+      amount: 1
+    }
     props.createdBy = Parse.User.current()
     setAdminACL(question)
       .then ->
@@ -20,7 +23,7 @@ Question = Parse.Object.extend 'Question',
       .then =>
         @
 
-  delete: (deleted = true) ->
+  delete: (deleted=true) ->
     @set 'deleted', deleted
     @save()
 
