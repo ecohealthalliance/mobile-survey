@@ -67,6 +67,8 @@ setAdminACL = (obj) ->
       acl.setPublicReadAccess false
       acl.setPublicWriteAccess false
       acl.setReadAccess adminRole, true
+      # A temporary hotfix until we get surveys by invitations implemented
+      acl.setPublicReadAccess(true)
       acl.setWriteAccess adminRole, true
       obj.setACL acl
     .fail (err) ->
@@ -81,6 +83,8 @@ setAdminACL = (obj) ->
 setUserACL = (obj, user, access=true) ->
   acl = obj.getACL()
   acl.setReadAccess(user, access)
+  # A temporary hotfix until we get surveys by invitations implemented
+  acl.setPublicReadAccess(true)
   obj.setACL(acl)
 
 ###
