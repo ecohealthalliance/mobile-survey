@@ -21,7 +21,6 @@ Template.basic_results_info.helpers
     checkNumberLength Template.instance(), @props.min
 
   max: ->
-    console.log @props.max
     checkNumberLength Template.instance(), @props.max
 
   longContent: ->

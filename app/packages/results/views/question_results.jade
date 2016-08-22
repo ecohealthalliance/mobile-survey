@@ -1,0 +1,34 @@
+template(name="question_results")
+  .question-results
+    .question-results--title(class="{{#unless hasSubmissions}} no-submissions {{/unless}}")
+      h4=question.text
+    .question-results--details
+      if hasSubmissions
+        +basic_results_info(
+          type=question.type
+          props=question.properties
+          participation=participation)
+        .results
+          +Template.dynamic template=template data=templateData
+          a.show-individual-results
+            if showIndividualResults
+              | Hide
+            else
+              | Show
+            | Detailed Results
+          if showIndividualResults
+            table.individual-results.table.table-striped
+              thead
+                tr
+                  th Answer
+                  th Participant email
+                  th Date of submission
+              tbody
+                each answers
+                  tr
+                    td=questionContent
+                    td=userEmail
+                    td=createdAt
+
+      else
+        p.empty Currently no participant submissions.

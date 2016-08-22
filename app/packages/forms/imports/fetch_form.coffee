@@ -29,7 +29,10 @@ fetchForm = (instance, formId) ->
           question.answers.push
             content: submission.get('answers')[question.objectId]
             userId: submission.get('userId').id
+            userEmail: submission.get('userId').get('email')
             createdAt: submission.get 'createdAt'
         instance.questions.insert question
+    .fail (err) ->
+      console.log err
 
 module.exports = fetchForm
