@@ -56,9 +56,8 @@ Survey = Parse.Object.extend 'Survey',
   addForm: (props) ->
     survey = @
     form = new Form()
-    @buildForm(props)
-      .then (formProps) ->
-        form.create(formProps, survey)
+    formProps = @buildForm(props)
+    form.create(formProps, survey)
       .then (form) ->
         relation = survey.relation 'forms'
         relation.add form
