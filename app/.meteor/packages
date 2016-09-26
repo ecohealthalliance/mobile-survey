@@ -47,3 +47,4 @@ gq:fixtures
 dispatch:mocha-phantomjs
 practicalmeteor:mocha@2.1.1-rc.1
 http
+ecosturmer:nojs-banner
